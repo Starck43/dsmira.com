@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% load cache %}
+
+{% block styles %}{% endblock %}
+
+{% block meta_og_title %}{% endblock %}
+{% block site_header %}{% endblock site_header %}
+{% block page_title %}<div class="hidden">{{main_title}}</div>{% endblock page_title %}
+
+{% block content %}
+	{% cache 86400 index_page %}{% endcache %}
+{% endblock content %}

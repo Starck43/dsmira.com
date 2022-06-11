@@ -1,0 +1,387 @@
+
+@import vars.module
+@import utils.module
+@import mixins
+@import fonts
+
+@import "vendors/awesome-slider.scss"
+
+html
+	font-size: 14px
+	+media-breakpoint-up(md)
+		font-size: 16px
+	+media-breakpoint-up(lg)
+		font-size: 18px
+	background-color: $bg-color
+
+\:root
+	--bs-font-sans-serif: #{$font-family-sans-serif}
+	--bs-body-color: #{$text-color}
+	--bs-body-bg: #{$bg-color}
+
+body
+	min-height: 100vh
+
+#__next
+	display: flex
+	flex-direction: column
+	min-height: 100vh
+	height: 100%
+
+main
+	flex: 1
+	section
+		flex: 100%
+
+pre
+	white-space: pre-wrap
+
+ul
+	margin: 0
+	padding: 0
+	list-style-type: none
+
+h1
+	color: $title-color
+	font-size: 2.6em
+	letter-spacing: 1px
+	line-height: 1
+	text-transform: uppercase
+
+h2
+	color: $title-color
+	font-size: 2em
+	font-weight: 500
+//letter-spacing: 2px
+
+h3
+	color: $title-color
+	font-size: 1.8rem
+	font-weight: 500
+	//letter-spacing: 1px
+	text-transform: uppercase
+
+h4
+	font-size: 1.2rem
+	text-transform: uppercase
+	font-weight: 500
+
+header
+	min-height: 100vh
+	.container
+		display: flex
+		@media (max-width: 767.98px) and (orientation: portrait)
+			min-height: 100vh !important
+			margin: 0
+
+		+media-breakpoint-down(lg)
+			min-height: 100vh
+
+	.header-logos
+		flex: 1
+		justify-content: center
+		margin-bottom: 1rem
+	.logo-link
+		max-width: 4rem
+		min-width: 80px
+		margin-right: 2vw
+		user-select: none
+
+	.header-title
+		flex: 0 1 50%
+		text-transform: uppercase
+		line-height: 1.2
+		h1
+			word-spacing: 100vw
+			color: $header-title-color
+		.subtitle
+			margin-top: auto
+			text-transform: lowercase
+			@extend h2
+			p
+				margin-bottom: 0
+
+
+	.date-forum
+		justify-content: space-between
+		flex: 1 1 42%
+
+	.date-block
+		font-size: 4em
+		line-height: 1
+		font-weight: bold
+		color: #000
+		text-align: right
+		.at-time
+			margin-bottom: 1em
+			font-size: 0.5em
+			font-weight: normal
+			text-transform: uppercase
+	.countdown-title
+		color: white
+	.countdown-block
+		display: inline-flex
+		margin-top: auto
+		.two-digit
+			position: relative
+			width: 2.4em
+			height: 2.4em
+			padding: 0
+			font-size: 1.5rem
+			font-weight: 500
+			color: #fff
+			border-radius: 50rem
+			border-color: $brand-color
+			background: $brand-color
+			user-select: none
+			&::after
+				position: absolute
+				content: ":"
+				top: 0
+				bottom: 0
+				left: 100%
+				font-size: 1.5em
+				line-height: 1.3
+				margin-left: .11em
+
+		.countdown-title
+			font-weight: bold
+
+		.number-wrapper
+			margin: 0 $countdown-number-offset * 2 0 0
+			&:last-child
+				margin-right: 0
+				.two-digit::after
+					content: none
+			span
+				margin-top: 0.2em
+				font-size: 0.6rem
+				text-transform: uppercase
+				color: $brand-color
+				font-weight: bold
+
+
+	.appeals
+		width: 100%
+		flex: auto
+		align-items: center
+		background-color: transparentize(white, 0.1)
+	.appeals-container
+		position: relative
+		margin: 4vh 0
+		ul.appeals-block
+			display: flex
+			justify-content: space-between
+			li
+				position: relative
+				display: flex
+				max-width: calc(33.33% - 2vw)
+				border: $border-width solid $brand-color
+				border-radius: $border-radius
+				>span
+					max-width: 50px
+					margin-right: 5% !important
+				.text
+					margin-bottom: auto
+
+		.appeal-footer
+			display: flex
+			.button
+				max-width: 300px
+				max-height: 75px
+				margin-left: 1em
+
+		+media-breakpoint-down(md)
+			ul.appeals-block
+				flex-direction: column
+				li
+					max-width: 100%
+					margin-top: 4vh
+
+			.appeal-footer
+				flex-direction: column
+				.button
+					align-items: center
+					margin-top: 4vh
+					margin-left: 0
+
+
+	+media-breakpoint-down(xl)
+		.date-forum
+			.date-block
+				font-size: 3.2em
+
+	+media-breakpoint-down(lg)
+		.container
+			flex-wrap: wrap
+			justify-content: center
+			min-height: 100%
+			align-items: flex-start
+
+		.header-title
+			flex: 1 1 75%
+
+
+		.date-forum
+			flex: 100%
+			flex-direction: row
+			margin-top: 2rem
+			.date-block
+				margin-bottom: 1em
+
+	+media-breakpoint-down(md)
+		.date-forum
+			flex-direction: column
+			align-items: center !important
+			height: min-content
+			margin-top: auto
+			.date-block
+				margin-bottom: 0
+			.countdown-block
+				justify-content: center
+				text-align: center
+
+	+media-breakpoint-down(sm)
+		.container
+			flex-direction: column
+		.header-logos
+			flex: initial
+		.header-title
+			margin-left: 0
+			font-size: 0.8em
+
+		.date-forum
+			.date-block
+				font-size: 2.8em
+
+
+.partners-forum
+	margin-top: auto
+	h3
+		font-weight: bold
+
+	.partners .partner-name
+		color: #fff
+		@extend h4
+		line-height: 1.6
+
+
+.partners
+	&.partner-logos
+		display: flex
+		justify-content: center
+	.partner-logo
+		position: relative
+		height: 100%
+
+.partner-block a
+	color: white
+	text-decoration: none
+	user-select: none
+
+.contacts-forum
+	margin-top: auto
+	text-align: right
+	font-weight: 500
+	h4
+		font-weight: 700
+	.get-in-touch
+		padding: 1rem 1.5rem
+		margin-right: -1.5rem
+		color: #000
+		background-color: transparentize(white, 0.3)
+		border-radius: $border-radius
+		p
+			margin: 0
+
+	div:last-child
+		color: #fff
+		margin-top: 2rem
+
+	+media-breakpoint-up(lg)
+		max-width: 40%
+
+	+media-breakpoint-down(sm)
+		flex: 100% !important
+		.get-in-touch
+			margin-right: 0
+			margin-top: 1em
+
+article
+	margin-bottom: 2em
+
+.event-content
+	max-width: 100%
+	min-height: $event-avatar-size
+	position: relative
+	text-align: center
+	>div
+		width: $event-avatar-size
+		height: $event-avatar-size
+		margin: 1rem auto
+		@extend .rounded
+		@extend .shadow3
+	a
+		color: $brand-color
+		text-decoration: none
+	img
+		max-width: $event-avatar-size
+		height: auto !important
+		margin-bottom: 1em
+
+
+	+media-breakpoint-up(sm)
+		display: inline-block
+		text-align: left
+		max-width: calc(100% - #{$event-avatar-size-sm})
+		>div
+			position: absolute
+			top: 0
+			left: 100%
+			margin-top: 0
+			margin-left: 1rem
+			width: $event-avatar-size-sm
+			height: $event-avatar-size-sm
+		img
+			max-width: $event-avatar-size-sm
+
+	+media-breakpoint-up(md)
+		max-width: calc(100% - #{$event-avatar-size-sm})
+		>div
+			width: $event-avatar-size
+			height: $event-avatar-size
+		img
+			max-width: $event-avatar-size
+
+main
+	.container
+		margin-bottom: 4vh
+
+footer
+	.container
+		padding-top: 2em
+		padding-bottom: 2em
+
+	.partner-block
+		display: flex
+		flex: 1
+		max-width: 300px
+		line-height: 0
+		margin: 0 2vw
+		overflow: hidden
+
+
+.copyright
+	border-top: 1px solid $bg-color
+	text-align: center
+	padding: 3px
+	a
+		color: $brand-color
+
+.registration
+	.meta-block, .questionnaire-block
+		border: 1px solid $border-color
+		padding: 1em
+
+	.questionnaire-block
+		margin-top: 2em

@@ -1,0 +1,68 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# static
+resources/
+src/
+static/
+**/media/*
+!**/media/no-image.jpg
+!**/media/no-image.png
+!**/media/no-person.png
+CACHE/
+
+# misc
+.DS_Store
+*.pem
+package-lock.json
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# Environment
+.env*
+.env
+prod.env
+.venv
+venv/
+
+# vercel
+.vercel
+.idea
+
+# Database #
+*.sqlite3
+
+# Sublime #
+*.sublime-workspace
+*.sublime-project
+sftp-config.json
+package-lock.json
+datadamp.json
+
+# Django #
+__pycache__/
+*.log
+*.pot
+*.pyc
+migrations/
+__init__.py
+wsgi.py
+asgi.py

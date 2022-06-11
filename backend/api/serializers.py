@@ -1,0 +1,205 @@
+# serializers.py
+from rest_framework import serializers
+from django.contrib.contenttypes.models import ContentType
+# from django.contrib.auth.models import User
+
+from .models import *
+from .logic import addDomainToUrl
+
+
+def get_model_data(model_name, **kwargs):
+	try:
+		model_type = ContentType.objects.get(app_label='api', model=model_name)
+		post = model_type.model_class().objects.get(**kwargs)
+	except ContentType.DoesNotExist:
+		post = None
+	return post
+
+
+class FixAbsolutePathSerializer(serializers.Field):
+	def to_representation(self, value):
+		if value:
+			request = self.context.get('request')
+			pattern = 'src=\"<URL>/media/'
+			url = addDomainToUrl(request, value.url, pattern)
+			return url
+
+
+class FixCharCaretSerializer(serializers.Field):
+	def to_representation(self, value):
+		value = value.replace('\r\n', '<br/>')
+		return value
+
+
+class FixRichCaretSerializer(serializers.Field):
+	def to_representation(self, value):
+		value = value.replace('</p>\r\n\r\n<p>', '<br/>')
+		request = self.context.get('request')
+		pattern = 'src=\"<URL>/media/'
+		value = addDomainToUrl(request, value, pattern)
+		return value
+
+
+class SeoSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Seo
+		fields = ('title', 'description', 'keywords')
+
+
+
+class PageSeoSerializer(serializers.ModelSerializer):
+	seo = SeoSerializer(source='page_seo', many=False)
+
+	class Meta:
+		model = Section
+		fields = ('seo',)
+
+
+class MetaSerializer(serializers.ModelSerializer):
+	logo = serializers.ImageField(max_length=None, use_url=True)
+	class Meta:
+		model = Contact
+		fields = ('logo', 'name', 'phone',)
+
+
+class SlideSerializer(serializers.ModelSerializer):
+	#cover = serializers.ImageField(max_length=None, use_url=True)
+	file = serializers.FileField(max_length=None, use_url=True)
+	class Meta:
+		model = Slide
+		fields = ('id', 'title', 'excerpt', 'portfolio', 'file', 'video', 'link',)
+
+
+class MediaSerializer(serializers.ModelSerializer):
+	excerpt = FixCharCaretSerializer()
+	file = serializers.ImageField(max_length=None, use_url=True)
+	class Meta:
+		model = Media
+		fields = ('id', 'title', 'excerpt', 'file',)
+
+
+class SliderSerializer(serializers.ModelSerializer):
+	excerpt = FixCharCaretSerializer()
+	description = FixRichCaretSerializer()
+	slides = SlideSerializer(many=True)
+	class Meta:
+		model = Slider
+		fields = ('title', 'excerpt', 'description', 'slides',)
+
+
+class PortfolioSerializer(serializers.ModelSerializer):
+	excerpt = FixCharCaretSerializer()
+	description = FixRichCaretSerializer()
+	created_date = serializers.DateField(format="%d.%m.%Y")
+	category = serializers.SlugRelatedField(slug_field='slug', queryset=Category.objects.all())
+	cover = serializers.ImageField(max_length=None, use_url=True)
+
+	class Meta:
+		model = Portfolio
+		exclude = ('section', 'sort', 'is_active',)
+
+
+	def to_representation(self, instance):
+		data = super().to_representation(instance)
+		if not self.context['many']:
+			data['slides'] = MediaSerializer(instance.images, many=True, context=self.context).data
+		return data
+
+
+class ContactSerializer(serializers.ModelSerializer):
+	location = FixCharCaretSerializer()
+	class Meta:
+		model = Contact
+		exclude  = ('id', 'post_type', 'sort', 'section', 'is_active',)
+
+
+class AboutSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = About
+		exclude  = ('id', 'post_type', 'sort', 'section', 'is_active',)
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Customer
+		exclude  = ('id', 'post_type', 'sort', 'section', 'is_active',)
+
+
+class SectionSerializer(serializers.ModelSerializer):
+	link = serializers.SerializerMethodField()
+	class Meta:
+		model = Section
+		fields = ('id', 'slug', 'name', 'show_on_page', 'area', 'in_nav', 'link',)
+
+	def get_link(self, obj):
+		return '{}{}'.format( '/' if obj.show_on_page == 'self_page' else '#', obj.slug )
+
+
+class PostSerializer(serializers.ModelSerializer):
+	excerpt = FixCharCaretSerializer()
+	description = FixRichCaretSerializer()
+	section = serializers.SlugRelatedField(slug_field='slug', queryset=Section.objects.all())
+	class Meta:
+		model = Post
+		fields = ('id', 'title', 'excerpt', 'description', 'post_type', 'section',)
+
+
+class PostListSerializer(serializers.ModelSerializer):
+	content = serializers.SerializerMethodField()
+	class Meta:
+		model = Post
+		fields = ('content', 'id', 'post_type',)
+
+	def get_content(self, obj):
+		data = get_model_data(obj.post_type, id=obj.id, is_active=True)
+		context=self.context
+		many = context.get('many', True)
+		self.context['many'] = many
+
+		if data:
+			#print(obj.post_type)
+			if obj.post_type == 'slider':
+				serializer = SliderSerializer(data, context=context)
+			elif obj.post_type == 'contact':
+				serializer = ContactSerializer(data, context=context)
+			elif obj.post_type == 'about':
+				serializer = AboutSerializer(data, context=context)
+			elif obj.post_type == 'customer':
+				serializer = CustomerSerializer(data, context=context)
+			elif obj.post_type == 'portfolio':
+				serializer = PortfolioSerializer(data, context=context)
+			else:
+				serializer = PostSerializer(data, context=context)
+
+			data = serializer.data
+		else:
+			data = {}
+		return data
+
+	def to_representation(self, instance):
+		data = super().to_representation(instance)
+		data['section'] = instance.section.slug
+		data['page'] = instance.section.show_on_page
+		data['area'] = instance.section.area
+		if instance.section.area != 'header':
+			data['url'] = '/{}/{}'.format(instance.section.slug, instance.id) if instance.section.show_on_page == 'self_page' else '#'+instance.section.slug
+		else:
+			data['url'] = None
+		return data
+
+
+class PostDetailSerializer(PostListSerializer, serializers.ModelSerializer):
+	def to_representation(self, instance):
+		self.context['many'] = False
+		data = super().to_representation(instance)
+		posts = Contact.objects.all()
+		queryset_contact = posts[0] if posts else None
+
+		data['meta'] = MetaSerializer(queryset_contact, context=self.context).data
+		try:
+			queryset_seo = Seo.objects.get(post=instance)
+			data['meta']['seo'] = SeoSerializer(queryset_seo, many=False).data
+		except Seo.DoesNotExist:
+			pass
+
+		return data
