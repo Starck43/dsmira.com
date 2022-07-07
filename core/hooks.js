@@ -57,7 +57,7 @@ export const useElementInView = ({root = null, margin = "0px", threshold = 1, st
 		return thresholds
 	}
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (
 			!"IntersectionObserver" in window ||
 			!"IntersectionObserverEntry" in window ||

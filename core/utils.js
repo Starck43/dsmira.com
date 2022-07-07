@@ -1,16 +1,16 @@
 // import getConfig from 'next/config'
 
-export const addClassToElements = (className, selector, node = document) => {
+export const addClassToElements = (className, selector, node) => {
 	let elements = node?.querySelectorAll(selector)
 	elements.length && elements.forEach(el => el.classList.add(className))
 }
 
-export const removeClassToElements = (className, selector, node = document) => {
+export const removeClassToElements = (className, selector, node) => {
 	let elements = node?.querySelectorAll(selector)
 	elements.length && elements.forEach(el => el.classList.remove(className))
 }
 
-export const removeElementsByMask = (selector, node = document) => {
+export const removeElementsByMask = (selector, node) => {
 	let elements = node?.querySelectorAll(selector)
 	elements.length && elements.forEach(el => el.remove())
 }

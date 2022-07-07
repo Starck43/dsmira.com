@@ -1,13 +1,11 @@
 const path = require('path')
-const isProduction = process.env.NODE_ENV === "production"
-const protocol = isProduction ? 'https' : 'http'
-const serverName = `${protocol}://${process.env.SERVER_HOST}`
 
+//const isProduction = process.env.NODE_ENV === "production"
 
 module.exports = {
 	env: {
-		SERVER: serverName,
-		API_SERVER: serverName + '/api',
+		SERVER: process.env.SERVER,
+		API_SERVER: process.env.SERVER + '/api',
 		API_ENDPOINTS: {
 				pages: '/pages/',
 				posts: '/posts/',
@@ -39,5 +37,27 @@ module.exports = {
 	sassOptions: {
 			includePaths: [path.join(__dirname, 'styles')],
 	},
+/*	async headers() {
+		return [
+			{
+				source: "/fonts/Montserrat-Regular.woff2",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/fonts/Montserrat-Bold.woff2",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+		]
+	},*/
 }
 

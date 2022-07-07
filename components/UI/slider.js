@@ -6,7 +6,7 @@ import Carousel from "nuka-carousel"
 import ReactPlayer from "react-player"
 import ProgressBar from "react-bootstrap/ProgressBar"
 
-import {addClassToElements, createThumbUrl, removeClassToElements, removeElementsByMask} from "../../core/utils"
+import {addClassToElements, createThumbUrl} from "../../core/utils"
 
 
 const remoteLoader = ({src, width}) => {
@@ -33,58 +33,60 @@ const Slider = ({
 	const carouselRef = useRef(null)
 	const [showSlideCaption, setShowSlideCaption] = useState(true)
 	const [slideInterval, setSlideInterval] = useState(interval)
-	const [slidersState, setSlidersState] = useState(
-		slides?.reduce((acc, value) => {
-			acc[value.id] = {
-				ref: createRef(),
-				id: value.id,
-				url: value.video || value.link || null,
-				cover: {
-					width: value.width,
-					height: value.height,
-					ratio: value.height / value.width,
-				},
-				width: "100%",
-				height: "100%",
-				margin: 0,
-				loaded: 0,
-				played: 0,
-				playing: false,
-				ended: false,
-			}
-			return acc
-		}, {}))
+	const [slidersState, setSlidersState] = useState(null)
+
+
+	useEffect(() => {
+		setSlidersState(
+			slides?.reduce((acc, value) => {
+				acc[value.id] = {
+					ref: createRef(),
+					id: value.id,
+					url: value.video || value.link || null,
+					margin: 0,
+					loaded: 0,
+					played: 0,
+					playing: false,
+					ended: false,
+				}
+				return acc
+			}, {})
+		)
+	}, [])
 
 
 	const handleSlideChange = (current, next) => {
 
-		// if current slide is video and it goes to next
-		let currentSlider = slidersState[slides[current]?.id]
-		if (current !== next && currentSlider?.ref?.current) {
-			currentSlider.ended && currentSlider.ref.current?.seekTo(0, "fraction")
-			currentSlider.playing = false
-			currentSlider.ended = false
-			// save player's state : current
-			setSlidersState({
-				...slidersState,
-				[slides[current].id]: currentSlider,
-			})
+		if (slidersState) {
+
+			// if current slide is video and it goes to next
+			let currentSlider = slidersState[slides[current]?.id]
+			if (current !== next && currentSlider?.ref?.current) {
+				currentSlider.ended && currentSlider.ref.current?.seekTo(0, "fraction")
+				currentSlider.playing = false
+				currentSlider.ended = false
+				// save player's state : current
+				setSlidersState({
+					...slidersState,
+					[slides[current].id]: currentSlider,
+				})
+			}
+
+			// get a new active player state
+			let nextSlider = slidersState[slides[next]?.id]
+			if (nextSlider?.ref?.current) {
+				nextSlider.playing = true
+
+				// save player's state : next
+				setSlidersState({
+					...slidersState,
+					[slides[next].id]: nextSlider,
+				})
+			}
+
+			// drop slideshow interval after changing a slide
+			setSlideInterval(Number(nextSlider?.url === null) * interval)
 		}
-
-		// get a new active player state
-		let nextSlider = slidersState[slides[next]?.id]
-		if (nextSlider?.ref?.current) {
-			nextSlider.playing = true
-
-			// save player's state : next
-			setSlidersState({
-				...slidersState,
-				[slides[next].id]: nextSlider,
-			})
-		}
-
-		// drop slideshow interval after changing a slide
-		setSlideInterval(Number(nextSlider?.url === null) * interval)
 	}
 
 
@@ -176,8 +178,8 @@ const Slider = ({
 			frameAriaLabel={`${className}_${label}`}
 			beforeSlide={handleSlideChange}
 		>
-			{slides.map((obj, index) => (
-				<Fragment key={index}>
+			{slides?.map((obj) => (
+				<Fragment key={obj.id}>
 					{obj.file &&
 					<>
 						<Image
@@ -204,7 +206,7 @@ const Slider = ({
 					</>
 					}
 
-					{(slidersState[obj.id]?.url) && ReactPlayer.canPlay(slidersState[obj.id]?.url) &&
+					{slidersState && slidersState[obj.id]?.url && ReactPlayer.canPlay(slidersState[obj.id]?.url) &&
 					<div className="player"
 					     data-player-id={obj.id}
 					     style={{
@@ -218,7 +220,7 @@ const Slider = ({
 							<ProgressBar now={(slidersState[obj.id]?.loaded - slidersState[obj.id]?.played) * 100}
 							             bsPrefix="loaded"/>
 						</ProgressBar>
-						<Player
+						<ReactPlayer
 							ref={slidersState[obj.id]?.ref}
 							className={`react-player`}
 							style={obj?.file && {
@@ -266,7 +268,5 @@ const Slider = ({
 
 
 export default Slider
-
-const Player = styled(ReactPlayer)``
 
 
