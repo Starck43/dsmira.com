@@ -1,0 +1,28 @@
+@use "sass:math"
+
+@import vars.module
+@import mixins
+
+nav
+  margin-top: 1.5rem
+  //margin-bottom: 2rem
+
+.nav-link
+  display: block
+  padding: 0.25rem 0
+  margin: 0 1rem
+  font-size: $nav-font-size
+  color: $link-color
+  text-transform: uppercase
+  text-decoration: none
+  user-select: none
+  border-bottom: 1px dotted transparent
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out
+  &.disabled, &:disabled
+    color: #6c757d
+    pointer-events: none
+    cursor: default
+    border-bottom: 1px solid $brand-color
+  &:hover
+    color: lighten($link-color, 20%)
+    border-color: $brand-color

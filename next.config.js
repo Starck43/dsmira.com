@@ -12,6 +12,7 @@ module.exports = {
 				pages: '/pages/',
 				posts: '/posts/',
 				sections: '/sections/',
+				feedback: '/feedback/',
 			},
 	},
 	publicRuntimeConfig: {},
@@ -21,9 +22,9 @@ module.exports = {
 		// secondSecret: process.env.SECOND_SECRET, // Pass through env variables
 	},
 	images: {
-		domains: [process.env.SERVER_HOST],
-		//deviceSizes: [320, 576, 768, 992, 1200, 1400, 1920], // breakpoints
-		//imageSizes: [320, 450, 640, 900, 1200], // breakpoints
+		domains: ['localhost', process.env.SERVER_HOST],
+		deviceSizes: [50, 320, 576, 768, 992, 1200, 1400], // breakpoints
+		//imageSizes: [75, 150, 300, 600], // breakpoints
 	},
 	compiler: {
 			// ssr and displayName are configured by default

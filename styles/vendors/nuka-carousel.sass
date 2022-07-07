@@ -1,0 +1,106 @@
+@import ../mixins
+@import ../vars.module
+
+.slider-container
+	width: 100%
+
+.slider-list
+	height: 100%
+
+.slide
+	position: relative
+	max-height: 100vh
+	> span
+		flex: 1
+		height: 100% !important
+
+.slider-control
+	overflow: hidden
+	&:focus-visible
+		outline: none
+	&-centerleft
+		margin-left: 0
+	&-centerright
+		margin-right: 0
+
+	+media-breakpoint-up(sm)
+		&-centerleft
+			margin-left: calc(-#{$arrow-size} - #{$slider-controls-margin} + 1rem)
+
+		&-centerright
+			margin-right: calc(-#{$arrow-size} - #{$slider-controls-margin} + 1rem)
+
+	+media-breakpoint-up(md)
+		&-centerleft
+			margin-left: calc(-#{$arrow-size} - #{$slider-controls-margin})
+
+		&-centerright
+			margin-right: calc(-#{$arrow-size} - #{$slider-controls-margin})
+
+
+.video-slider
+	.slide
+		margin: auto
+
+	.player
+		+push--absolute
+		transition: opacity 0.3s ease-out, backdrop-filter 0.15s linear
+		opacity: 0
+		backdrop-filter: blur(0px)
+
+		.progress
+			position: absolute
+			display: flex
+			width: 100%
+			height: $progressbar-h
+			left: 0
+			top: 0
+			padding: 0 1px
+			background-color: $progressbar-bg
+			z-index: 1
+			.loaded-bar, .played-bar
+				height: 100%
+				transition: width 1s linear
+			.loaded-bar
+				background-color: $progressbar-loaded-bg
+			.played-bar
+				background-color: $progressbar-played-bg
+
+		.react-player
+			position: relative
+			line-height: 0
+
+		&.loaded
+			opacity: 1
+			backdrop-filter: blur(10px)
+
+
+.slider
+	.slide
+		display: flex
+		align-items: center
+
+	~.slider-control-bottomcenter ul
+		top: 0 !important
+
+	.carousel-caption
+		position: absolute
+		top: 0
+		left: 0
+		right: 0
+		padding: 2vw
+		background-color: transparentize(white, 0.8)
+		transition: background-color 200ms ease
+		user-select: none
+		opacity: 0
+		p, .subtitle
+			text-align: center
+			color: black
+		p
+			display: table
+			margin: auto
+			font-size: 0.9rem
+			text-align: left
+	.slide:hover .carousel-caption
+		background-color: transparentize(white, 0.3)
+

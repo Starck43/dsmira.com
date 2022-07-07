@@ -7,17 +7,17 @@ import Page from "../../components/posts/page"
 import {getPageDetail, getSection} from "../../core/api"
 
 
-export default function PortfolioPage({post, preview}) {
+export default function ProjectDetail({post, preview}) {
 	const router = useRouter()
 	if (!router.isFallback && !post?.id) {
 		return <ErrorPage statusCode={404}/>
 	}
 	return (
-		<Layout meta={post.body.meta} preview={preview}>
+		<Layout meta={post.meta} preview={preview}>
 			{router.isFallback ? (
 				<div>Загрузка...</div>
 			) : (
-				<Page {...post}/>
+				<Page {...post} page="project-detail"/>
 			)
 			}
 		</Layout>

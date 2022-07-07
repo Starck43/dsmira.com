@@ -1,20 +1,23 @@
+
 import Container from "../UI/container"
-import Events from "./events"
-
+import About from "./about"
 import Customers from "./customers"
+import Works from "./works"
+import Projects from "./projects"
+import ProjectDetail from "./project-detail"
 
 
-export default function PageBody({clients}) {
+export default function PageBody({body, page}) {
 	return (
-		<main className="post">
-			<Container className="py-4vh flex-wrap">
-				<Events events={events}/>
-				<section className="partners-forum cell-auto">
-					<h3>Клиенты</h3>
-					<Customers className="partner-names" clients={clients} fields={['name']}/>
-				</section>
-				<section className="contacts-forum cell-auto">
-				</section>
+		<main className="main">
+			<Container className="pb-4">
+				{page === "home" && (<>
+					<Works items={body.works}/>
+					<About items={body.about}/>
+					<Customers items={body.customers}/>
+				</>)}
+				{page === "projects" && <Projects page={page} projects={body.projects}/>}
+				{page === "project-detail" && <ProjectDetail page={page} {...body}/>}
 			</Container>
 		</main>
 	)

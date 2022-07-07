@@ -1,77 +1,73 @@
 import {useState} from "react"
-import Image from 'next/image'
-import placeholder from "~/public/placeholder.png"
+import Link from "next/link"
+import Image from "next/image"
+import {createThumbUrl, shimmer, toBase64} from "../../core/utils"
+
+import style from "~/styles/modules/avatar.module.sass"
+import {HEADER} from "../../core/constants"
 
 
-export const Logo = ({className = 'logo', name = '', src}) => {
-
-	const remoteLoader = ({ src }) => {
-		return src
+const remoteLoader = ({src, width}) => {
+	let breakpoints = [50, 320, 450]
+	if (breakpoints.indexOf(width) !== -1)
+		return createThumbUrl(src, width)
+	return src
 }
+
+export const Logo = ({className = "logo", name = "", src, width = null, height = null, rounded = true, href = "/"}) => {
+
 	const [imageSize, setImageSize] = useState({
-		naturalWidth: 100,
-		naturalHeight: 100
+		naturalWidth: 160,
+		naturalHeight: 160
 	})
 
 	const loadComplete = function (imageDimension) {
-		//console.log(imageDimension)
 		setImageSize(imageDimension)
 	}
 
-	const shimmer = (color, w, h=null) => `
-		<svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-		<defs>
-		<linearGradient id="g">
-		<stop stop-color="${color}" offset="20%" />
-		<stop stop-color="#ccc" offset="50%" />
-		<stop stop-color="${color}" offset="70%" />
-		</linearGradient>
-		</defs>
-		${ h==null
-			? `<circle fill="${color}" cx="${w/2}" cy="${w/2}" r="${w/2}"/><circle id="c" fill="url(#g)" cx="${w/2}" cy="${w/2}" r="${w/2}"/>`
-			: `<rect width="${w}" height="${h}" fill="${color}" /><rect id="r" width="${w}" height="${h}" fill="url(#g)" />`
-		}
-		<animate xlink:href="#c" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"/>
-		</svg>`
-
-	const toBase64 = (str) => (
-		typeof window === 'undefined'
-			? Buffer.from(str).toString('base64')
-			: window.btoa(str)
-	)
-
 	return (
-		<div className={className}>
-			<Image
-				src={src}
-				loader={remoteLoader}
-				layout="intrinsic"
-				blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer('#a6a6a6', imageSize.naturalWidth, imageSize.naturalHeight))}`}
-				placeholder="blur"
-				width={imageSize.naturalWidth}
-				height={imageSize.naturalHeight}
-				unoptimized={true}
-				alt={name}
-				onLoadingComplete={loadComplete}
-			/>
-		</div>
+		<Link href={href} passHref>
+			<a className={`${className} ${rounded ? style.rounded : ""}`}>
+				<Image
+					src={HEADER.logo || src}
+					alt={name}
+					//loader={remoteLoader}
+					layout="responsive"
+					width={width || imageSize.naturalWidth}
+					height={height || imageSize.naturalHeight}
+					unoptimized={true}
+					//blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer("#a6a6a6", imageSize.naturalWidth, imageSize.naturalHeight, rounded))}`}
+					//placeholder="blur"
+					onLoadingComplete={loadComplete}
+				/>
+			</a>
+		</Link>
 	)
 }
 
-export const Avatar = ({src, name = '', width = 160, height = null, rounded="rounded"}) => {
+export const Avatar = ({
+	                       className = "centered vertical",
+	                       src,
+	                       name = "",
+	                       width = 160,
+	                       height = null,
+	                       rounded = false,
+                       }) => {
 
 	return (
-		<div className="avatar centered vertical">
+		<div className={`${className} ${style.wrapper} ${rounded ? style.rounded : ""} ${!src ? style.emptyWrapper : ""}`}>
+			{src &&
 			<Image
-				className={rounded}
 				src={src}
+				loader={remoteLoader}
+				alt={name}
 				width={width}
 				height={height ? height : width}
-				blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer('#a6a6a6', width, height))}`}
 				placeholder="blur"
-				alt={name}
+				//blurDataURL={createThumbUrl(src, 50)}
+				blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer("#a6a6a6", width, height, rounded))}`}
 			/>
-			<div className="avatar-caption">{name}</div>
+			}
 		</div>
 	)
 }

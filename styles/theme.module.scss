@@ -1,0 +1,9 @@
+@import 'vars.module';
+
+:export {
+	bgColor: $bg-color;
+	brandColor: $brand-color;
+	textColor: $text-color;
+	sliderAutoplayInterval: $slider-autoplay-interval;
+}
+

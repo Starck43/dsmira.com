@@ -3,38 +3,86 @@
 @import utils.module
 @import mixins
 @import fonts
+@import nav
+@import projects
 
-@import "vendors/awesome-slider.scss"
+//@import "vendors/awesome-slider.scss"
+@import "vendors/nuka-carousel"
 
 html
+	overflow-x: hidden
 	font-size: 14px
 	+media-breakpoint-up(md)
+		font-size: 15px
+	+media-breakpoint-up(xl)
 		font-size: 16px
-	+media-breakpoint-up(lg)
-		font-size: 18px
 	background-color: $bg-color
 
 \:root
+	scroll-behavior: auto !important
 	--bs-font-sans-serif: #{$font-family-sans-serif}
 	--bs-body-color: #{$text-color}
 	--bs-body-bg: #{$bg-color}
 
 body
+	width: 100vw
 	min-height: 100vh
+	overflow-y: auto
 
 #__next
 	display: flex
 	flex-direction: column
 	min-height: 100vh
 	height: 100%
+	opacity: 0
+	+animation(body, 500ms 0s ease-out both, In)
+
+
+.container
+	position: relative
+	align-items: center
+	width: 100%
+	+media-breakpoint-up(sm)
+		width: 80%
+	+media-breakpoint-up(xl)
+		max-width: 1200px
+
+
+section:not(:last-child)
+	margin-bottom: 9vh
+
 
 main
 	flex: 1
-	section
+	>section
 		flex: 100%
+		header
+			margin-bottom: 5vh
+
+	.container
+		margin-bottom: 4vh
+		+media-breakpoint-down(sm)
+			padding: 0 1rem
+
+
+footer
+	+media-breakpoint-down(sm)
+		.container
+			padding: 0 1rem
+
+
++img-responsive
+
+iframe
+	width: 100% !important
+	height: 100% !important
 
 pre
 	white-space: pre-wrap
+
+p
+	line-height: 1.5
+	color: lighten($text-color, 20%)
 
 ul
 	margin: 0
@@ -43,332 +91,162 @@ ul
 
 h1
 	color: $title-color
-	font-size: 2.6em
-	letter-spacing: 1px
-	line-height: 1
+	font-size: 1.8rem
 	text-transform: uppercase
 
 h2
+	margin-bottom: 2rem
 	color: $title-color
-	font-size: 2em
+	font-size: 1.4rem
+	text-transform: uppercase
+	line-height: 2
 	font-weight: 500
-//letter-spacing: 2px
 
 h3
+	margin-bottom: 1rem
 	color: $title-color
-	font-size: 1.8rem
+	font-size: 1.2rem
 	font-weight: 500
-	//letter-spacing: 1px
 	text-transform: uppercase
 
 h4
-	font-size: 1.2rem
-	text-transform: uppercase
-	font-weight: 500
+	margin-bottom: 1rem
+	font-size: 1.1rem
+	//text-transform: uppercase
+	font-weight: 700
 
-header
-	min-height: 100vh
-	.container
-		display: flex
-		@media (max-width: 767.98px) and (orientation: portrait)
-			min-height: 100vh !important
-			margin: 0
-
-		+media-breakpoint-down(lg)
-			min-height: 100vh
-
-	.header-logos
-		flex: 1
-		justify-content: center
-		margin-bottom: 1rem
-	.logo-link
-		max-width: 4rem
-		min-width: 80px
-		margin-right: 2vw
-		user-select: none
-
-	.header-title
-		flex: 0 1 50%
-		text-transform: uppercase
-		line-height: 1.2
-		h1
-			word-spacing: 100vw
-			color: $header-title-color
-		.subtitle
-			margin-top: auto
-			text-transform: lowercase
-			@extend h2
-			p
-				margin-bottom: 0
-
-
-	.date-forum
-		justify-content: space-between
-		flex: 1 1 42%
-
-	.date-block
-		font-size: 4em
-		line-height: 1
-		font-weight: bold
-		color: #000
-		text-align: right
-		.at-time
-			margin-bottom: 1em
-			font-size: 0.5em
-			font-weight: normal
-			text-transform: uppercase
-	.countdown-title
-		color: white
-	.countdown-block
-		display: inline-flex
-		margin-top: auto
-		.two-digit
-			position: relative
-			width: 2.4em
-			height: 2.4em
-			padding: 0
-			font-size: 1.5rem
-			font-weight: 500
-			color: #fff
-			border-radius: 50rem
-			border-color: $brand-color
-			background: $brand-color
-			user-select: none
-			&::after
-				position: absolute
-				content: ":"
-				top: 0
-				bottom: 0
-				left: 100%
-				font-size: 1.5em
-				line-height: 1.3
-				margin-left: .11em
-
-		.countdown-title
-			font-weight: bold
-
-		.number-wrapper
-			margin: 0 $countdown-number-offset * 2 0 0
-			&:last-child
-				margin-right: 0
-				.two-digit::after
-					content: none
-			span
-				margin-top: 0.2em
-				font-size: 0.6rem
-				text-transform: uppercase
-				color: $brand-color
-				font-weight: bold
-
-
-	.appeals
-		width: 100%
-		flex: auto
-		align-items: center
-		background-color: transparentize(white, 0.1)
-	.appeals-container
-		position: relative
-		margin: 4vh 0
-		ul.appeals-block
-			display: flex
-			justify-content: space-between
-			li
-				position: relative
-				display: flex
-				max-width: calc(33.33% - 2vw)
-				border: $border-width solid $brand-color
-				border-radius: $border-radius
-				>span
-					max-width: 50px
-					margin-right: 5% !important
-				.text
-					margin-bottom: auto
-
-		.appeal-footer
-			display: flex
-			.button
-				max-width: 300px
-				max-height: 75px
-				margin-left: 1em
-
-		+media-breakpoint-down(md)
-			ul.appeals-block
-				flex-direction: column
-				li
-					max-width: 100%
-					margin-top: 4vh
-
-			.appeal-footer
-				flex-direction: column
-				.button
-					align-items: center
-					margin-top: 4vh
-					margin-left: 0
-
-
-	+media-breakpoint-down(xl)
-		.date-forum
-			.date-block
-				font-size: 3.2em
-
-	+media-breakpoint-down(lg)
-		.container
-			flex-wrap: wrap
-			justify-content: center
-			min-height: 100%
-			align-items: flex-start
-
-		.header-title
-			flex: 1 1 75%
-
-
-		.date-forum
-			flex: 100%
-			flex-direction: row
-			margin-top: 2rem
-			.date-block
-				margin-bottom: 1em
-
-	+media-breakpoint-down(md)
-		.date-forum
-			flex-direction: column
-			align-items: center !important
-			height: min-content
-			margin-top: auto
-			.date-block
-				margin-bottom: 0
-			.countdown-block
-				justify-content: center
-				text-align: center
-
-	+media-breakpoint-down(sm)
-		.container
-			flex-direction: column
-		.header-logos
-			flex: initial
-		.header-title
-			margin-left: 0
-			font-size: 0.8em
-
-		.date-forum
-			.date-block
-				font-size: 2.8em
-
-
-.partners-forum
-	margin-top: auto
-	h3
-		font-weight: bold
-
-	.partners .partner-name
-		color: #fff
-		@extend h4
-		line-height: 1.6
-
-
-.partners
-	&.partner-logos
-		display: flex
-		justify-content: center
-	.partner-logo
-		position: relative
-		height: 100%
-
-.partner-block a
-	color: white
-	text-decoration: none
+.title
+	text-align: left
 	user-select: none
 
-.contacts-forum
-	margin-top: auto
-	text-align: right
-	font-weight: 500
-	h4
-		font-weight: 700
-	.get-in-touch
-		padding: 1rem 1.5rem
-		margin-right: -1.5rem
-		color: #000
-		background-color: transparentize(white, 0.3)
-		border-radius: $border-radius
-		p
-			margin: 0
+.subtitle
+	text-transform: initial
 
-	div:last-child
-		color: #fff
-		margin-top: 2rem
+.avatar-title
+	margin-top: 2rem
 
-	+media-breakpoint-up(lg)
-		max-width: 40%
+a
+	color: $link-color
+	display: table
+	text-decoration: none
+	&:hover
+		color: lighten($link-color, 20%)
 
-	+media-breakpoint-down(sm)
-		flex: 100% !important
-		.get-in-touch
-			margin-right: 0
-			margin-top: 1em
+header
+	&.home
+		+media-breakpoint-up(md)
+			min-height: 100vh
+	.logo
+		width: 50px
+		height: 50px
+		+push--auto
+		margin-bottom: 1rem
+		+media-breakpoint-up(md)
+			width: 80px
+			height: 80px
+		+media-breakpoint-up(xl)
+			width: 100px
+			height: 100px
+	.slider
+		margin-top: 2vw
+		margin-bottom: 7vh
 
-article
-	margin-bottom: 2em
 
-.event-content
-	max-width: 100%
-	min-height: $event-avatar-size
-	position: relative
-	text-align: center
-	>div
-		width: $event-avatar-size
-		height: $event-avatar-size
-		margin: 1rem auto
-		@extend .rounded
-		@extend .shadow3
+#projects
+	.title
+		margin-bottom: 0
+	.projects-nav
+		margin: 0 -1rem 2rem
+
+	.meta
+		max-width: 700px
+		line-height: 1.5
+		&-title ~div
+			font-size: 0.9rem
+		&-created-date
+			font-weight: 700
+
+#works
+	.projects-link
+		margin-top: 1rem
+		text-align: right
+	+media-breakpoint-up(sm)
+		.meta
+			&-excerpt
+				font-size: .9rem
+#about
+	.about
+		+push--auto
+		max-width: 900px
+		&-avatar
+			flex: 100%
+			text-align: center
+			max-width: 300px
+			margin: 0 auto 3rem
+			+media-breakpoint-up(md)
+				max-width: 200px
+				margin-right: 4vw
+			+media-breakpoint-up(lg)
+				max-width: 300px
+		&-meta
+			max-width: 500px
+			+push--auto
+			flex: 1
+
+		&-excerpt
+			margin-bottom: 1rem
+			font-weight: 700
+
+		&-extra
+			position: relative
+			width: 100%
+			max-width: 900px
+			margin-top: 2rem
+			+push--auto
+			.title
+				margin: 4vh 0
+				text-transform: uppercase
+				text-align: center
+			+media-breakpoint-up(sm)
+				width: 80%
+			+media-breakpoint-up(md)
+				flex: 100%
+
+#customers
+	.customers-slider
+		.slide
+			margin: 1vw 2vw 0
+	.customer
+		max-width: 150px
+		margin: auto
+
+
+#contacts
+	.contact
+		display: table
+		+push--auto
+		>div
+			display: flex
+			align-items: center
+			margin-top: 0.5rem
+		svg
+			height: 1.5rem
 	a
-		color: $brand-color
-		text-decoration: none
-	img
-		max-width: $event-avatar-size
-		height: auto !important
-		margin-bottom: 1em
+		border-bottom: 1px dotted
+		&:hover
+			border-bottom: 1px solid
+	> div
+		margin-top: 1rem
 
+
+#get-in-touch
+	width: 100%
+	max-width: 500px
+	.subtitle
+		text-align: center
 
 	+media-breakpoint-up(sm)
-		display: inline-block
-		text-align: left
-		max-width: calc(100% - #{$event-avatar-size-sm})
-		>div
-			position: absolute
-			top: 0
-			left: 100%
-			margin-top: 0
-			margin-left: 1rem
-			width: $event-avatar-size-sm
-			height: $event-avatar-size-sm
-		img
-			max-width: $event-avatar-size-sm
-
-	+media-breakpoint-up(md)
-		max-width: calc(100% - #{$event-avatar-size-sm})
-		>div
-			width: $event-avatar-size
-			height: $event-avatar-size
-		img
-			max-width: $event-avatar-size
-
-main
-	.container
-		margin-bottom: 4vh
-
-footer
-	.container
-		padding-top: 2em
-		padding-bottom: 2em
-
-	.partner-block
-		display: flex
-		flex: 1
-		max-width: 300px
-		line-height: 0
-		margin: 0 2vw
-		overflow: hidden
+		width: 90%
 
 
 .copyright
@@ -376,12 +254,7 @@ footer
 	text-align: center
 	padding: 3px
 	a
+		display: inline-block
 		color: $brand-color
 
-.registration
-	.meta-block, .questionnaire-block
-		border: 1px solid $border-color
-		padding: 1em
 
-	.questionnaire-block
-		margin-top: 2em

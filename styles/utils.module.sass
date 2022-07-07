@@ -3,14 +3,6 @@
 @import vars.module
 @import mixins
 
-.container
-  position: relative
-  width: 100%
-  +media-breakpoint-up(xxl)
-    max-width: 1400px
-
-.mx-auto
-  +push--auto
 
 .my-2vh
   margin-top: 2vh !important
@@ -42,9 +34,6 @@
   @extend .py-2vh
 
 
-.bg-white
-  background-color: #fff !important
-
 .flex-wrap
   display: flex
   flex-wrap: wrap
@@ -57,8 +46,6 @@
   &.space-between
     justify-content: space-between
 
-.gap
-  gap: 1em
 
 .cell-4
   flex: 1 1 33.3%
@@ -76,6 +63,8 @@
     align-items: flex-end
   &.center
     align-items: center
+  &.reverse
+    flex-direction: column-reverse !important
 
 .inline
   display: inline-block
@@ -89,7 +78,7 @@
   align-items: center
 
 .rounded
-  border-radius: 50rem
+  border-radius: 50rem !important
 
 .btn
   @extend  .centered
@@ -98,69 +87,40 @@
   border: 2px solid $brand-color
   line-height: 1
   color: $brand-color
-  @extend  .rounded
+  //@extend  .rounded
   user-select: none
-  transition: all .18s ease
+  transition: all 200ms ease
 
   &-primary
     background-color: $brand-color
     color: white
+    &:hover
+      background-color: darken($brand-color, 20%)
   &-secondary
     background-color: white
+
   &:hover
     @extend .shadow4
-
-.btn-close
-  position: relative
-  display: block
-  width: $icon-size
-  height: $icon-size
-  max-width: 25px
-  transition: all 150ms ease
-  opacity: .7
-  user-select: none
-  box-sizing: content-box
-  border: none
-  cursor: pointer
-  background-color: transparent
-  &:hover
-    transform: rotate(90deg)
-    opacity: 1
-  &::before,
-  &::after
-    content: ''
-    position: absolute
-    width: 100%
-    height: $border-width
-    left: 0
-    top: 50%
-    margin-top: math.div(-$border-width, 2)
-    border-radius: $border-radius
-    background-color: black
-  &::before
-    transform: rotate(45deg)
-  &::after
-    transform: rotate(-45deg)
 
 .vertical
   flex-direction: column
 
 .shadow3
-  box-shadow: 0 10px 20px 0 rgba(0,0,0,.21)
+  box-shadow: 0 8px 30px -5px rgba(0,0,0,.20)
 
 .shadow4
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,.07),0 4px 6px -2px rgba(0,0,0,.05)
+  box-shadow: 0 8px 12px -3px rgba(0,0,0,.06),0 4px 6px -2px rgba(0,0,0,.03)
 
-.link
-  user-select: none
-  cursor: pointer
-  color: $brand-color
+.zoom-out
+  transition: all 250ms ease-out
+  &:hover
+    transform: scale(1.08)
+    @extend .shadow3
+
 
 .highlight
   color: $brand-color !important
 
-.status-error
-    color: darkred
 
 .button
   @extend .centered
@@ -177,10 +137,11 @@
   cursor: pointer
 
 .large-text
-  font-size: 1.2em
+  font-size: 1.2rem
 
-.fade
-  transition: opacity 0.18s linear
+.small--text
+  font-size: 0.8rem
+
 
 .modal
   position: fixed
@@ -212,7 +173,7 @@
   &.fade
     opacity: 0
   &.show
-    opacity: 0.3
+    opacity: 0.95
 
 .modal-dialog
   position: relative
@@ -223,22 +184,87 @@
   +media-breakpoint-up(sm)
     max-width: 90%
     margin: 1.75rem auto
+  &.modal-sm
+    max-width: 576px
+  &.modal-md
+    max-width: 768px
+  &.modal-lg
+    max-width: 992px
+  &.modal-xl
+    max-width: 1200px
 
-.modal-content
-  position: relative
-  display: flex
-  flex-direction: column
-  width: 100%
-  background-color: $modal-dialog-bg
-  background-clip: padding-box
-  border: $border-width solid $brand-color
-  border-radius: $border-radius
-  pointer-events: auto
-  outline: 0
-  @extend .shadow3
+  &.modal-fullscreen
+    &-sm-down
+      +media-breakpoint-down(sm)
+        width: 100%
+    &-md-down
+      +media-breakpoint-down(md)
+        width: 100%
+    &-lg-down
+      +media-breakpoint-down(lg)
+        width: 100%
 
+  .btn-close
+    position: relative
+    display: block
+    max-width: 2rem
+    width: $control-size
+    height: $control-size
+    margin-left: auto
+    background-color: transparent
+    transition: all 200ms ease-out
+    user-select: none
+    box-sizing: content-box
+    border: none
+    &:hover
+      opacity: 1
+    &::before,
+    &::after
+      content: ''
+      position: absolute
+      width: 60%
+      height: $arrow-thickness
+      left: 20%
+      top: 50%
+      margin-top: math.div(-$border-width, 2)
+      border-radius: $border-radius
+      background-color: black
+    &::before
+      transform: rotate(45deg)
+    &::after
+      transform: rotate(-45deg)
+    &-white
+      &::before,
+      &::after
+        background-color: white
+
+  .alert-content
+    position: relative
+    display: flex
+    flex-direction: column
+    width: 100%
+    background-color: $modal-dialog-bg
+    background-clip: padding-box
+    border: $border-width solid $brand-color
+    //border-radius: $border-radius
+    pointer-events: auto
+    outline: 0
+    @extend .shadow3
+
+    .status
+      font-weight: bold
+      &-error
+        >span
+          color: $message-status-error
+      &-success
+        >span
+          color: $message-status-success
+      &-warning
+        >span
+          color: $message-status-warning
 
 .modal-header, .modal-footer
+  @extend .centered
   +media-breakpoint-down(md)
     padding: 2vh 1.5rem
 
@@ -258,13 +284,13 @@
 
   border-top-left-radius: $border-radius - 1px
   border-top-right-radius: $border-radius - 1px
+
   .modal-title
     margin-bottom: 0
     line-height: 1.5
     color: $brand-color
     font-weight: 500
     font-size: 1.4rem
-
 
 .modal-dialog-centered
   display: flex
@@ -289,26 +315,27 @@
   box-shadow: none
 
 
-.form-group >label
-  display: block
-  font-weight: bold
+.form-group
+  >label
+    display: block
+    font-weight: normal
 
-input~label
-  color: $brand-color
+  input ~ label
+    color: $brand-color
+
+  input, textarea
+    &::placeholder
+      font-size: 0.9rem
+      font-weight: 300
+
+  .form-control
+    border-radius: 0
+
 
 .form-check-input
   width: 1.2rem
   height: 1.2rem
 
-.alert-container
-  .status
-    font-weight: bold
-    &-0
-      color: darkcyan
-    &-1
-      color: orange
-    &-2
-      color: #178038
 
 .was-validated
   .form-control
@@ -321,3 +348,151 @@ input~label
         color: $brand-color
 
 
+.link
+  position: relative
+  user-select: none
+  cursor: pointer
+  transition: all 200ms ease-out
+  &.with-label
+    display: flex
+    align-items: center
+    height: 1rem
+    .arrow
+      margin-top: 1px
+      &.left
+        width: 0.8rem
+        height: $control-size
+
+  &:not(.btn-primary)
+    span
+      border-bottom: 1px dotted transparent
+      &:hover
+        border-bottom: 1px dotted
+
+  &.btn-primary
+    .arrow
+      &::before, &::after
+        background-color: #fff
+
+
+.animation
+  >*
+    transition: opacity 200ms $cubic-bezier, visibility #{$slide-left-duration}
+  >header
+    transition: opacity #{$slide-left-duration} ease-in-out, transform $slide-left-duration $slide-left-bezier
+
+  &.invisible
+    >header
+      transform: translate($slide-left-offset, 0)
+    >*
+      opacity: 0
+
+  &.visible
+    >*
+      opacity: 1
+    >header
+      transform: none
+
+
+.arrow
+  position: relative
+  width: $arrow-size
+  height: $arrow-size
+  $arrow-padding: 60%
+  background-color: transparent !important
+  transition: transform 0.2s ease-out 0.125s, opacity 0.2s ease-out
+  cursor: pointer
+  &:hover
+    stroke-width: 0
+
+  &:before,
+  &:after
+    content: ' '
+    position: absolute
+    height: 100% - $arrow-padding
+    border-radius: $arrow-border-radius
+    width: $arrow-thickness
+    background-color: $arrow-color
+    transition: all 0.15s ease-out
+    &:active
+      opacity: 0.5
+
+  $rotation-degree: 90deg - $arrow-degree/2
+  $sin : +sin($rotation-degree)
+  &:before,
+  &:after
+    left: calc(50% - (#{$sin * (1 - $arrow-padding / 100%) * $arrow-size} + #{$arrow-thickness}) / 2)
+
+  &:before
+    transform-origin: 0 100% 0
+    top: $arrow-padding - 50%
+    transform: rotate($rotation-degree)
+
+  &:after
+    transform-origin: 0 0 0
+    top: 50%
+    transform: rotate(-$rotation-degree)
+
+  &:hover
+    $rotation-degree: 90deg - $arrow-degree-hover/2
+    $sin : +sin($rotation-degree)
+    &:before,
+    &:after
+      left: calc(50% - (#{$sin * (1 - $arrow-padding / 100%) * $arrow-size} + #{$arrow-thickness}) / 2)
+
+    &:after
+      transform: rotate(-$rotation-degree)
+    &:before
+      transform: rotate($rotation-degree)
+
+  &.right
+    transform: rotate(180deg)
+
+  &.up
+    transform: rotate(90deg)
+
+
+#scrollToTop
+  position: fixed
+  top: 100%
+  right: 1.5rem
+  width: $arrow-scroll-up-size
+  height: $arrow-scroll-up-size
+  padding: 0
+  transition: transform 500ms $bound-bezier, opacity 700ms ease-out
+  z-index: 999
+  cursor: pointer
+
+  .link
+    position: absolute
+    width: 100%
+    height: 100%
+    border: 0
+    padding: 1rem
+    transform: scale(0.6)
+    .arrow.up, span
+      transition: all 300ms ease-in-out
+
+    span
+      position: absolute
+      top: 100%
+      left: 0
+      right: 0
+      padding: 5px
+      font-size: 1em
+      transform: none
+
+  &.visible
+    transform: translateY(calc(-#{$arrow-scroll-up-size} - 4vh))
+    opacity: .3
+
+  &.invisible
+    transform: none
+    opacity: 0
+
+  &:hover
+    opacity: 1
+    .arrow.up
+      margin-top: -1rem
+    span
+      transform: translateY(-100%)

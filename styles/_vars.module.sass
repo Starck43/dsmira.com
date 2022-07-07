@@ -1,21 +1,60 @@
 @import "../node_modules/bootstrap/scss/functions"
 @import "../node_modules/bootstrap/scss/variables"
 @import "../node_modules/bootstrap/scss/mixins"
+@import mixins
 
-$font-family-sans-serif: "exo2", Tahoma, Arial
-$bg-color: #a6a6a6
-$brand-color: #8c52ff
+$font-family-sans-serif: 'Roboto', Tahoma, Arial
+$bg-color: #fff
+$brand-color: #3d4652
 
+$nav-font-size: 0.8rem
 $header-title-color: white
 $link-color: $brand-color
 $title-color: #000
-$text-color: #333
+$text-color: $brand-color
 $button-text-color: #fff
 $button-bg-color: $brand-color
-$countdown-number-offset: 0.5em
-$border-radius: 8px
-$icon-size: 1.2rem
-$border-width: 3px
-$modal-dialog-bg: lighten($bg-color, 30%)
+$border-radius: 1px
+$control-size: 1.5rem
+$border-width: 1px
 $event-avatar-size: 300px
 $event-avatar-size-sm: 180px
+$projects-img-gap: 2vw
+
+$slider-autoplay-interval: 0s
+$slider-controls-margin: $control-size
+$lightbox-controls-margin: 2vw
+$lightbox-controls-color: transparentize(white, 0.3)
+$lightbox-controls-bg-color: transparentize(black, 0.3)
+
+$arrow-degree: 110deg
+$arrow-degree-hover: 90deg
+$arrow-size: 3.5rem
+$arrow-scroll-up-size: 2.5rem
+$arrow-thickness: 2px
+$arrow-border-radius: 1rem
+$arrow-color: black
+
+$modal-dialog-bg: lighten($bg-color, 30%)
+$message-status-success: black
+$message-status-error: #8a2b02
+$message-status-warning: #bb6e09
+
+$transition-bezier: cubic-bezier(.03, .2, .3, 1)
+$cubic-bezier: cubic-bezier(.07, .19, .3, 1.03)
+$bound-bezier: cubic-bezier(.05, .58, .47, 1.5)
+
+$slide-up-bezier: $transition-bezier
+$slide-up-offset: 150px
+$slide-up-duration: 700ms
+$slide-up-delay: 200ms
+
+$slide-left-bezier: $cubic-bezier
+$slide-left-offset: 100px
+$slide-left-duration: 1200ms
+$slide-left-delay: 100ms
+
+$progressbar-h: 2px
+$progressbar-bg: lighten($brand-color, 50%)
+$progressbar-loaded-bg: lighten($brand-color, 30%)
+$progressbar-played-bg: $brand-color

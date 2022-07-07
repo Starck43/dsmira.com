@@ -13,7 +13,7 @@ from ckeditor.fields import RichTextField
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit, ResizeToFill
 
-from .logic import remove_media_folder, remove_media, generate_media, get_admin_thumb, MediaFileStorage, PortfolioUploadTo, SliderUploadTo
+from .logic import remove_media_folder, remove_media, generate_media, get_admin_thumb, MediaFileStorage, MediaUploadTo
 
 
 class SearchManager(models.Manager):
@@ -100,6 +100,16 @@ class Post(models.Model):
 	description = RichTextUploadingField('Подробное описание', blank=True, help_text='Дополнительный блок с редактором текста')
 	sort = models.PositiveSmallIntegerField('Индекс сортировки', null=True, blank=True, help_text='Нумерованные записи окажутся выше других')
 	post_type = models.CharField('Тип поста', max_length=50, null=True, blank=True, editable=False)
+	file = ProcessedImageField(
+		processors=[ResizeToFit(1200, 800)],
+		format='JPEG',
+		options={'quality': settings.PORTFOLIO_IMAGE_QUALITY},
+		storage=MediaFileStorage(output='about_extra.jpg'),
+		null=True,
+		blank=True,
+		verbose_name='Дополнительный медиафайл',
+		help_text=''
+	)
 
 	objects = SearchManager()
 
@@ -109,9 +119,30 @@ class Post(models.Model):
 		verbose_name_plural = 'Посты'
 
 
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.original_file = self.file
+
+
+	def delete(self, *args, **kwargs):
+		super().delete(*args, **kwargs)
+		remove_media(self.file)
+
+
 	def save(self, *args, **kwargs):
+		# delete an old image before saving a new one
+		if self.original_file and self.file != self.original_file:
+			remove_media(self.original_file)
+			self.original_file = None
+
 		self.post_type = self._meta.model_name
 		super().save(*args, **kwargs)
+
+		if self.file != self.original_file:
+			generate_media(self.file, [50, 320, 576, 768, 992])
+
+		self.original_file = self.file
+
 
 	def __str__(self):
 		return self.title
@@ -122,7 +153,6 @@ class Contact(Post):
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Введите номер в формате: '+7XXXXXXXXXX'")
 
 	logo = ProcessedImageField(
-		upload_to='uploads/',
 		processors=[ResizeToFit(150, 150)],
 		format='PNG',
 		options={'quality': settings.PORTFOLIO_IMAGE_QUALITY},
@@ -135,8 +165,8 @@ class Contact(Post):
 	phone = models.CharField('Телефон', validators=[phone_regex], max_length=12, blank=True, default="")
 	email = models.EmailField('E-mail', max_length=50, blank=True, default="")
 	www = models.URLField('Сайт', blank=True, help_text='Ссылка на этот сайт')
-	whatsapp = models.CharField('WhatsApp', max_length=75, blank=True, default="wa.me", help_text='Укажите номер телефона только цифрами')
-	telegram = models.CharField('Telegram', max_length=75, blank=True, default="t.me", help_text='Укажите имя пользователя username')
+	whatsapp = models.CharField('WhatsApp', max_length=75, blank=True, help_text='Укажите номер телефона цифрами wa.me/7XXXXXXXXXX')
+	telegram = models.CharField('Telegram', max_length=75, blank=True, help_text='Укажите имя пользователя username t.me/username')
 	location = models.TextField('Адрес расположения', blank=True)
 	show_email = models.BooleanField('Показать почтовый адрес в контактах?', blank=True, default=True)
 
@@ -148,7 +178,7 @@ class Contact(Post):
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.original_file = self.logo
+		self.original_logo = self.logo
 
 
 	def delete(self, *args, **kwargs):
@@ -157,14 +187,16 @@ class Contact(Post):
 
 
 	def save(self, *args, **kwargs):
-		if self.logo and self.original_file and self.logo.file != self.logo.path:
-			generate_media(self.logo)
-
-		if not self.logo and self.original_file:
-			remove_media(self.original_file)
+		# delete an old image before saving a new one
+		if self.original_logo and self.logo != self.original_logo:
+			remove_media(self.original_logo)
+			self.original_logo = None
 
 		super().save(*args, **kwargs)
-		self.original_file = self.logo
+		if self.logo != self.original_logo:
+			generate_media(self.logo)
+
+		self.original_logo = self.logo
 
 
 	def __str__(self):
@@ -225,18 +257,18 @@ class Customer(Post):
 class About(Post):
 	#slug = models.SlugField('Ярлык', max_length=250, unique=True, help_text='')
 	avatar = ProcessedImageField(
-		upload_to='avatars/',
-		processors=[ResizeToFill(450, 450)],
+		processors=[ResizeToFit(600, 600)],
 		format='JPEG',
 		options={'quality': settings.PORTFOLIO_IMAGE_QUALITY},
 		storage=MediaFileStorage(),
 		blank=True,
 		verbose_name='Аватар',
-		help_text='Изображение аватар размером 450x450 пикс'
+		help_text='Изображение аватар размером 600x600 пикс'
 	)
 	link = models.URLField('Ссылка на сайт', blank=True, help_text='Внешняя ссылка на сайт')
 
 	class Meta:
+		db_table = 'about'
 		ordering = ['title']
 		verbose_name = 'о себе'
 		verbose_name_plural = 'О себе'
@@ -256,9 +288,11 @@ class About(Post):
 		# delete an old image before saving a new one
 		if self.original_avatar and self.avatar != self.original_avatar:
 			remove_media(self.original_avatar)
-			self.original_avatar = None
 
 		super().save(*args, **kwargs)
+		if self.avatar != self.original_avatar:
+			generate_media(self.avatar, [50, 320, 450])
+
 		self.original_avatar = self.avatar
 
 
@@ -276,10 +310,10 @@ class Portfolio(Post):
 
 	category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name='Категория', related_name='portfolio')
 	slug = models.SlugField(max_length=250, verbose_name='Ярлык', editable=False)
-	created_date = models.DateField('Дата реализации проекта', auto_now_add=False)
+	created_date = models.DateField('Дата реализации проекта', blank=True, auto_now_add=False)
 	cover = ProcessedImageField(
-		upload_to=PortfolioUploadTo,
-		processors=[ResizeToFill(600, 600)],
+		upload_to=MediaUploadTo,
+		processors=[ResizeToFit(900, 900)],
 		format='JPEG',
 		options={'quality': settings.PORTFOLIO_IMAGE_QUALITY},
 		storage=MediaFileStorage(output='cover.jpg'),
@@ -312,11 +346,15 @@ class Portfolio(Post):
 			self.original_cover = None
 
 		super().save(*args, **kwargs)
+		if self.cover != self.original_cover:
+			generate_media(self.cover, [50, 320, 576, 768])
+
 		self.original_cover = self.cover
 
 
 	def delete(self, *args, **kwargs):
 		super().delete(*args, **kwargs)
+		remove_media(self.cover)
 		remove_media_folder(f'{self._meta.db_table}/{self.slug}')
 
 
@@ -331,14 +369,14 @@ class Media(models.Model):
 	title = models.CharField('Заголовок', max_length=50, blank=True)
 	excerpt = models.TextField('Подзаголовок', blank=True)
 	file = ProcessedImageField(
-		upload_to=PortfolioUploadTo,
-		processors=[ResizeToFit(1200, 800)],
+		upload_to=MediaUploadTo,
+		processors=[ResizeToFit(1400, 900)],
 		#format='WEBP',
 		options={'quality': settings.PORTFOLIO_IMAGE_QUALITY},
 		storage=MediaFileStorage(),
 		null=True,
 		verbose_name='Фото проекта',
-		help_text='Изображение размером 1200x800 пикс'
+		help_text='Изображение размером 1400x900 пикс'
 	)
 	sort = models.PositiveSmallIntegerField('Индекс сортировки', null=True, blank=True)
 
@@ -368,7 +406,7 @@ class Media(models.Model):
 		super().save(*args, **kwargs)
 
 		if self.file != self.original_file:
-			generate_media(self.file, [50, 320, 576, 768, 1080, 1200])
+			generate_media(self.file, [50, 320, 576, 768, 992, 1200])
 
 		self.original_file = self.file
 
@@ -411,10 +449,10 @@ class Slider(Post):
 class Slide(Media):
 	Media._meta.get_field('portfolio').blank=True
 	slider = models.ForeignKey(Slider, on_delete=models.CASCADE, null=True, verbose_name='Слайдер', related_name='slides')
-	video = models.FileField('Видео', upload_to=SliderUploadTo, null=True, blank=True, storage=MediaFileStorage(), help_text='Фото или видеофайл')
+	video = models.FileField('Видео', upload_to=MediaUploadTo, null=True, blank=True, storage=MediaFileStorage(), help_text='Фото или видеофайл')
 	Media._meta.get_field('file').verbose_name='слайд'
 	Media._meta.get_field('file').verbose_name_plural='Слайды'
-	Media._meta.get_field('file').upload_to=SliderUploadTo
+	Media._meta.get_field('file').blank=True
 	link = models.URLField('Ссылка на видео', null=True, blank=True, help_text='Внешняя ссылка на видео (Youtube, Vimeo и др)')
 
 	# Metadata

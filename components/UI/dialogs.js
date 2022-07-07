@@ -2,32 +2,41 @@ import {Button, Modal} from "react-bootstrap"
 import React from "react"
 
 
-export const AlertDialog = ({children, show, closeHandler, title, footer, className}) => (
-	<Modal className={`alert-container ${className}`} show={show} onHide={closeHandler} size="md" centered>
+export const ModalDialog = ({
+	                            children,
+	                            show = false,
+	                            closeHandler,
+	                            title,
+	                            footer,
+	                            className,
+	                            size = "sm",
+	                            scrollable = true
+                            }) => (
+	<Modal className={className}
+	       contentClassName="alert-content"
+	       centered
+	       size={size}
+	       fullscreen="sm-down"
+	       scrollable={scrollable}
+	       backdrop={false}
+	       show={show}
+	       onHide={closeHandler}
+	>
 		<Modal.Header closeButton>
-			<Modal.Title>{title}</Modal.Title>
+			{title && <Modal.Title>{title}</Modal.Title>}
 		</Modal.Header>
 
+		{children &&
 		<Modal.Body className="flex-column center">
 			{children}
 		</Modal.Body>
+		}
 
-		{footer}
+		<Modal.Footer>
+			{footer || <Button variant="secondary" type="button" onClick={closeHandler}>Закрыть</Button>}
+		</Modal.Footer>
 	</Modal>
 )
 
 
-export const ModalDialog = ({children, show, submitHandler, closeHandler, title, footer, className}) => (
-	<Modal className={`${className}`} show={show} onHide={closeHandler} size="xl" fullscreen="sm-down" scrollable={true} centered>
-		<Modal.Header closeButton>
-			<Modal.Title>{title}</Modal.Title>
-		</Modal.Header>
-
-		<Modal.Body className="flex-column center">
-			{children}
-		</Modal.Body>
-
-		{footer}
-	</Modal>
-)
 

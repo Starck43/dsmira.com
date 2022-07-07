@@ -17,18 +17,17 @@ from uuslug import slugify, uuslug
 
 
 def is_file_exist(obj):
-	return path.isfile(obj.file.name)
+	return path.isfile(obj.path)
 
 
 def is_image_file(obj):
 	filename, ext = path.splitext(obj.file.name)
-	return ext.lower() == '.jpg' or ext.lower() == '.jpeg' or ext.lower() == '.png'
+	return ext.lower() == '.jpg' or ext.lower() == '.jpeg' or ext.lower() == '.png' or ext.lower() == '.gif'
 
 
 # delete obj related media files and their cached thumbnails
 def remove_media_folder(relative_folder):
 	absolute_path = path.join(settings.BASE_DIR, settings.MEDIA_ROOT, settings.FILES_UPLOAD_FOLDER, relative_folder)
-	print(absolute_path)
 	rmtree(absolute_path, ignore_errors=True)
 
 # delete obj related media files and their cached thumbnails
@@ -78,6 +77,42 @@ def generate_media(obj, *sizes, resize_source=True):
 			return HttpResponse('Ошибка открытия файла %s!' % file)
 
 
+
+class MediaFileStorage(FileSystemStorage):
+	def __init__(self, **kwargs):
+		self.output_name = kwargs.get('output', None)
+		super().__init__()
+
+
+	def get_available_name(self, name, max_length=None):
+		upload_folder, filename = path.split(name)
+		if upload_folder:
+			upload_folder += '/'
+
+		if self.output_name:
+			filename = self.output_name
+
+		filename, ext = path.splitext(filename)
+		name = upload_folder+slugify(filename)
+		filename = name+ext
+
+		#delete a file if exists
+		index=0
+		while self.exists(filename):
+			index += 1
+			filename = f'{name}-{index:02}{ext}'
+			if index == 20:
+				break
+			#remove(self.path(name))
+
+		return filename
+
+
+	def save(self, name, content, max_length=None):
+		return super().save(name, content, max_length)
+
+
+
 class AdminThumbnail(ImageSpec):
 	w = settings.ADMIN_THUMBNAIL_SIZE[0]
 	h = settings.ADMIN_THUMBNAIL_SIZE[1]
@@ -102,7 +137,7 @@ def get_admin_thumb(obj):
 		thumb = generate_admin_thumb(obj)
 		#print(f'get admin thumb {thumb.url}')
 		if thumb.url:
-			return format_html('<img src="{0}" max-width="50"/>', thumb.url)
+			return format_html('<img src="{0}" width="50"/>', thumb.url)
 	return format_html('<img src="/media/no-image.png" width="50"/>')
 
 
@@ -130,59 +165,20 @@ def generate_thumbs(obj, sizes):
 
 
 
-def PortfolioUploadTo(instance, filename):
-	if instance._meta.model_name == 'media':
+def MediaUploadTo(instance, filename):
+	#print(instance._meta.model_name)
+	if instance._meta.model_name == 'slider':
+		related_folder = instance.slider._meta.db_table
+		folder = slugify(instance.slider.title)
+	elif instance._meta.model_name == 'media':
 		related_folder = instance.portfolio._meta.db_table
 		folder = slugify(instance.portfolio.title)
 	else:
 		related_folder = instance._meta.db_table
-		folder = instance.slug
+		folder = slugify(instance.title)
 
+ 	#latest_id = 1 if not related_model.objects.all() else related_model.objects.latest().id
 	return '{0}{1}/{2}/{3}'.format(settings.FILES_UPLOAD_FOLDER, related_folder, folder, filename)
-
-
-
-def SliderUploadTo(instance, filename):
-	related_folder = instance.slider._meta.db_table
-	related_model = instance.slider._meta.model
-	#latest_id = 1 if not related_model.objects.all() else related_model.objects.latest().id
-	folder = slugify(instance.slider.title)
-	return '{0}{1}/{2}/{3}'.format(settings.FILES_UPLOAD_FOLDER, related_folder, folder, filename)
-
-
-
-class MediaFileStorage(FileSystemStorage):
-	def __init__(self, **kwargs):
-		self.output_name = kwargs.get('output', None)
-		super().__init__()
-
-
-	def get_available_name(self, name, max_length=None):
-		upload_folder, filename = path.split(name)
-		if upload_folder:
-			upload_folder += '/'
-
-		if self.output_name:
-			filename = self.output_name
-		#print(upload_folder, filename)
-		filename, ext = path.splitext(filename)
-		name = upload_folder+slugify(filename)+ext
-
-		# delete a file if exists
-		if path.exists(self.path(name)):
-			remove(self.path(name))
-
-		return name
-
-	# def save(self, name, content, max_length=None):
-	# 	filename, ext = path.splitext(name)
-	# 	index = 1
-	# 	while self.exists(name):
-	# 		index += 1
-	# 		name = '{}-{}{}'.format(filename, index, ext)
-	# 		if index == 20:
-	# 			break
-	# 	return super().save(name, content, max_length)
 
 
 
@@ -194,14 +190,16 @@ def get_admin_site_url(request):
 
 
 def get_site_url(request):
+	name = ''
 	scheme = request.is_secure() and "https" or "http"
-	url = settings.CORS_ALLOWED_ORIGINS[0] if len(settings.CORS_ALLOWED_ORIGINS) > 0 else '%s://%s' % (scheme, request.META['HTTP_HOST'])
+	if request.META['HTTP_HOST'] :
+		url = '%s://%s' % (scheme, request.META['HTTP_HOST'])
+	else :
+		url = settings.ALLOWED_HOSTS[0] if len(settings.ALLOWED_HOSTS) > 0 else ""
+
 	if (url):
 		name = re.sub(r'^https?:\/\/|\/(www\.)?$', '', url, flags=re.MULTILINE)
 		name = name.strip().strip('/')
-	else:
-		url = ''
-		name = ''
 
 	return {
 		'url': url,
@@ -224,41 +222,44 @@ def addDomainToUrl(request, value, pattern, start=False):
 
 
 """ Sending email """
-def SendEmail(subject, template, email_ricipients=settings.EMAIL_RICIPIENTS):
+def SendEmail(subject, template, email_sender=settings.EMAIL_HOST_USER, email_ricipients=settings.EMAIL_RICIPIENTS):
 	email = EmailMessage(
 		subject,
 		template,
-		settings.EMAIL_HOST_USER,
+		email_sender,
 		email_ricipients,
+		reply_to=[settings.EMAIL_RICIPIENTS[0]],
 	)
 
 	email.content_subtype = "html"
 	email.html_message = True
-	email.fail_silently=False
+	email.fail_silently = False
 
 	try:
 		email.send()
-	except BadHeaderError:
+	except Exception as e:
+		print('Mail sending error: %s' % type(e))
 		return False
 
 	return True
 
 
 """ Async email sending class """
-class EmailThread(Thread):
-	def __init__(self, subject, template, email_ricipients):
+class AsyncEmail(Thread):
+	def __init__(self, subject, template, email_sender, email_ricipients):
 		self.subject = subject
 		self.html_content = template
-		self.recipient_list = email_ricipients
+		self.email_sender = email_sender
+		self.email_ricipients = email_ricipients
 		Thread.__init__(self)
 
 	def run(self):
-		return SendEmail(self.subject, self.html_content, self.recipient_list)
+		return SendEmail(self.subject, self.html_content, self.email_sender, self.email_ricipients)
 
 
-""" Sending email to recipients """
-def SendEmailAsync(subject, template, email_ricipients=settings.EMAIL_RICIPIENTS):
-	EmailThread(subject, template, email_ricipients).start()
+""" Sending email to recipients asyncronically """
+def SendEmailAsync(subject, template, email_sender=settings.EMAIL_HOST_USER, email_ricipients=settings.EMAIL_RICIPIENTS):
+	AsyncEmail(subject, template, email_sender, email_ricipients).start()
 
 
 

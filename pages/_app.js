@@ -23,7 +23,7 @@ export default function MyApp({ Component, pageProps }) {
 		}
 	}, [router.events])
 	return (
-		<IconContext.Provider value={{className: 'react-icons'}}>
+		<IconContext.Provider value={{className: 'react-icons svg-icons', size: '3rem'}}>
 			<Component {...pageProps} />
 		</IconContext.Provider>
 	)

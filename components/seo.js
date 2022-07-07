@@ -1,25 +1,29 @@
 import Head from "next/head"
-import DATA, {HOME_TITLE, SITE_NAME, SITE_URL} from "../core/constants"
+import {HEADER, SITE_NAME, SITE_URL} from "../core/constants"
 
 const Seo = ({name, logo, seo}) => (
 	<Head>
 		<meta charSet="utf-8"/>
 		<title>{name}</title>
-		<meta name="title" content={seo.title}/>
-		<meta name="description" content={seo.description}/>
-		<meta name="keywords" content={seo.keywords}/>
+		{Object.keys(seo).length && (
+			<>
+				<meta name="title" content={seo.title}/>
+				<meta name="description" content={seo.description}/>
+				<meta name="keywords" content={seo.keywords}/>
+				<meta property="og:description" content={seo.description}/>
+				<meta property="og:title" content={seo.title}/>
+			</>
+		)}
+		<meta property="og:site_name" content={SITE_NAME}/>
 		<meta property="og:type" content="website"/>
 		<meta property="og:locale" content="ru_RU"/>
-		<meta property="og:site_name" content={SITE_NAME}/>
-		<meta property="og:description" content={seo.description}/>
-		<meta property="og:title" content={seo.title}/>
 		<meta property="og:image" content={logo}/>
 
 		<link
 			rel="preload"
 			as="image"
-			href={DATA.logo}
-			crossOrigin="true"
+			href={HEADER.logo}
+			//crossOrigin="true"
 		/>
 		{process.env.NODE_ENV === "production" && (
 			<>
@@ -54,13 +58,13 @@ const Seo = ({name, logo, seo}) => (
 				<link
 					rel="mask-icon"
 					href="/favicons/safari-pinned-tab.svg"
-					color={DATA.safariColor}
+					color={HEADER.safariColor}
 				/>
 
 				<link rel="manifest" href="/favicons/site.webmanifest"/>
-				<meta name="msapplication-TileColor" content={DATA.msTileColor}/>
+				<meta name="msapplication-TileColor" content={HEADER.msTileColor}/>
 				<meta name="msapplication-config" content="/favicons/browserconfig.xml"/>
-				<meta name="theme-color" content={DATA.themeColor}/>
+				<meta name="theme-color" content={HEADER.themeColor}/>
 				<link rel="shortcut icon" href="/favicons/favicon.ico"/>
 				<link rel="alternate" type="application/rss+xml" href="/feed.xml"/>
 

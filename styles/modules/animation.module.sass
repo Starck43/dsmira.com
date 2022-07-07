@@ -1,0 +1,19 @@
+@import ../vars.module
+
+\:export
+	slideUp__delay : $slide-up-delay
+	slideLeft__delay : $slide-left-delay
+
+.slideUp
+	transform: translate(0, $slide-up-offset)
+	transition: opacity #{$slide-up-duration * 1.2} ease-out, transform $slide-up-duration $slide-up-bezier
+
+.slideLeft
+	transform: translate($slide-left-offset, 0)
+	transition: opacity #{$slide-left-duration * 1.2} ease-out, transform $slide-left-duration $slide-left-bezier
+
+.invisible
+	opacity: 0
+.visible
+	opacity: 1
+	transform: none

@@ -7,15 +7,16 @@ import CheckControl from "./controls/check"
 
 const Control = ({
 		title,
+		name,
 		type='text',
 		choices,
+		compact=true,
 		selected='',
 		required=false,
 		inline=false,
-		compact=true,
 		placeholder='',
 		autocomplete='false',
-		name,
+		rows=5,
 	}) => {
 
 	return (
@@ -27,7 +28,7 @@ const Control = ({
 						<Form.Control
 							as={type}
 							name={name}
-							rows={3}
+							rows={rows}
 							placeholder={placeholder}
 							autoComplete={autocomplete.toString()}
 							required={required}

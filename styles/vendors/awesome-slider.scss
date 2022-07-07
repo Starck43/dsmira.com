@@ -72,8 +72,10 @@ video {
 .#{$root-element} {
 	display: block;
 	position: relative;
-	width: 90%;
+	width: 100%;
 	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
 
 	&__wrapper {
 		display: block;
@@ -99,7 +101,7 @@ video {
 		}
 	}
 	&__startUp {
-		background-color: red;
+		background-color: grey;
 		height: 100%;
 		width: 100%;
 
@@ -139,12 +141,6 @@ video {
 					position: relative;
 					padding-bottom: var(--slider-height-percentage);
 				}
-
-				.react-player {
-					position: absolute;
-					top: 0;
-					left: 0;
-				}
 			}
 		}
 		// > div {
@@ -161,17 +157,18 @@ video {
 	&__controls {
 		button {
 			@extend %clear-focus;
+			position: absolute;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			width: var(--control-button-width);
 			height: var(--control-button-height);
-			position: absolute;
-			z-index: 10;
 			top: calc(50% - (0.5 * var(--control-button-height)));
+			padding: 0;
 			border: none;
 			background-color: var(--control-button-background);
 			color: #fff;
+			z-index: 10;
 			cursor: pointer;
 			.#{$root-element}__controls__arrow-left,
 			.#{$root-element}__controls__arrow-right {
@@ -221,10 +218,10 @@ video {
 		}
 	}
 	&__next {
-		right: calc(var(--control-button-width) * -1.1);
+		right: calc(var(--control-button-width) * -1);
 	}
 	&__prev {
-		left: calc(var(--control-button-width) * -1.1);
+		left: calc(var(--control-button-width) * -1);
 	}
 	&__box {
 		z-index: 1;

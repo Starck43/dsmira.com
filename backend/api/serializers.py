@@ -40,6 +40,7 @@ class FixRichCaretSerializer(serializers.Field):
 		return value
 
 
+
 class SeoSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Seo
@@ -62,12 +63,10 @@ class MetaSerializer(serializers.ModelSerializer):
 		fields = ('logo', 'name', 'phone',)
 
 
-class SlideSerializer(serializers.ModelSerializer):
-	#cover = serializers.ImageField(max_length=None, use_url=True)
-	file = serializers.FileField(max_length=None, use_url=True)
+class CategorySerializer(serializers.ModelSerializer):
 	class Meta:
-		model = Slide
-		fields = ('id', 'title', 'excerpt', 'portfolio', 'file', 'video', 'link',)
+		model = Category
+		fields = ('id', 'title', 'slug',)
 
 
 class MediaSerializer(serializers.ModelSerializer):
@@ -76,6 +75,20 @@ class MediaSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Media
 		fields = ('id', 'title', 'excerpt', 'file',)
+
+	def to_representation(self, instance):
+		data = super().to_representation(instance)
+		if instance.file:
+			data.update({'width' : instance.file.width, 'height' : instance.file.height})
+		return data
+
+
+class SlideSerializer(MediaSerializer):
+	#cover = serializers.ImageField(max_length=None, use_url=True)
+	#file = serializers.FileField(max_length=None, use_url=True)
+	class Meta:
+		model = Slide
+		fields = ('id', 'title', 'excerpt', 'portfolio', 'file', 'video', 'link',)
 
 
 class SliderSerializer(serializers.ModelSerializer):
@@ -90,24 +103,30 @@ class SliderSerializer(serializers.ModelSerializer):
 class PortfolioSerializer(serializers.ModelSerializer):
 	excerpt = FixCharCaretSerializer()
 	description = FixRichCaretSerializer()
-	created_date = serializers.DateField(format="%d.%m.%Y")
-	category = serializers.SlugRelatedField(slug_field='slug', queryset=Category.objects.all())
+	#created_date = serializers.DateField(format="%d.%m.%Y")
+	category = CategorySerializer()
 	cover = serializers.ImageField(max_length=None, use_url=True)
 
 	class Meta:
 		model = Portfolio
-		exclude = ('section', 'sort', 'is_active',)
+		exclude = ('section', 'post_type', 'sort', 'is_active',)
 
 
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
+		if instance.cover:
+			data['cover_size'] = {'width' : instance.cover.width, 'height' : instance.cover.height}
+
 		if not self.context['many']:
 			data['slides'] = MediaSerializer(instance.images, many=True, context=self.context).data
 		return data
 
 
+
 class ContactSerializer(serializers.ModelSerializer):
 	location = FixCharCaretSerializer()
+	excerpt = FixCharCaretSerializer()
+
 	class Meta:
 		model = Contact
 		exclude  = ('id', 'post_type', 'sort', 'section', 'is_active',)
@@ -118,8 +137,14 @@ class AboutSerializer(serializers.ModelSerializer):
 		model = About
 		exclude  = ('id', 'post_type', 'sort', 'section', 'is_active',)
 
+	def to_representation(self, instance):
+		data = super().to_representation(instance)
+		if instance.avatar:
+			data['avatar_size'] = {'width' : instance.avatar.width, 'height' : instance.avatar.height}
+		return data
 
-class CustomerSerializer(serializers.ModelSerializer):
+
+class CustomerSerializer(AboutSerializer, serializers.ModelSerializer):
 	class Meta:
 		model = Customer
 		exclude  = ('id', 'post_type', 'sort', 'section', 'is_active',)
@@ -132,7 +157,13 @@ class SectionSerializer(serializers.ModelSerializer):
 		fields = ('id', 'slug', 'name', 'show_on_page', 'area', 'in_nav', 'link',)
 
 	def get_link(self, obj):
-		return '{}{}'.format( '/' if obj.show_on_page == 'self_page' else '#', obj.slug )
+		return '{}{}'.format( '' if obj.show_on_page == 'self_page' else '#', obj.slug )
+
+	def to_representation(self, instance):
+		data = super().to_representation(instance)
+		data['active'] = True if self.context['current_route'] == instance.slug else False
+
+		return data
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -146,9 +177,11 @@ class PostSerializer(serializers.ModelSerializer):
 
 class PostListSerializer(serializers.ModelSerializer):
 	content = serializers.SerializerMethodField()
+
 	class Meta:
 		model = Post
-		fields = ('content', 'id', 'post_type',)
+		fields = ('content', 'id', 'post_type', 'title',)
+
 
 	def get_content(self, obj):
 		data = get_model_data(obj.post_type, id=obj.id, is_active=True)
@@ -179,27 +212,24 @@ class PostListSerializer(serializers.ModelSerializer):
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
 		data['section'] = instance.section.slug
+		data['section_name'] = instance.section.name
 		data['page'] = instance.section.show_on_page
 		data['area'] = instance.section.area
+		if instance.file:
+			data['content']['file_size'] = {'width' : instance.file.width, 'height' : instance.file.height}
 		if instance.section.area != 'header':
-			data['url'] = '/{}/{}'.format(instance.section.slug, instance.id) if instance.section.show_on_page == 'self_page' else '#'+instance.section.slug
+			if instance.post_type == 'portfolio':
+				data['url'] = '/{}/{}'.format('projects', instance.id)
+			else:
+				data['url'] = '/{}/{}'.format(instance.section.slug, instance.id)
 		else:
 			data['url'] = None
+
 		return data
 
 
 class PostDetailSerializer(PostListSerializer, serializers.ModelSerializer):
 	def to_representation(self, instance):
 		self.context['many'] = False
-		data = super().to_representation(instance)
-		posts = Contact.objects.all()
-		queryset_contact = posts[0] if posts else None
+		return super().to_representation(instance)
 
-		data['meta'] = MetaSerializer(queryset_contact, context=self.context).data
-		try:
-			queryset_seo = Seo.objects.get(post=instance)
-			data['meta']['seo'] = SeoSerializer(queryset_seo, many=False).data
-		except Seo.DoesNotExist:
-			pass
-
-		return data

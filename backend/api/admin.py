@@ -55,7 +55,7 @@ class MediaInlineAdmin(admin.TabularInline):
 
 
 
-class SlideInlineAdmin(admin.TabularInline):
+class SlideInlineAdmin(MediaInlineAdmin):
 	model = Slide
 
 	extra = 0 #new blank record count
@@ -140,8 +140,6 @@ class AboutAdmin(PostAdmin):
 
 @admin.register(Portfolio)
 class PortfolioAdmin(PostAdmin):
-	model = Portfolio
-
 	list_display = ('thumb', 'title', 'category', 'section', 'created_date', 'status',)
 	list_display_links = ('thumb', 'title',)
 	list_filter = ('category', 'status',)
@@ -154,7 +152,6 @@ class PortfolioAdmin(PostAdmin):
 
 @admin.register(Media)
 class MediaAdmin(admin.ModelAdmin):
-	model = Media
 	exclude = ('name',)
 	list_display = ('thumb', 'portfolio', 'title', 'excerpt',)
 	list_display_links = ('thumb', 'portfolio', 'title',)
@@ -163,14 +160,12 @@ class MediaAdmin(admin.ModelAdmin):
 
 @admin.register(Slider)
 class SliderAdmin(PostAdmin):
-	model = Slider
 	inlines = [SlideInlineAdmin]
 
 
 
 @admin.register(Slide)
 class SlideAdmin(MediaAdmin):
-	model = Slide
 	# exclude = ('name',)
 	list_display = ('thumb','filename', 'slider', 'portfolio', )
 	list_display_links = ('thumb','filename',)

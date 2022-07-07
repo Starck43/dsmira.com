@@ -1,4 +1,5 @@
-import {arrayToParams, cleanDoubleSlashes} from "./utils"
+import {arrayToParams, cleanDoubleSlashes, getSiteLocation} from "./utils"
+import {Fetch} from "./Fetch"
 
 /*
 * getPages([page]) - get page content grouped by header, body and footer blocks to update whole page
@@ -80,4 +81,24 @@ export async function getAllPosts(fields = []) {
 	const res = await fetch(url)
 	return await res.json() || []
 
+}
+
+export const postForm = async (form) => {
+	let formData = new FormData(form) // form data to object
+	let data = Object.fromEntries(formData) // get json formatted data
+	data['site'] = getSiteLocation()
+	//console.log(data)
+
+	return await Fetch(process.env.API_SERVER, process.env.API_ENDPOINTS.feedback, {}, {
+		method: "post",
+		headers: {
+			"Origin": process.env.SERVER,
+			//'Content-Type': 'application/x-www-form-urlencoded',
+			//'Content-Type': 'multipart/form-data',
+			"Content-Type": "application/json",
+			"Accept": "application/json, application/xml, text/plain, text/html",
+		},
+		body: JSON.stringify(data),
+		//credentials: 'include',
+	})
 }

@@ -1,0 +1,39 @@
+{% load custom_tags %}
+
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Новое обращение на сайте {{site.name}}</title>
+</head>
+<style>
+	body {
+		margin: 1.5em;
+		font-family: Helvetica, Arial;
+	}
+	.message-field{
+		line-height: 1.3;
+		font-size: 16px;
+	}
+	pre{
+		width:auto;
+		padding: 1.5em;
+		font-style: italic;
+		background-color: #eee;
+	}
+</style>
+
+<body>
+	<h2>Новое сообщение</h2>
+
+	<p>На сайте {{site.name}} оставлено новое сообщение!</p>
+	<div class="message-field">Имя отправителя: <b>{{name}}</b></div>
+	<div class="message-field">E-mail: <b>{{email}}</b></div>
+	<div class="message-field">Телефон: <b>{{phone}}</b></div>
+	<br/>
+	<div class="message-field">Сообщение:</div>
+	<pre>{{message}}</pre>
+
+</body>
+</html>
+
+
