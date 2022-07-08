@@ -37,7 +37,8 @@ const Seo = ({name, logo, seo}) => (
 					crossOrigin="true"
 				/>
 				<meta name="robots" content="follow, index"/>
-				<meta name="yandex-verification" content={process.env.YANDEX_VERIFICATION}/>
+				{process.env.YANDEX_VERIFICATION &&
+				<meta name="yandex-verification" content={process.env.YANDEX_VERIFICATION}/>}
 				<link rel="canonical" href={SITE_URL}/>
 			</>
 		)}

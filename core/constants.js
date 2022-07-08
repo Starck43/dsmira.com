@@ -1,6 +1,9 @@
 export const SITE_NAME = "dsmira"
 export const SITE_URL = "https://dsmira.com"
 export const HOME_TITLE = "Архитектурная студия МИРА"
+export const HEADER = {
+	logo: "/logo.svg",
+}
 
 
 export const FEEDBACK_FORM = {
