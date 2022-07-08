@@ -1,5 +1,6 @@
 import Head from "next/head"
-import {HEADER, SITE_NAME, SITE_URL} from "../core/constants"
+import {SITE_NAME, SITE_URL} from "../core/constants"
+
 
 const Seo = ({name, logo, seo}) => (
 	<Head>
@@ -22,52 +23,19 @@ const Seo = ({name, logo, seo}) => (
 		<link
 			rel="preload"
 			as="image"
-			href={HEADER.logo}
+			href="/logo.svg"
 			//crossOrigin="true"
 		/>
 		{process.env.NODE_ENV === "production" && (
 			<>
+				<link rel="icon" type="image/svg+xml" href="/favicons/favicon.svg"/>
+				<link rel="icon" type="image/png" href="/favicons/favicon.png"/>
 				<link
-					href="/fonts/regular.woff2"
+					href="/fonts/roboto-regular.woff2"
 					rel="preload"
 					as="font"
 					crossOrigin="true"
 				/>
-				<link
-					rel="apple-touch-icon"
-					sizes="180x180"
-					href="/favicons/apple-touch-icon.png"
-				/>
-				<link
-					rel="icon"
-					type="image/svg"
-					href={DATA.logo}
-				/>
-				<link
-					rel="icon"
-					type="image/png"
-					sizes="32x32"
-					href="/favicons/favicon-32x32.png"
-				/>
-				<link
-					rel="icon"
-					type="image/png"
-					sizes="16x16"
-					href="/favicons/favicon-16x16.png"
-				/>
-				<link
-					rel="mask-icon"
-					href="/favicons/safari-pinned-tab.svg"
-					color={HEADER.safariColor}
-				/>
-
-				<link rel="manifest" href="/favicons/site.webmanifest"/>
-				<meta name="msapplication-TileColor" content={HEADER.msTileColor}/>
-				<meta name="msapplication-config" content="/favicons/browserconfig.xml"/>
-				<meta name="theme-color" content={HEADER.themeColor}/>
-				<link rel="shortcut icon" href="/favicons/favicon.ico"/>
-				<link rel="alternate" type="application/rss+xml" href="/feed.xml"/>
-
 				<meta name="robots" content="follow, index"/>
 				<meta name="yandex-verification" content={process.env.YANDEX_VERIFICATION}/>
 				<link rel="canonical" href={SITE_URL}/>

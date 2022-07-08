@@ -1,14 +1,6 @@
-export const SITE_NAME = "Site Name"
-export const SITE_URL = "http://localhost"
-export const HOME_TITLE = "Новый сайт"
-
-
-export const HEADER = {
-	logo: "/logo.svg",
-	themeColor: "#a6a6a6",
-	msTileColor: "#8c52ff",
-	safariColor: "#8c52ff",
-}
+export const SITE_NAME = "dsmira"
+export const SITE_URL = "https://dsmira.com"
+export const HOME_TITLE = "Архитектурная студия МИРА"
 
 
 export const FEEDBACK_FORM = {

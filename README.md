@@ -6,9 +6,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ![](screenshot.jpg)
 
-1. To view a static site **[click here](https://fogapo.ru/)**.
-2. To view a site's code **[visit repository](https://github.com/Starck43/fogapo.git)**.
-3. To add/change content **[open Django](https://admin.fogapo.ru)**.
+1. To view a static site **[click here](https://site.ru/)**.
+2. To view a site's code **[visit repository](https://github.com/Starck43/site.git)**.
+3. To add/change content **[open Django](https://admin.site.ru)**.
 
 
 ## Site code
@@ -18,34 +18,12 @@ Site was written on React/Next.js with Python/Django backend. Pages are pre-rend
  - `next-config.js` -  API settings
  - `core/constants.js` - to change additional personal data
  - `pages/*.js` - base pages
+ - `libs/*.js` - vendor libraries
  - `components/*.js` - all component's folder
  - `public/` - folder for icons, logos and fonts
  - `babel.config.js` Babel settings
-
-### babel.config.js configuration
-```
-module.exports = {
-		"presets": [
-				[
-						"next/babel",
-				]
-		],
-		"plugins": [
-				[
-						"babel-plugin-root-import"
-				],
-				[
-						"styled-components",
-						{
-								"ssr": true
-						}
-				],
-				[
-						"macros"
-				],
-		]
-}
-```
+ - `next-sitemap.config.js` Sitemap settings
+ 
 
 ### Online registration
 
@@ -86,14 +64,6 @@ $ python manage.py runserver [localhost:8000]
 ````
 
 ### API endpoints
-- /posts
-```
-[
-  title,
-  subtitle,
-  content
-]
-```
 
 
 ## Frontend
@@ -103,10 +73,10 @@ In terminal clone and run the project:
 
 ```bash
 # Clone this repository to your project's folder
-$ git clone https://github.com/Starck43/fogapo.git
+$ git clone https://github.com/Starck43/site.git
 
 # Go into the repository
-$ cd fogapo
+$ cd site
 
 # Install dependencies
 $ npm i (or yarn)
@@ -141,7 +111,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 Run [Hook](https://api.vercel.com/v1/integrations/deploy/prj_FCMF1WgdMPeSIP6bmDBe1PspBjAP/NJ0Kqa6gDK) to build site on the hoster's server
 
-Open [fogapo.vercel.app](http://fogapo.vercel.app) with your browser to see the result.
+Open [site.vercel.app](http://site.vercel.app) with your browser to see the result.
+
 
 ## Technologies Used
 
