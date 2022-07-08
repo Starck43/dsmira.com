@@ -17,7 +17,7 @@ export default function MyApp({ Component, pageProps }) {
 	useEffect(() => {
 		const handleRouteChange = url => {
 			/* invoke analytics function only for production */
-			if (isProduction) gtag.pageview(url)
+			if (isProduction && process.env.GA_ANALYTICS_MEASUREMENT_ID) gtag.pageview(url)
 		}
 		router.events.on("routeChangeComplete", handleRouteChange)
 		return () => {

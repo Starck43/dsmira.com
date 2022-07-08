@@ -1,12 +1,11 @@
 
 @import vars.module
-@import utils.module
 @import mixins
+@import utils.module
 @import fonts
 @import nav
 @import projects
 
-//@import "vendors/awesome-slider.scss"
 @import "vendors/nuka-carousel"
 
 html
@@ -131,6 +130,9 @@ a
 	text-decoration: none
 	&:hover
 		color: lighten($link-color, 20%)
+
+.animation a
+	display: block
 
 header
 	&.home
