@@ -25,6 +25,10 @@ static/
 !**/media/no-person.png
 CACHE/
 
+# public
+public/robots.txt
+public/sitemap*.xml
+
 # misc
 .DS_Store
 *.pem
