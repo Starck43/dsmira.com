@@ -49,7 +49,7 @@ const Projects = ({projects, page}) => {
 			<BlockAnimation as="header" className="title" effect="slideLeft">
 				<h2>{projects[0].section_name}</h2>
 			</BlockAnimation>
-			<Filters projects={projects} filterKey={filterKey} filterClickHandle={selectFilterKey}/>
+			<Filters projects={projects} filterKey={filterKey} sortField="sort" filterClickHandle={selectFilterKey}/>
 			<ProjectList items={projects} className={page}/>
 		</section>
 	)
@@ -83,27 +83,34 @@ const ProjectList = ({items, className}) => {
 	)
 }
 
-const Filters = ({projects, filterKey, filterClickHandle}) => {
+const Filters = ({projects, filterKey, sortField, filterClickHandle}) => {
 	Array.prototype.unique = function () {
 		let arr = []
 		for (let i = 0; i < this.length; i++) {
-			arr[this[i].content.category.slug] = this[i].content.category
+			arr.push(this[i].content.category)
 		}
-		return arr
+		return arr.sort(compare)
 	}
+
+	function compare( a, b ) {
+		if ( a[sortField] < b[sortField] ) return -1
+		if ( a[sortField] > b[sortField] ) return 1
+		return 0
+	}
+
 	const filters = projects.unique()
 
 	return (
 		<Nav as={"nav"} className="projects-nav flex-wrap">
 			<Nav.Link data-filter="*" disabled={filterKey === "*"} onClick={filterClickHandle}>Все</Nav.Link>
-			{Object.keys(filters).map(key => (
+			{filters.map(obj => (
 				<Nav.Link
-					key={key}
-					data-filter={filters[key].slug}
+					key={obj.id}
+					data-filter={obj.slug}
 					onClick={filterClickHandle}
-					disabled={filterKey === key}
+					disabled={filterKey === obj.slug}
 				>
-					{filters[key].title}
+					{obj.title}
 				</Nav.Link>
 			))}
 		</Nav>

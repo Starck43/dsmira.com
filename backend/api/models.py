@@ -95,7 +95,7 @@ class Category(models.Model):
 class Post(models.Model):
 	is_active = models.BooleanField('Показывать на странице', default=True)
 	section = models.ForeignKey(Section, on_delete=models.SET_NULL, null=True, related_name='posts', verbose_name='Раздел', help_text='Выберите связанный с контентом раздел')
-	title = models.CharField('Заголовок', max_length=250, unique=True, help_text='Укажите название секции')
+	title = models.CharField('Заголовок', max_length=250, help_text='Укажите название секции')
 	excerpt = models.TextField('Подзаголовок', blank=True, help_text='Дополнительный текст под заголовком')
 	description = RichTextUploadingField('Подробное описание', blank=True, help_text='Дополнительный блок с редактором текста')
 	sort = models.PositiveSmallIntegerField('Индекс сортировки', null=True, blank=True, help_text='Нумерованные записи окажутся выше других')

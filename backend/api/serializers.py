@@ -66,7 +66,7 @@ class MetaSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Category
-		fields = ('id', 'title', 'slug',)
+		fields = ('id', 'title', 'slug', 'sort',)
 
 
 class MediaSerializer(serializers.ModelSerializer):
