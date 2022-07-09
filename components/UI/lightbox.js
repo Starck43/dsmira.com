@@ -25,7 +25,7 @@ const LightBox = ({slides, currentSlide, title, excerpt, show, handleClick, clas
 				/>
 			</Modal.Body>
 
-			<CloseButton variant="white" className="" onClick={handleClick}/>
+			<CloseButton className="" onClick={handleClick}/>
 
 		</Modal>
 	)
