@@ -12,13 +12,12 @@ export default function ProjectDetail({post, preview}) {
 	if (!router.isFallback && !post?.id) {
 		return <ErrorPage statusCode={404}/>
 	}
+
 	return (
 		<Layout meta={post.meta} preview={preview}>
-			{router.isFallback ? (
-				<div>Загрузка...</div>
-			) : (
-				<Page {...post} page="project-detail"/>
-			)
+			{router.isFallback
+				? <div>Загрузка...</div>
+				: <Page {...post} page="project-detail"/>
 			}
 		</Layout>
 	)

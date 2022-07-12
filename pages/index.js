@@ -26,9 +26,11 @@ export default function Index({post}) {
 
 	return (
 		<Layout meta={post.meta}>
-			<Page {...post} page="home"/>
+			{router.isFallback
+				? <div>Загрузка...</div>
+				: <Page {...post} page="home"/>
+			}
 		</Layout>
-
 	)
 }
 
