@@ -17,7 +17,7 @@ from uuslug import slugify, uuslug
 
 
 def is_file_exist(obj):
-	return path.isfile(obj.path)
+	return obj and path.isfile(obj.path)
 
 
 def is_image_file(obj):
@@ -86,13 +86,17 @@ class MediaFileStorage(FileSystemStorage):
 
 	def get_available_name(self, name, max_length=None):
 		upload_folder, filename = path.split(name)
+		filename, extension = path.splitext(filename)
+		ext = extension
+
 		if upload_folder:
 			upload_folder += '/'
 
 		if self.output_name:
-			filename = self.output_name
+			filename, ext = path.splitext(self.output_name)
+			if not ext:
+				ext = extension
 
-		filename, ext = path.splitext(filename)
 		name = upload_folder+slugify(filename)
 		filename = name+ext
 

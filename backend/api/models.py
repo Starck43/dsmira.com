@@ -102,13 +102,13 @@ class Post(models.Model):
 	post_type = models.CharField('Тип поста', max_length=50, null=True, blank=True, editable=False)
 	file = ProcessedImageField(
 		processors=[ResizeToFit(1200, 800)],
-		format='JPEG',
+		#format='JPEG',
 		options={'quality': settings.PORTFOLIO_IMAGE_QUALITY},
-		storage=MediaFileStorage(output='about_extra.jpg'),
+		storage=MediaFileStorage(),
 		null=True,
 		blank=True,
 		verbose_name='Дополнительный медиафайл',
-		help_text=''
+		help_text='Дополнительный медиафайл размером 1200x800 пикс'
 	)
 
 	objects = SearchManager()
@@ -257,6 +257,7 @@ class Customer(Post):
 class About(Post):
 	#slug = models.SlugField('Ярлык', max_length=250, unique=True, help_text='')
 	avatar = ProcessedImageField(
+		upload_to='avatars/',
 		processors=[ResizeToFit(600, 600)],
 		format='JPEG',
 		options={'quality': settings.PORTFOLIO_IMAGE_QUALITY},

@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 # from django.contrib.auth.models import User
 
 from .models import *
-from .logic import addDomainToUrl
+from .logic import addDomainToUrl, is_file_exist
 
 
 def get_model_data(model_name, **kwargs):
@@ -161,7 +161,8 @@ class SectionSerializer(serializers.ModelSerializer):
 
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
-		data['active'] = True if self.context['current_route'] == instance.slug else False
+		print(self.context)
+		data['active'] = True if 'current_route' in self.context and self.context['current_route'] == instance.slug else False
 
 		return data
 
@@ -215,7 +216,7 @@ class PostListSerializer(serializers.ModelSerializer):
 		data['section_name'] = instance.section.name
 		data['page'] = instance.section.show_on_page
 		data['area'] = instance.section.area
-		if instance.file:
+		if is_file_exist(instance.file):
 			data['content']['file_size'] = {'width' : instance.file.width, 'height' : instance.file.height}
 		if instance.section.area != 'header':
 			if instance.post_type == 'portfolio':
