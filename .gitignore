@@ -20,8 +20,7 @@ resources/
 src/
 static/
 **/media/*
-!**/media/no-image.jpg
-!**/media/no-image.png
+!**/media/no-image.*
 !**/media/no-person.png
 CACHE/
 
@@ -58,6 +57,7 @@ venv/
 *.sublime-workspace
 *.sublime-project
 sftp-config.json
+
 package-lock.json
 datadamp.json
 
