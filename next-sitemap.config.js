@@ -1,24 +1,24 @@
 module.exports = {
 	siteUrl: "https://dsmira.com",
-	generateRobotsTxt: true,
-	changefreq: 'monthly',
+	changefreq: "daily",
 	priority: 0.7,
-	exclude: ["/disallowed"],
-	alternateRefs: [],
+	sitemapSize: 5000,
+	generateRobotsTxt: true,
+	//exclude: ["/secret-page"],
+	alternateRefs: [
+		/*
+		{
+			href: 'https://en.example.com',
+			hreflang: 'en',
+		},
+		*/
+	],
 	robotsTxtOptions: {
 		policies: [
 			{
 				userAgent: "*",
-				allow: "/*",
-			},
-			{
-				disallow: "*/?",
-			},
-			{
-				disallow: "/search/?q=",
-			},
-			{
-				disallow: "/api/*",
+				allow: ["/"],
+				disallow: ["/api/*", "/search/?"],
 			},
 		],
 	},
