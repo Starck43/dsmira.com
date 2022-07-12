@@ -15,7 +15,10 @@ export default function ProjectsPage({post}) {
 
 	return (
 		<Layout meta={post.meta}>
-			<Page {...post} page="projects"/>
+			{router.isFallback
+				? <div>Загрузка...</div>
+				: <Page {...post} page="projects"/>
+			}
 		</Layout>
 
 	)

@@ -3,7 +3,7 @@ import React, {useState} from "react"
 import {FormTemplate} from "../UI/forms"
 import {SuccessResponse} from "./modal-response"
 import {FEEDBACK_FORM} from "../../core/constants"
-import {Fetch} from "../../core/Fetch"
+import {Fetch} from "../../core/fetch"
 import {AlertDialog, ModalDialog} from "../UI/dialogs"
 import {Button, Modal} from "react-bootstrap"
 
