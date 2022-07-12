@@ -158,6 +158,7 @@ const Slider = ({
 			enableKeyboardControls
 			slideIndex={current}
 			cellSpacing={1}
+			dragThreshold={0.2}
 			withoutControls={slides.length < 2}
 			autoplay={Boolean(slideInterval)}
 			autoplayInterval={slideInterval}
