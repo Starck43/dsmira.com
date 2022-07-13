@@ -19,6 +19,7 @@
 resources/
 src/
 static/
+assets/
 **/media/*
 !**/media/no-image.*
 !**/media/no-person.png
