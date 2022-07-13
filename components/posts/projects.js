@@ -1,13 +1,12 @@
 import {useEffect, useRef, useState} from "react"
 import Link from "next/link"
 import {Nav} from "react-bootstrap"
+
+import PostMeta from "./post-meta"
 import Cover from "../UI/cover"
 import {BlockAnimation} from "../UI/animation"
-import PostMeta from "./post-meta"
 
-const isBrowser = typeof window !== "undefined"
-const Isotope = isBrowser ? window.Isotope || require("isotope-layout") : null
-//const imagesloaded = isBrowser ? require('imagesloaded') : null;
+const Isotope = typeof window !== "undefined" ? window.Isotope || require("isotope-layout") : null
 
 
 const Projects = ({projects, page}) => {
