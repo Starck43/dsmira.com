@@ -33,32 +33,34 @@ const Slider = ({
 	const carouselRef = useRef(null)
 	const [showSlideCaption, setShowSlideCaption] = useState(true)
 	const [slideInterval, setSlideInterval] = useState(interval)
-	const [slidersState, setSlidersState] = useState(null)
+	const [slidersState, setSlidersState] = useState(
+		slides?.reduce((acc, value) => {
+			acc[value.id] = {
+				ref: createRef(),
+				id: value.id,
+				url: value.video || value.link || null,
+				margin: 0,
+				loaded: 0,
+				played: 0,
+				playing: false,
+				ended: false,
+			}
+			return acc
+		}, {})
+	)
 
+	/*
 
-	useEffect(() => {
-		setSlidersState(
-			slides?.reduce((acc, value) => {
-				acc[value.id] = {
-					ref: createRef(),
-					id: value.id,
-					url: value.video || value.link || null,
-					margin: 0,
-					loaded: 0,
-					played: 0,
-					playing: false,
-					ended: false,
-				}
-				return acc
-			}, {})
-		)
-	}, [])
+		useEffect(() => {
+			setSlidersState()
+		}, [])
+	*/
 
 
 	const handleSlideChange = (current, next) => {
 
+		//console.log('change', slidersState, current, next)
 		if (slidersState) {
-
 			// if current slide is video and it goes to next
 			let currentSlider = slidersState[slides[current]?.id]
 			if (current !== next && currentSlider?.ref?.current) {
@@ -225,8 +227,6 @@ const Slider = ({
 							ref={slidersState[obj.id]?.ref}
 							className={`react-player`}
 							style={obj?.file && {
-								//minWidth: "100%",
-								//minHeight: "100%",
 								//background: `url(${createThumbUrl(obj.file, 50)}) no-repeat center center / cover`,
 							}}
 							url={slidersState[obj.id]?.url}
