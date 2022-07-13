@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load custom_tags %}
 
 {% if app_list %}
   {% for app in app_list %}
@@ -35,7 +36,7 @@
         {% if app.app_label == 'api' %}
           <tr>
             <th scope="row">Обновление контента</th>
-            <td><a href="/api/generate_new_pages/" target="_blank" title="Внесение изменений на сайт">Запуск</a></td>
+            <td><a href="{{'api:rebuild'|get_reverse_url}}" target="_blank" title="Внесение изменений на сайт">Запуск</a></td>
           </tr>
         {% endif %}
       </table>

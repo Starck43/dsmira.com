@@ -5,6 +5,7 @@ import threading
 from os import path
 from django.conf import settings
 from django import template
+from django.urls import reverse
 
 register = template.Library()
 
@@ -20,6 +21,9 @@ def verbose_name_plural(obj):
 def to_string(obj):
 	return " ".join(obj)
 
+@register.filter
+def get_reverse_url(name):
+	return reverse(name)
 
 class UrlCache(object):
 	_md5_sum = {}
