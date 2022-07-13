@@ -63,6 +63,7 @@ export const Avatar = ({
 				alt={name}
 				width={width}
 				height={height ? height : width}
+				unoptimized={true}
 				placeholder="blur"
 				//blurDataURL={createThumbUrl(src, 50)}
 				blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer("#a6a6a6", width, height, rounded))}`}

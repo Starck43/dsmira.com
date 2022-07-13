@@ -14,7 +14,7 @@ export default function Cover({src, alt, width = 16, height = 9, layout = "respo
 	}
 
 	const remoteLoader = ({src, width}) => {
-		let breakpoints = [50, 320, 576, 768, 992]
+		let breakpoints = [50, 320, 576, 768]
 		if (breakpoints.indexOf(width) !== -1)
 			return createThumbUrl(src, width)
 		return src
@@ -31,7 +31,7 @@ export default function Cover({src, alt, width = 16, height = 9, layout = "respo
 			height={height}
 			quality={80}
 			objectFit="cover"
-			//unoptimized={true}
+			unoptimized={true}
 			placeholder="blur"
 			blurDataURL={createThumbUrl(src, 50)}
 			onLoadingComplete={loadComplete}
