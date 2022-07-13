@@ -1,5 +1,5 @@
 import {arrayToParams, cleanDoubleSlashes, getSiteLocation} from "./utils"
-import {Fetch} from "./fetch"
+import {Fetch} from "./Fetch"
 
 /*
 * getPages([page]) - get page content grouped by header, body and footer blocks to update whole page
