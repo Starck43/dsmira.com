@@ -30,6 +30,7 @@ def remove_media_folder(relative_folder):
 	absolute_path = path.join(settings.BASE_DIR, settings.MEDIA_ROOT, settings.FILES_UPLOAD_FOLDER, relative_folder)
 	rmtree(absolute_path, ignore_errors=True)
 
+
 # delete obj related media files and their cached thumbnails
 def remove_media(obj, **kwargs):
 	if obj and obj.path:
@@ -168,7 +169,6 @@ def generate_thumbs(obj, sizes):
 				im.save(thumb_filename)
 
 
-
 def MediaUploadTo(instance, filename):
 	#print(instance._meta.model_name)
 	if instance._meta.model_name == 'slider':
@@ -185,12 +185,10 @@ def MediaUploadTo(instance, filename):
 	return '{0}{1}/{2}/{3}'.format(settings.FILES_UPLOAD_FOLDER, related_folder, folder, filename)
 
 
-
 def get_admin_site_url(request):
 	protocol = 'https' if request.is_secure() else 'http'
 	admin_url = "{0}://{1}".format(protocol, request.get_host())
 	return admin_url
-
 
 
 def get_site_url(request):
@@ -205,10 +203,7 @@ def get_site_url(request):
 		name = re.sub(r'^https?:\/\/|\/(www\.)?$', '', url, flags=re.MULTILINE)
 		name = name.strip().strip('/')
 
-	return {
-		'url': url,
-		'name': name
-	}
+	return {'url': url, 'name': name}
 
 
 def addDomainToUrl(request, value, pattern, start=False):

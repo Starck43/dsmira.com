@@ -320,7 +320,7 @@ class Portfolio(Post):
 		storage=MediaFileStorage(output='cover.jpg'),
 		null=True,
 		verbose_name='Обложка',
-		help_text='Изображение обложки проекта размером 600x600 пикс'
+		help_text='Изображение обложки проекта размером 900x900 пикс'
 	)
 	status = models.BooleanField('Статус проекта', choices=STATUS)
 

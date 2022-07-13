@@ -32,10 +32,10 @@
             {% endif %}
           </tr>
         {% endfor %}
-        {% if app.app_label == 'forum' %}
+        {% if app.app_label == 'api' %}
           <tr>
             <th scope="row">Обновление контента</th>
-            <td><a href="/generate_new_pages/" target="_blank" title="Ввнесение изменений на сайте">Запуск</a></td>
+            <td><a href="/api/generate_new_pages/" target="_blank" title="Внесение изменений на сайт">Запуск</a></td>
           </tr>
         {% endif %}
       </table>

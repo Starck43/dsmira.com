@@ -1,6 +1,6 @@
 # views.py
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 # from django.contrib.auth.models import User
@@ -198,3 +198,10 @@ def feedback_manage(request):
 		status = 500
 
 	return JsonResponse(data, status=status)
+
+
+
+""" Build site Hook """
+def generate_pages(request):
+	return HttpResponseRedirect(settings.API_PAGES_RENDER_HOOK)
+
