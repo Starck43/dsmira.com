@@ -7,11 +7,12 @@ import * as gtag from "../libs/gtag"
 
 import "../styles/vendors.scss"
 import "../styles/main.sass"
+import Loader from "../components/UI/loader"
 
 
 export default function MyApp({Component, pageProps}) {
 	const router = useRouter()
-	const [useSsr, setUseSsr] = useState(false)
+	const [isLoaded, setLoaded] = useState(false)
 
 	const isProduction = process.env.NODE_ENV === "production"
 
@@ -27,16 +28,17 @@ export default function MyApp({Component, pageProps}) {
 	}, [router.events])
 
 	useEffect(() => {
-		setUseSsr(true)
+		setLoaded(true)
+		//typeof window !== "undefined" && document.getElementById('__next').classList.add('loaded')
 	}, [])
 
 
-	if (!useSsr) return null
+	if (!isLoaded) return <Loader/>
 	if (typeof window === "undefined") return <></>
 	return (
 		<ErrorBoundary>
 			<IconContext.Provider value={{className: "react-icons svg-icons", size: "3rem"}}>
-				<Component {...pageProps} />
+				<Component {...pageProps} loaded={isLoaded}/>
 			</IconContext.Provider>
 		</ErrorBoundary>
 	)
