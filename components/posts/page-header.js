@@ -22,7 +22,7 @@ export default function PageHeader({logo, nav, header}) {
 					        section={section.section}
 					        {...section.content}
 					        interval={interval}
-					        speed={1800}
+					        duration={1800}
 					        infinite={false}
 					        objectFit="contain"
 					        className="video-slider"

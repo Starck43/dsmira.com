@@ -1,0 +1,168 @@
+@import ../mixins
+@import ../vars.module
+
+\:root
+	--swiper-theme-color: #{$brand-color} !important
+
+.carousel-container
+	position: relative
+
+.swiper-slide
+	span
+		max-height: 100vh
+	.swiper-zoom-container
+		overflow: unset !important
+
+
+	.carousel-caption
+		position: absolute
+		top: 0
+		left: 0
+		right: 0
+		padding: 2vw
+		background-color: transparentize(black, 0.9)
+		transition: all 200ms ease
+		user-select: none
+		.subtitle
+			margin: 0.5rem 0
+		>*
+			color: white
+		p
+			display: table
+			font-size: 0.9rem
+			text-align: left
+		&.hide
+			opacity: 0
+			visibility: hidden
+		&.show
+			opacity: 1
+			visibility: visible
+			&:hover
+				background-color: transparentize(black, 0.5)
+
+	.player
+		+push--absolute
+		transition: opacity 0.3s ease-out, backdrop-filter 0.15s linear
+		opacity: 0
+		backdrop-filter: blur(0px)
+		pointer-events: none
+		.progress
+			position: absolute
+			display: flex
+			width: 100%
+			height: $progressbar-h
+			left: 0
+			top: 0
+			padding: 0 1px
+			background-color: $progressbar-bg
+			z-index: 1
+			.loaded-bar, .played-bar
+				height: 100%
+				transition: width 1s linear
+			.loaded-bar
+				background-color: $progressbar-loaded-bg
+			.played-bar
+				background-color: $progressbar-played-bg
+
+		.react-player
+			position: relative
+			line-height: 0
+
+	&-active
+		.player.loaded
+			opacity: 1
+			backdrop-filter: blur(10px)
+
+.swiper-control
+	&-prev,
+	&-next
+		position: absolute
+		top: 50%
+		width: auto !important
+		padding: 0 !important
+		transform: translateY(-50%)
+		overflow: hidden
+		z-index: 1
+		&:focus-visible
+			outline: none
+		&.disabled
+			display: none
+	&-prev
+		left: 0
+	&-next
+		right: 0
+
+	+media-breakpoint-up(sm)
+		&-prev
+			left: calc(-#{$arrow-size} - #{$slider-controls-margin} + 1rem)
+
+		&-next
+			right: calc(-#{$arrow-size} - #{$slider-controls-margin} + 1rem)
+
+	+media-breakpoint-up(md)
+		&-prev
+			left: calc(-#{$arrow-size} - #{$slider-controls-margin})
+
+		&-next
+			right: calc(-#{$arrow-size} - #{$slider-controls-margin})
+
+
+.lightbox
+	.swiper-wrapper
+		align-items: center
+	.carousel-caption
+		position: absolute
+		bottom: 0
+		left: 0
+		width: 100%
+		padding: $lightbox-controls-margin
+		background-color: transparentize(black, .8)
+		transition: all 300ms ease-out
+		>*
+			color: $lightbox-controls-bg-color
+			margin: 0
+			padding: 0 $arrow-size
+			text-align: left
+
+	.swiper-control
+		&-prev,
+		&-next
+			background-color: transparentize($lightbox-controls-bg-color, 0.7)
+			padding: 0
+			transition: all 300ms ease-out
+			//border: 1px solid black
+			//@extend .rounded
+			.arrow
+				//@extend .rounded
+				&::before, &::after
+					background-color: $lightbox-controls-color
+			&:hover
+				background-color: $lightbox-controls-bg-color
+
+		&-prev
+			left: $lightbox-controls-margin
+
+		&-next
+			right: $lightbox-controls-margin
+
+		&__slide-info
+			position: fixed
+			left: $lightbox-controls-margin
+			top: $lightbox-controls-margin
+			right: unset
+			padding: 0.8rem
+			color: $lightbox-controls-color
+			background-color: transparentize($lightbox-controls-bg-color, 0.7)
+			border-radius: 0
+			opacity: 0.8
+
+
+.carousel-modal .btn-close
+	position: fixed
+	right: $lightbox-controls-margin
+	top: $lightbox-controls-margin
+	padding: 0.8rem
+	//background-color: transparentize($lightbox-controls-bg-color, 0.7)
+	z-index: 1
+	&:hover
+		transform: scale(1.2)

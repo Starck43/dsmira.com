@@ -37,7 +37,13 @@ const ProjectDetail = ({id, post_type, page, section, content}) => {
 				<section id={`project-${id}`} className={`project-detail flex-column centered${screen === "desktop" ? " reverse" : ""} mt-3`}>
 					<ProjectMeta {...content} className={screen === "desktop" ? "mt-5" : "mb-5"}/>
 					{screen === "desktop"
-						? (<Slider {...content} style={{height: width / 1.77}} className={post_type}/>)
+						? (
+							<Slider
+								{...content}
+								style={{height: width / 1.77}}
+								className={post_type}
+							/>
+						)
 						: (
 							<>
 								<Grid
