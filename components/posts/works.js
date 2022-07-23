@@ -1,4 +1,4 @@
-import {Col, Row} from "react-bootstrap"
+import {Row} from "react-bootstrap"
 import Cover from "../UI/cover"
 import Link from "next/link"
 import {BlockAnimation} from "../UI/animation"
