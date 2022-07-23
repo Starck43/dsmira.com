@@ -3,11 +3,14 @@ import React, {createRef, useCallback, useEffect, useRef, useState} from "react"
 import Image from "next/image"
 
 import {Swiper, SwiperSlide} from "swiper/react"
-import {Pagination, Keyboard, Zoom, Autoplay} from "swiper"
+import {Lazy, Pagination, Keyboard, Zoom, Autoplay, Parallax} from "swiper"
 
 import "swiper/css"
+import "swiper/css/lazy"
+import "swiper/css/autoplay"
 import "swiper/css/pagination"
-import "swiper/css/effect-fade"
+import "swiper/css/parallax"
+
 
 import ReactPlayer from "react-player/lazy"
 import ProgressBar from "react-bootstrap/ProgressBar"
@@ -43,6 +46,7 @@ const Slider = ({
 
 	const carouselRef = useRef(null)
 	const {width} = useWindowDimensions()
+	const [currentIndex, setCurrentIndex] = useState(current)
 	const [showSlideCaption, setShowSlideCaption] = useState(true)
 	const [slideInterval, setSlideInterval] = useState(interval)
 	const [slidersState, setSlidersState] = useState(
@@ -61,21 +65,23 @@ const Slider = ({
 		}, {})
 	)
 
+	/*
 
-	useEffect(() => {
-		console.log(carouselRef.current.swiper)
-	}, [])
+		useEffect(() => {
+			console.log(carouselRef.current?.swiper)
+		}, [])
 
+	*/
 
 	const handlePrev = useCallback(() => {
-		if (!carouselRef.current) return
-		carouselRef.current.swiper.slidePrev()
+		//if (!carouselRef.current) return
+		carouselRef.current?.swiper.slidePrev()
 	}, [])
 
 
 	const handleNext = useCallback(() => {
-		if (!carouselRef.current) return
-		carouselRef.current.swiper.slideNext()
+		//if (!carouselRef.current) return
+		carouselRef.current?.swiper.slideNext()
 	}, [])
 
 
@@ -101,29 +107,31 @@ const Slider = ({
 	}
 
 
-	const handleSlideChange = ({previousIndex, activeIndex, autoplay}) => {
+	const handleSlideChange = ({previousIndex, realIndex, activeIndex, autoplay}) => {
+		setCurrentIndex(realIndex)
 
-		// if current slide is video and it goes to next
-		let previousSlider = slidersState[slides[previousIndex]?.id]
-		if (previousSlider?.ref?.current) {
+		let prev = infinite && previousIndex > 0 ? previousIndex - 1 : previousIndex
+		let previousSlider = slidersState[slides[prev]?.id]
+		// if prev slide is video
+		if (previousSlider?.url) {
 			previousSlider.playing = false
 			previousSlider.ended && previousSlider.ref.current?.seekTo(0, "fraction")
 			previousSlider.ended = false
 			// save player's state : current
 			setSlidersState({
 				...slidersState,
-				[slides[previousIndex].id]: previousSlider,
+				[slides[prev].id]: previousSlider,
 			})
 		}
 
-		let nextSlider = slidersState[slides[activeIndex]?.id]
-		if (nextSlider?.ref?.current) {
+		let nextSlider = slidersState[slides[realIndex]?.id]
+		if (nextSlider?.url) {
 			nextSlider.playing = true
 
 			// save player's state : next
 			setSlidersState({
 				...slidersState,
-				[slides[activeIndex].id]: nextSlider,
+				[slides[realIndex].id]: nextSlider,
 			})
 		}
 
@@ -199,13 +207,21 @@ const Slider = ({
 					ref={carouselRef}
 					className={className}
 					style={style}
-					modules={[Pagination, Keyboard, Zoom, Autoplay]}
+					modules={[Lazy, Pagination, Keyboard, Zoom, Autoplay, Parallax]}
 					initialSlide={current}
 					pagination={{
 						clickable: true,
 						dynamicBullets: true,
+						hideOnClick: false,
 						type: "bullets"
 					}}
+					preloadImages={false}
+					lazy={{
+						enabled: true,
+						//loadPrevNext: true,
+						loadOnTransitionStart: true,
+					}}
+					parallax
 					keyboard
 					zoom
 					effect={effect}
@@ -220,7 +236,7 @@ const Slider = ({
 					grabCursor
 					watchOverflow
 					autoHeight={autoHeight}
-					passiveListeners={false}
+					//passiveListeners={false}
 					onInit={handleSlideInitialized}
 					onSlideChangeTransitionStart={handleSlideChange}
 				>
@@ -229,7 +245,7 @@ const Slider = ({
 							{obj.file &&
 							<>
 								<Image
-									className="swiper-zoom-target"
+									className="swiper-zoom-target swiper-lazy"
 									loader={remoteLoader}
 									src={obj.file}
 									alt={obj.title}
@@ -240,29 +256,42 @@ const Slider = ({
 									objectFit={label === "lightbox" || obj.width / obj.height < 1.4 ? "contain" : objectFit}
 									placeholder="blur"
 									blurDataURL={createThumbUrl(obj.file, 50)}
-									unoptimized
+									//unoptimized
 								/>
+								<div className="swiper-lazy-preloader"/>
 								{
 									(obj.title || obj.excerpt) &&
-									<figcaption
-										className={`carousel-caption ${showSlideCaption ? "show" : "hide"}`}>
-										{label === "lightbox" && <h3 className="title">{title}</h3>}
-										<h4 className="subtitle">{obj.title}</h4>
-										<p className="excerpt">{obj.excerpt}</p>
+									<figcaption className={`carousel-caption ${showSlideCaption ? "show" : "hide"}`}>
+										{label === "lightbox" &&
+										<h3 className="title"
+										    data-swiper-parallax-opacity="0"
+										    data-swiper-parallax="-200"
+										    data-swiper-parallax-duration={duration}
+										>
+											{title}
+										</h3>
+										}
+										<h4 className="subtitle"
+										    data-swiper-parallax-opacity="0"
+										    data-swiper-parallax="-200"
+										    data-swiper-parallax-duration={duration * 1.1}
+										>
+											{obj.title}
+										</h4>
+										<p className="excerpt"
+										   data-swiper-parallax-opacity="0"
+										   data-swiper-parallax="-200"
+										   data-swiper-parallax-duration={duration * 1.2}
+										>
+											{obj.excerpt}
+										</p>
 									</figcaption>
 								}
 							</>
 							}
 
 							{slidersState && ReactPlayer.canPlay(slidersState[obj.id]?.url) &&
-							<div className="player"
-							     data-player-id={obj.id}
-							     style={{
-								     // width: slidersState[obj.id].width,
-								     // height: slidersState[obj.id].height,
-								     // top: slidersState[obj.id].height !== "100%" ? slidersState[obj.id].margin : 0,
-								     // left: slidersState[obj.id].width !== "100%" ? slidersState[obj.id].margin : 0,
-							     }}>
+							<div className="player" data-player-id={obj.id}>
 								<ProgressBar>
 									<ProgressBar now={slidersState[obj.id]?.played * 100} bsPrefix="played"/>
 									<ProgressBar
@@ -317,6 +346,14 @@ const Slider = ({
 							}
 						</SwiperSlide>
 					))}
+					{
+						label === "lightbox" &&
+						<div className="swiper-fraction">
+							<span className="current-image">{currentIndex+1}</span>
+							/
+							<span className="total-images">{slides.length}</span>
+						</div>
+					}
 				</Swiper>
 				{width > 576 ? (<>
 					<div
