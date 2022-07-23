@@ -3,16 +3,22 @@
 
 \:root
 	--swiper-theme-color: #{$brand-color} !important
+	--swiper-pagination-bullet-size: 0.6rem
+	--swiper-pagination-bullet-inactive-color: #888
+	--swiper-pagination-bullet-inactive-opacity: 0.3
+	--swiper-pagination-bullet-opacity: 1
+	--swiper-pagination-bullet-horizontal-gap: 0.3rem
+	--swiper-pagination-bullet-vertical-gap: 1.5rem
 
 .carousel-container
-	position: relative
+	+make-container
 
 .swiper-slide
 	span
-		max-height: 100vh
+		max-height: 80vh
+
 	.swiper-zoom-container
 		overflow: unset !important
-
 
 	.carousel-caption
 		position: absolute
@@ -20,7 +26,8 @@
 		left: 0
 		right: 0
 		padding: 2vw
-		background-color: transparentize(black, 0.9)
+		+blur-background(25px, black, 0.9)
+
 		transition: all 200ms ease
 		user-select: none
 		.subtitle
@@ -73,6 +80,10 @@
 			opacity: 1
 			backdrop-filter: blur(10px)
 
+
+.swiper-pagination
+	mix-blend-mode: color-burn
+
 .swiper-control
 	&-prev,
 	&-next
@@ -108,6 +119,8 @@
 
 
 .lightbox
+	.swiper
+		overflow: unset
 	.swiper-wrapper
 		align-items: center
 	.carousel-caption

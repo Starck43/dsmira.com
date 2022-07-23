@@ -1,14 +1,16 @@
 @use "sass:math"
 
 // Source mixin
-@mixin make-container($padding-x: 0)
+
+@mixin make-container($margin: 0, $padding-x: 0)
+  position: relative
   width: 100%
+  margin-right: $margin
+  margin-left: $margin
   @if ($padding-x != 0)
     padding-right: $padding-x
     padding-left: $padding-x
 
-  margin-right: auto
-  margin-left: auto
 
 @mixin font($f-name, $f-style, $f-weight, $local-url, $url:none, $display:swap)
   @font-face
@@ -20,15 +22,13 @@
     src: url($local-url) if($url != none, #{','} $url format('woff2'), format('woff2'))
     @content
 
-@mixin font-settings($font:false, $colour:false, $size:false, $case:false, $weight:false, $lh:false)
-  @if $font
-    font-family: "#{$font}",#{$default-fonts}
-  @else
-    font-family: #{$default-fonts}
+
+@mixin font-settings($font, $color:false, $size:false, $case:false, $weight:false, $lh:false)
+  font-family: "#{$font}"
   @if $size
     font-size: $size
-  @if $colour
-    color: $colour
+  @if $color
+    color: $color
   @if $case
     text-transform: $case
   @if $weight
@@ -36,23 +36,28 @@
   @if $lh
     line-height: $lh
 
+
 //Убираем единицы измерения у чисел
 @function strip-units($size)
   $number: $size / ($size * 0 + 1)
   @return $number
 
-@function em($pixels, $fontsize: $base-font-size)
+
+@function em($pixels, $fontsize)
   $fontsize: $fontsize + 0px
   @return ($pixels/$fontsize)*1em
 
-@function px($em, $fontsize: $base-font-size)
+
+@function px($em, $fontsize)
   @return round(strip-units($em) * strip-units($fontsize))*1px
+
 
 //Автоматическое центрирование
 @mixin push--auto
   margin:
     left: auto
     right: auto
+
 
 //Абсолютное позиционирование в размер родителя
 @mixin push--absolute($t: 0, $r: none, $b: none, $l: none)
@@ -71,10 +76,11 @@
     right: $r
     bottom: $b
 
-@mixin blur-background($blur:10, $color:white, $transparentize:0.8)
-  background-color: transparentize($color, $transparentize)
+
+@mixin blur-background($blur:10px, $bg-color:white, $transparent:0.8)
+  background-color: transparentize($bg-color, $transparent)
   @supports (backdrop-filter: blur(0))
-    backdrop-filter: blur(#{$blur}px)
+    backdrop-filter: blur($blur)
 
 // Вычисляем высоту блока за вычетом видимых в области экрана
 // например: height: calc-height($header-height, $nav-height, $top-bar-height)

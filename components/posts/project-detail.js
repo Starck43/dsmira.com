@@ -34,14 +34,15 @@ const ProjectDetail = ({id, post_type, page, section, content}) => {
 		width
 			? <Fragment>
 				{content.slides.length > 0 &&
-				<section id={`project-${id}`} className={`project-detail flex-column centered${screen === "desktop" ? " reverse" : ""} mt-3`}>
+				<section id={`project-${id}`} className={`project-detail flex-column centered${screen === "desktop" ? " reverse" : ""}`}>
 					<ProjectMeta {...content} className={screen === "desktop" ? "mt-5" : "mb-5"}/>
 					{screen === "desktop"
 						? (
 							<Slider
-								{...content}
-								style={{height: width / 1.77}}
+								//style={{height: width / 1.77}}
 								className={post_type}
+								autoHeight={true}
+								{...content}
 							/>
 						)
 						: (

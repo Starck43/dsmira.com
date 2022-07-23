@@ -1,18 +1,19 @@
-import React, {createRef, Fragment, useCallback, useEffect, useRef, useState} from "react"
+import React, {createRef, useCallback, useEffect, useRef, useState} from "react"
 //import styled from "styled-components/macro"
 import Image from "next/image"
 
 import {Swiper, SwiperSlide} from "swiper/react"
-import {Pagination, Zoom, Keyboard, Autoplay} from "swiper"
+import {Pagination, Keyboard, Zoom, Autoplay} from "swiper"
 
 import "swiper/css"
 import "swiper/css/pagination"
-import 'swiper/css/effect-fade'
+import "swiper/css/effect-fade"
 
-import ReactPlayer from "react-player"
+import ReactPlayer from "react-player/lazy"
 import ProgressBar from "react-bootstrap/ProgressBar"
 
 import {addClassToElements, createThumbUrl} from "../../core/utils"
+import {useWindowDimensions} from "../../core/hooks"
 
 
 const remoteLoader = ({src, width}) => {
@@ -30,15 +31,18 @@ const Slider = ({
 	                interval = 0,
 	                duration = 900,
 	                infinite = true,
-	                direction="horizontal",
-					responsive=null,
+	                direction = "horizontal",
+	                autoHeight = false,
+	                responsive = null,
 	                effect = "slide",
 	                objectFit = "cover",
 	                label = "slider",
 	                className = "",
+	                style = {},
                 }) => {
 
 	const carouselRef = useRef(null)
+	const {width} = useWindowDimensions()
 	const [showSlideCaption, setShowSlideCaption] = useState(true)
 	const [slideInterval, setSlideInterval] = useState(interval)
 	const [slidersState, setSlidersState] = useState(
@@ -57,8 +61,9 @@ const Slider = ({
 		}, {})
 	)
 
+
 	useEffect(() => {
-		console.log(carouselRef.current?.swiper)
+		console.log(carouselRef.current.swiper)
 	}, [])
 
 
@@ -75,8 +80,8 @@ const Slider = ({
 
 
 	const handleSlideInitialized = ({imagesToLoad, activeIndex, autoplay}) => {
-		label === 'lightbox' && imagesToLoad.forEach(img=>{
-			img.parentNode.classList.add('swiper-zoom-container')
+		label === "lightbox" && imagesToLoad.forEach(img => {
+			img.parentNode.classList.add("swiper-zoom-container")
 		})
 
 		let currentSlider = slidersState[slides[activeIndex]?.id]
@@ -186,16 +191,21 @@ const Slider = ({
 		ended && carouselRef.current?.swiper?.autoplay?.start()
 	}
 
+
 	return (
 		slides?.length > 0
 			? <div className={`carousel-container ${label}`}>
 				<Swiper
 					ref={carouselRef}
 					className={className}
-					modules={[Pagination, Zoom, Keyboard, Autoplay]}
+					style={style}
+					modules={[Pagination, Keyboard, Zoom, Autoplay]}
 					initialSlide={current}
-					slidesPerView={1}
-					pagination={{clickable: true}}
+					pagination={{
+						clickable: true,
+						dynamicBullets: true,
+						type: "bullets"
+					}}
 					keyboard
 					zoom
 					effect={effect}
@@ -207,7 +217,9 @@ const Slider = ({
 					direction={direction}
 					breakpoints={responsive}
 					centeredSlides
-					//autoHeight
+					grabCursor
+					watchOverflow
+					autoHeight={autoHeight}
 					passiveListeners={false}
 					onInit={handleSlideInitialized}
 					onSlideChangeTransitionStart={handleSlideChange}
@@ -275,15 +287,23 @@ const Slider = ({
 									onPause={handleOnPause(obj.id)}
 									onProgress={handleProgress(obj.id)}
 									config={{
-										youtube: {},
+										youtube: {
+											controls: 0,
+											playsInline: 1,
+											rel: 0,
+											showInfo: 0,
+											color: "white",
+											modestBranding: 1,
+										},
 										vimeo: {
-											responsive: true,
-											//playsInline: false,
-											autoPause: true,
 											autoPlay: false,
+											playsInline: true,
+											autoPause: true,
+											responsive: true,
 										},
 										file: {
 											attributes: {
+												playsInline: true,
 												autoPlay: false,
 												preload: "metadata",
 												//crossOrigin: "anonymous",
@@ -298,14 +318,18 @@ const Slider = ({
 						</SwiperSlide>
 					))}
 				</Swiper>
-				<div className={`swiper-control-next ${!infinite && carouselRef.current?.swiper.isEnd ? "disabled" : ""}`}
-				     onClick={handleNext}>
-					<span className={`arrow right`}/>
-				</div>
-				<div className={`swiper-control-prev ${!infinite && carouselRef.current?.swiper.isBeginning ? "disabled" : ""}`}
-				     onClick={handlePrev}>
-					<span className={`arrow left`}/>
-				</div>
+				{width > 576 ? (<>
+					<div
+						className={`swiper-control-next ${!infinite && carouselRef.current?.swiper.isEnd ? "disabled" : ""}`}
+						onClick={handleNext}>
+						<span className={`arrow right`}/>
+					</div>
+					<div
+						className={`swiper-control-prev ${!infinite && carouselRef.current?.swiper.isBeginning ? "disabled" : ""}`}
+						onClick={handlePrev}>
+						<span className={`arrow left`}/>
+					</div>
+				</>) : null}
 			</div>
 			: null
 	)
