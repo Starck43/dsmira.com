@@ -3,8 +3,8 @@ import Link from "next/link"
 import Image from "next/image"
 import {createThumbUrl, shimmer, toBase64} from "../../core/utils"
 
-import style from "~/styles/modules/avatar.module.sass"
 import {HEADER} from "../../core/constants"
+import style from "~/styles/modules/avatar.module.sass"
 
 
 const remoteLoader = ({src, width}) => {

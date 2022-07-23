@@ -2,7 +2,15 @@ import Image from "next/image"
 import {createThumbUrl} from "../../core/utils"
 import {useState} from "react"
 
-import style from "~/styles/modules/cover.module.sass"
+import styles from "~/styles/modules/cover.module.sass"
+
+
+const remoteLoader = ({src, width}) => {
+	let breakpoints = [50, 320, 576, 768]
+	if (breakpoints.indexOf(width) !== -1)
+		return createThumbUrl(src, width)
+	return src
+}
 
 export default function Cover({src, alt, width = 16, height = 9, layout = "responsive", className = "", style = {}}) {
 	const [isLoaded, setLoaded] = useState(false)
@@ -13,16 +21,9 @@ export default function Cover({src, alt, width = 16, height = 9, layout = "respo
 		height = size.naturalHeight
 	}
 
-	const remoteLoader = ({src, width}) => {
-		let breakpoints = [50, 320, 576, 768]
-		if (breakpoints.indexOf(width) !== -1)
-			return createThumbUrl(src, width)
-		return src
-	}
-
 	return (
 		<Image
-			className={`${className} ${style.image} ${isLoaded ? style.show : style.hide}`}
+			className={`${className} ${styles.image} ${isLoaded ? styles.show : styles.hide}`}
 			loader={remoteLoader}
 			src={src}
 			alt={alt}
@@ -31,7 +32,7 @@ export default function Cover({src, alt, width = 16, height = 9, layout = "respo
 			height={height}
 			quality={80}
 			objectFit="cover"
-			unoptimized={true}
+			//unoptimized
 			placeholder="blur"
 			blurDataURL={createThumbUrl(src, 50)}
 			onLoadingComplete={loadComplete}
