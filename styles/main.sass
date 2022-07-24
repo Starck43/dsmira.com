@@ -50,7 +50,7 @@ body
 
 
 section:not(:last-child)
-	margin-bottom: 9vh
+	margin-bottom: 12vh
 
 
 main
@@ -217,12 +217,15 @@ header
 				flex: 100%
 
 #customers
-	.customers-slider
-		.slide
-			margin: 1vw 2vw 0
+	$max-w: 160px
+	.carousel-container
+		margin: calc(-#{$max-w} * 0.12)
+		.customers-slider
+			padding: 0 calc(#{$max-w} * 0.12)
 	.customer
-		max-width: 150px
-		margin: auto
+		margin-top: calc(#{$max-w} * 0.12)
+		max-width: $max-w
+		//margin: auto
 
 
 #contacts

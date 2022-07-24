@@ -12,10 +12,15 @@
 
 .carousel-container
 	+make-container
+	min-width: 100%
+
+.swiper
+	height: 100%
 
 .swiper-slide
 	span
-		max-height: 90vh
+		max-height: 80vh
+		margin: auto !important
 
 	.swiper-zoom-container
 		overflow: unset !important
@@ -75,8 +80,7 @@
 			position: relative
 			line-height: 0
 
-	&-active
-		.player.loaded
+		&.loaded
 			opacity: 1
 			backdrop-filter: blur(10px)
 
@@ -120,6 +124,10 @@
 		overflow: unset
 	.swiper-wrapper
 		align-items: center
+	.swiper-slide
+		height: auto
+		span
+			max-height: 100vh
 	.carousel-caption
 		padding: $lightbox-controls-margin
 
