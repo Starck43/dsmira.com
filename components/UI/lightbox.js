@@ -7,21 +7,25 @@ import Slider from "./slider"
 const LightBox = ({slides, currentSlide, title, excerpt, show, handleClick, className}) => {
 	return (
 		<Modal
-			show={show}
-			onHide={handleClick}
-			centered={true}
-			fullscreen={true}
-			scrollable={false}
 			contentClassName="carousel-content"
 			dialogClassName="carousel-modal"
+			centered
+			fullscreen
+			scrollable={false}
+			show={show}
+			onHide={handleClick}
 		>
 			<Modal.Body>
-				<Slider label="lightbox"
-				        slides={slides}
-				        current={currentSlide}
-				        title={title}
-				        excerpt={excerpt}
-				        className={className}
+				<Slider
+					label="lightbox"
+					className={className}
+					current={currentSlide}
+					title={title}
+					excerpt={excerpt}
+					slides={slides}
+					parallax
+					infinite
+					zoom
 				/>
 			</Modal.Body>
 

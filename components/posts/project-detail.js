@@ -20,7 +20,7 @@ const ProjectDetail = ({id, post_type, page, section, content}) => {
 	const openLightbox = (event) => {
 		let current = event.currentTarget
 		let slides = current.parentElement.querySelectorAll(".grid-item")
-		let index = (slides.length > 0) ? [...slides].indexOf(current) : -1
+		let index = (slides?.length > 0) ? [...slides].indexOf(current) : -1
 
 		setImageIndex(index)
 		setShowModal(!showModal)
@@ -34,14 +34,16 @@ const ProjectDetail = ({id, post_type, page, section, content}) => {
 		width
 			? <Fragment>
 				{content.slides.length > 0 &&
-				<section id={`project-${id}`} className={`project-detail flex-column centered${screen === "desktop" ? " reverse" : ""}`}>
+				<section id={`project-${id}`}
+				         className={`project-detail flex-column centered${screen === "desktop" ? " reverse" : ""}`}>
 					<ProjectMeta {...content} className={screen === "desktop" ? "mt-5" : "mb-5"}/>
 					{screen === "desktop"
 						? (
 							<Slider
 								//style={{height: width / 1.77}}
 								className={post_type}
-								autoHeight={true}
+								zoom
+								parallax
 								{...content}
 							/>
 						)
@@ -52,6 +54,7 @@ const ProjectDetail = ({id, post_type, page, section, content}) => {
 									container={post_type}
 									handleClick={openLightbox}
 								/>
+
 								{imageIndex >= 0 &&
 								<LightBox
 									slides={content.slides}
@@ -61,7 +64,8 @@ const ProjectDetail = ({id, post_type, page, section, content}) => {
 									excerpt={content.excerpt}
 									handleClick={toggleShow}
 									className={post_type}
-								/>}
+								/>
+								}
 							</>
 						)
 					}

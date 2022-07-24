@@ -5,6 +5,7 @@ import {createThumbUrl, shimmer, toBase64} from "../../core/utils"
 
 import {HEADER} from "../../core/constants"
 import style from "~/styles/modules/avatar.module.sass"
+import styled from "styled-components"
 
 
 const remoteLoader = ({src, width}) => {
@@ -48,6 +49,7 @@ export const Logo = ({className = "logo", name = "", src, width = null, height =
 export const Avatar = ({
 	                       className = "centered vertical",
 	                       src,
+	                       href = null,
 	                       name = "",
 	                       width = 160,
 	                       height = null,
@@ -55,7 +57,8 @@ export const Avatar = ({
                        }) => {
 
 	return (
-		<div className={`${className} ${style.wrapper} ${rounded ? style.rounded : ""} ${!src ? style.emptyWrapper : ""}`}>
+		<Wrapper as={href ? "a": "div"} href={href}
+			className={`${className} ${style.wrapper} ${rounded ? style.rounded : ""} ${!src ? style.emptyWrapper : ""}`}>
 			{src &&
 			<Image
 				src={src}
@@ -69,6 +72,10 @@ export const Avatar = ({
 				blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer("#a6a6a6", width, height, rounded))}`}
 			/>
 			}
-		</div>
+		</Wrapper>
 	)
 }
+
+
+const Wrapper = styled.div`
+`

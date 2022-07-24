@@ -1,56 +1,56 @@
-//import Link from "next/link"
-import Carousel from "nuka-carousel"
-import {
-	BsChevronLeft as ArrowLeftIcon,
-	BsChevronRight as ArrowRightIcon
-} from "react-icons/bs"
-import {useWindowDimensions} from "../../core/hooks"
+import {SwiperSlide} from "swiper/react"
+
 import {Avatar} from "../UI/avatar"
 import {BlockAnimation} from "../UI/animation"
-import {useEffect, useState} from "react"
+import Slider from "../UI/slider"
 
 
 export default function Customers({items}) {
-	const {width, media} = useWindowDimensions()
-	const [slidesToShow, setSlidesToShow] = useState(0)
-
-	useEffect(()=> {
-		switch (media) {
-			case "md" : setSlidesToShow(2); break
-			case "lg" : setSlidesToShow(3); break
-			case "xl" : setSlidesToShow(4); break
-			case "xxl": setSlidesToShow(5); break
-			default: setSlidesToShow(2);
-		}
-	},[media])
-
 	return (
-		items?.length > 0 && slidesToShow > 0 ?
+		items?.length > 0 ?
 			<BlockAnimation id={items[0].section} as="section">
 				<header className="title">
 					<h2>{items[0].section_name}</h2>
 				</header>
-				<Carousel
+				<Slider
 					className="customers-slider"
-					frameAriaLabel="customers-slider"
-					slidesToShow={slidesToShow}
-					withoutControls={width < 576}
-					renderBottomCenterControls={() => null}
-					renderTopCenterControls={() => null}
-					defaultControlsConfig={{
-						nextButtonText: " ",
-						prevButtonText: " ",
-						prevButtonClassName: "arrow left",
-						nextButtonClassName: "arrow right",
+					section={items[0].section}
+					paginationType={null}
+					freeScroll
+					responsive={{
+						320: {
+							slidesPerView: 2,
+							spaceBetween: 20
+						},
+						576: {
+							slidesPerView: 3,
+							spaceBetween: 30
+						},
+						768: {
+							slidesPerView: 4,
+							spaceBetween: 40
+						},
+						1200: {
+							slidesPerView: 5,
+							spaceBetween: 50
+						}
 					}}
+					objectFit="contain"
 				>
 					{items.map(item => (
-						<a key={item.id} className="customer centered vertical" href={item.content.link}>
-							<Avatar src={item.content?.avatar} name={item.title} width={300} rounded={true} className="avatar-wrapper zoom-out"/>
+						<SwiperSlide key={item.id} className="customer centered vertical">
+							<Avatar
+								className="avatar-wrapper zoom-out"
+								src={item.content?.avatar}
+								href={item.content?.link}
+								name={item.title}
+								width={160}
+								rounded
+							/>
 							<h4 className="avatar-title">{item.title}</h4>
-						</a>
+						</SwiperSlide>
 					))}
-				</Carousel>
+				</Slider>
 			</BlockAnimation>
 			: null
 	)

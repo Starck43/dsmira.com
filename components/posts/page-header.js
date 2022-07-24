@@ -6,9 +6,9 @@ import Slider from "../UI/slider"
 import theme from "~/styles/theme.module.scss"
 import {convertTime2Number} from "../../core/utils"
 
+const INTERVAL = convertTime2Number(theme.sliderAutoplayInterval)
 
 export default function PageHeader({logo, nav, header}) {
-	let interval = convertTime2Number(theme.sliderAutoplayInterval)
 
 	return (
 		<header id="home" className="page-header flex-column">
@@ -17,15 +17,17 @@ export default function PageHeader({logo, nav, header}) {
 				<Menu nav={nav}/>
 				{header?.map(section => (
 					section?.post_type === "slider" &&
-					<Slider key={section.id}
-					        label={section.post_type}
-					        section={section.section}
-					        {...section.content}
-					        interval={interval}
-					        duration={1800}
-					        infinite={false}
-					        objectFit="contain"
-					        className="video-slider"
+					<Slider
+						className="video-slider"
+						key={section.id}
+						label={section.post_type}
+						section={section.section}
+						{...section.content}
+						interval={INTERVAL}
+						duration={1800}
+						//infinite
+						parallax
+						objectFit="contain"
 					/>
 				))}
 			</Container>

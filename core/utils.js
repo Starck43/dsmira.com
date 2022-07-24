@@ -2,17 +2,17 @@
 
 export const addClassToElements = (className, selector, node) => {
 	let elements = node?.querySelectorAll(selector)
-	elements.length && elements.forEach(el => el.classList.add(className))
+	elements?.length && elements.forEach(el => el.classList.add(className))
 }
 
 export const removeClassToElements = (className, selector, node) => {
 	let elements = node?.querySelectorAll(selector)
-	elements.length && elements.forEach(el => el.classList.remove(className))
+	elements?.length && elements.forEach(el => el.classList.remove(className))
 }
 
 export const removeElementsByMask = (selector, node) => {
 	let elements = node?.querySelectorAll(selector)
-	elements.length && elements.forEach(el => el.remove())
+	elements?.length && elements.forEach(el => el.remove())
 }
 
 
