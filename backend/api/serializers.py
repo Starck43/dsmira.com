@@ -2,9 +2,11 @@
 from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
 # from django.contrib.auth.models import User
+from os import path
+
 
 from .models import *
-from .logic import addDomainToUrl, is_file_exist
+from .logic import addDomainToUrl, buildSrcSet, is_file_exist
 
 
 def get_model_data(model_name, **kwargs):
@@ -16,6 +18,7 @@ def get_model_data(model_name, **kwargs):
 	return post
 
 
+
 class FixAbsolutePathSerializer(serializers.Field):
 	def to_representation(self, value):
 		if value:
@@ -25,10 +28,12 @@ class FixAbsolutePathSerializer(serializers.Field):
 			return url
 
 
+
 class FixCharCaretSerializer(serializers.Field):
 	def to_representation(self, value):
 		value = value.replace('\r\n', '<br/>')
 		return value
+
 
 
 class FixRichCaretSerializer(serializers.Field):
@@ -56,6 +61,7 @@ class PageSeoSerializer(serializers.ModelSerializer):
 		fields = ('seo',)
 
 
+
 class MetaSerializer(serializers.ModelSerializer):
 	logo = serializers.ImageField(max_length=None, use_url=True)
 	class Meta:
@@ -63,10 +69,12 @@ class MetaSerializer(serializers.ModelSerializer):
 		fields = ('logo', 'name', 'phone',)
 
 
+
 class CategorySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Category
 		fields = ('id', 'title', 'slug', 'sort',)
+
 
 
 class MediaSerializer(serializers.ModelSerializer):
@@ -79,8 +87,16 @@ class MediaSerializer(serializers.ModelSerializer):
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
 		if instance.file:
-			data.update({'width' : instance.file.width, 'height' : instance.file.height})
+			data.update({
+				'src' : data['file'],
+				'srcset': buildSrcSet(self, instance.file),
+				'size': {
+					'width' : instance.file.width,
+					'height' : instance.file.height
+					}
+				})
 		return data
+
 
 
 class SlideSerializer(MediaSerializer):
@@ -91,6 +107,7 @@ class SlideSerializer(MediaSerializer):
 		fields = ('id', 'title', 'excerpt', 'portfolio', 'file', 'video', 'link',)
 
 
+
 class SliderSerializer(serializers.ModelSerializer):
 	excerpt = FixCharCaretSerializer()
 	description = FixRichCaretSerializer()
@@ -98,6 +115,7 @@ class SliderSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Slider
 		fields = ('title', 'excerpt', 'description', 'slides',)
+
 
 
 class PortfolioSerializer(serializers.ModelSerializer):
@@ -115,7 +133,11 @@ class PortfolioSerializer(serializers.ModelSerializer):
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
 		if instance.cover:
-			data['cover_size'] = {'width' : instance.cover.width, 'height' : instance.cover.height}
+				data['cover'] = {
+				'src' : data['cover'],
+				'size': {'width' : instance.cover.width, 'height' : instance.cover.height},
+				'srcset': buildSrcSet(self, instance.cover)
+			}
 
 		if not self.context['many']:
 			data['slides'] = MediaSerializer(instance.images, many=True, context=self.context).data
@@ -140,7 +162,11 @@ class AboutSerializer(serializers.ModelSerializer):
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
 		if instance.avatar:
-			data['avatar_size'] = {'width' : instance.avatar.width, 'height' : instance.avatar.height}
+			data['avatar'] = {
+				'src' : data['avatar'],
+				'size': {'width' : instance.avatar.width, 'height' : instance.avatar.height},
+				'srcset': buildSrcSet(self, instance.avatar)
+			}
 		return data
 
 
@@ -217,7 +243,12 @@ class PostListSerializer(serializers.ModelSerializer):
 		data['page'] = instance.section.show_on_page
 		data['area'] = instance.section.area
 		if is_file_exist(instance.file):
-			data['content']['file_size'] = {'width' : instance.file.width, 'height' : instance.file.height}
+			data['content']['file'] = {
+				'src' : data['content']['file'],
+				'size': {'width' : instance.file.width, 'height' : instance.file.height},
+				'srcset': buildSrcSet(self, instance.file)
+			}
+
 		if instance.section.area != 'header':
 			if instance.post_type == 'portfolio':
 				data['url'] = '/{}/{}'.format('projects', instance.id)

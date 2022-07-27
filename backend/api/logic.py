@@ -1,5 +1,5 @@
 import re
-from os import path, remove
+from os import path, remove, listdir
 from threading import Thread
 from django.conf import settings
 from django.utils.html import format_html
@@ -218,6 +218,20 @@ def addDomainToUrl(request, value, pattern, start=False):
 
 		return url
 	return value
+
+
+def buildSrcSet(self, obj):
+	file_url, _ = path.split(obj.url)
+	upload_folder, filename = path.split(obj.path)
+	filename, _ = path.splitext(filename)
+	files = sorted(listdir(upload_folder), key=lambda s: (len(s), s))
+	request = self.context.get('request')
+	pattern = '<URL>/media/'
+	srcset = []
+	for file in files:
+		if file.startswith(filename+"_"):
+			srcset.append(addDomainToUrl(request,path.join(file_url,file), pattern))
+	return srcset
 
 
 """ Sending email """
