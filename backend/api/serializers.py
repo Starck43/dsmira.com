@@ -183,7 +183,7 @@ class SectionSerializer(serializers.ModelSerializer):
 		fields = ('id', 'slug', 'name', 'show_on_page', 'area', 'in_nav', 'link',)
 
 	def get_link(self, obj):
-		return '{}{}'.format( '' if obj.show_on_page == 'self_page' else '#', obj.slug )
+		return '{}{}'.format( '' if obj.show_on_page == 'self_page' else '#', obj.slug ) if obj else None
 
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
@@ -229,7 +229,8 @@ class PostListSerializer(serializers.ModelSerializer):
 			elif obj.post_type == 'portfolio':
 				serializer = PortfolioSerializer(data, context=context)
 			else:
-				serializer = PostSerializer(data, context=context)
+				return None
+				#serializer = PostSerializer(data, context=context)
 
 			data = serializer.data
 		else:
@@ -242,6 +243,7 @@ class PostListSerializer(serializers.ModelSerializer):
 		data['section_name'] = instance.section.name
 		data['page'] = instance.section.show_on_page
 		data['area'] = instance.section.area
+
 		if is_file_exist(instance.file):
 			data['content']['file'] = {
 				'src' : data['content']['file'],
