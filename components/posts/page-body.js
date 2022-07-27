@@ -1,4 +1,3 @@
-
 import Container from "../UI/container"
 import About from "./about"
 import Customers from "./customers"

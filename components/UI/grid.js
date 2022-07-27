@@ -7,7 +7,7 @@ const isBrowser = typeof window !== "undefined"
 const Masonry = isBrowser ? window.Masonry || require("masonry-layout") : null
 
 
-const Grid = ({container, slideName="grid-item", images, handleClick=null}) => {
+const Grid = ({container, slideName = "grid-item", images, handleClick = null}) => {
 	const masonry = useRef()
 	let grid = "grid-sizer"
 	let gutter = "gutter-sizer"
@@ -27,26 +27,28 @@ const Grid = ({container, slideName="grid-item", images, handleClick=null}) => {
 			<div className={`${container} grid`}>
 				<div className={grid}/>
 				<div className={gutter}/>
-				{images?.map(obj => (
-					obj.file &&
-					<BlockAnimation
-						key={obj.id}
-						id={`slide-${obj.id}`}
-						className={`${slideName} ${obj.height > 0 && obj.width / obj.height < 1 ? "portrait" : "landscape"}`}
-						handleClick={handleClick}
-					>
-						<Cover
-							src={obj.src}
-							srcSet={obj.srcset}
-							alt={obj.title || obj.excerpt}
-							title={obj.title || obj.excerpt}
-							width={obj.width}
-							height={obj.height}
-							layout="responsive"
-							style={handleClick && {cursor:"pointer"}}
-						/>
-					</BlockAnimation>
-				))}
+				{
+					images?.map(obj => (
+						obj.file &&
+						<BlockAnimation
+							key={obj.id}
+							id={`slide-${obj.id}`}
+							className={`${slideName} ${obj.height > 0 && obj.size?.width / obj.size?.height < 1 ? "portrait" : "landscape"}`}
+							handleClick={handleClick}
+						>
+							<Cover
+								src={obj.src}
+								srcSet={obj.srcset}
+								alt={obj.title || obj.excerpt}
+								title={obj.title || obj.excerpt}
+								width={obj.size?.width}
+								height={obj.size?.height}
+								layout="responsive"
+								style={handleClick && {cursor: "pointer"}}
+							/>
+						</BlockAnimation>
+					))
+				}
 			</div>
 		)
 	)

@@ -1,6 +1,7 @@
-import {Nav} from "react-bootstrap"
+import {useCallback} from "react"
 import {useRouter} from "next/router"
 import Link from "next/link"
+import {Nav} from "react-bootstrap"
 
 
 const Menu = ({nav}) => {
@@ -18,7 +19,7 @@ export default Menu
 
 const NavItem = ({item, pathname}) => {
 
-	const handleScroll = (e) => {
+	const handleScroll = useCallback((e) => {
 		e.preventDefault()
 		let hash = e.target.getAttribute("href").replace("/", "")
 		let el = hash ? document.querySelector(hash) : null
@@ -26,7 +27,7 @@ const NavItem = ({item, pathname}) => {
 			behavior: "smooth"
 		})
 
-	}
+	},[])
 
 	return (
 		<Nav.Item>

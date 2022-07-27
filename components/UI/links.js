@@ -1,5 +1,5 @@
 import Link from "next/link"
-import React, {useEffect} from "react"
+import React, {useCallback, useEffect} from "react"
 import {useScrollPosition} from "../../core/hooks"
 import {smoothScroll} from "../../core/utils"
 
@@ -22,10 +22,10 @@ export const ScrollToTop = ({url, className = ""}) => {
 		? useScrollPosition(document.documentElement, window.innerHeight)
 		: {position: 0, reachedTarget: false}
 
-	const scrollToRef = () => {
+	const scrollToRef = useCallback(() => {
 		let ref = document.querySelector(url)
 		smoothScroll(ref)
-	}
+	},[])
 
 	return (
 		<div id="scrollToTop" className={`${scroll.reachedTarget ? "visible" : "invisible"} ${className}`} onClick={scrollToRef}>

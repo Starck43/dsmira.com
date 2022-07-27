@@ -1,4 +1,3 @@
-import {useRef} from "react"
 import styled, {keyframes} from "styled-components"
 
 import {useElementInView} from "../../core/hooks"

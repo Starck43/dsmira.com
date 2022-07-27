@@ -16,7 +16,7 @@ export default function PageHeader({logo, nav, header}) {
 				<Logo src={logo}/>
 				<Menu nav={nav}/>
 				{header?.map(section => (
-					section?.post_type === "slider" &&
+					section.post_type === "slider" &&
 					<Slider
 						className="video-slider"
 						key={section.id}
