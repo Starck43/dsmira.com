@@ -14,27 +14,34 @@ export default function About({items}) {
 				<div className="about flex-column flex-md-wrap flex-md-row">
 					{items.map(item => (
 						<Fragment key={item.id}>
-							{item.content.avatar &&
-							<Avatar
-								className="about-avatar"
-								src={item.content.avatar.src}
-								width={item.content.avatar.size?.width || 320}
-								height={item.content.avatar.size?.height || 320}
-							/>}
-							<div className="about-meta">
-								{item.content.excerpt && <div className="about-excerpt">{item.content.excerpt}</div>}
-								{item.content.description &&
-								<HtmlContent className="about-description">{item.content.description}</HtmlContent>}
-							</div>
-							{item.content.file &&
-							<div className="about-extra">
-								<h3 className="title">География заказчиков</h3>
-								<Cover
-									src={item.content.file?.src}
-									width={item.content.file?.size.width}
-									height={item.content.file?.size.height}
+							{
+								item.content?.avatar &&
+								<Avatar
+									className="about-avatar"
+									src={item.content?.avatar.src}
+									width={item.content?.avatar.size?.width || 320}
+									height={item.content?.avatar.size?.height || 320}
 								/>
-							</div>
+							}
+							{
+								(item.content?.excerpt || item.content?.description) &&
+								<div className="about-meta">
+									{item.content.excerpt &&
+									<div className="about-excerpt">{item.content.excerpt}</div>}
+									{item.content.description &&
+									<HtmlContent className="about-description">{item.content.description}</HtmlContent>}
+								</div>
+							}
+							{
+								item.content?.file &&
+								<div className="about-extra">
+									<h3 className="title">География заказчиков</h3>
+									<Cover
+										src={item.content?.file.src}
+										width={item.content?.file.size?.width}
+										height={item.content?.file.size?.height}
+									/>
+								</div>
 							}
 						</Fragment>
 					))}
