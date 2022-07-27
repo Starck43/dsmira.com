@@ -37,7 +37,7 @@ export default function MyApp({Component, pageProps}) {
 	if (typeof window === "undefined") return <></>
 	return (
 		<ErrorBoundary>
-			<IconContext.Provider value={{className: "react-icons svg-icons", size: "3rem"}}>
+			<IconContext.Provider value={{className: "react-icons svg-icons", size: "40px"}}>
 				<Component {...pageProps} loaded={isLoaded}/>
 			</IconContext.Provider>
 		</ErrorBoundary>
