@@ -1,6 +1,6 @@
 import React, {createRef, useCallback, useEffect, useRef, useState} from "react"
 //import styled from "styled-components/macro"
-import Image from "next/image"
+//import Image from "next/image"
 
 import {Swiper, SwiperSlide} from "swiper/react"
 import {Lazy, Pagination, Keyboard, Zoom, Autoplay, Parallax, FreeMode} from "swiper"
@@ -14,7 +14,7 @@ import "swiper/css/parallax"
 import "swiper/css/free-mode"
 
 
-import {createThumbUrl} from "../../core/utils"
+import {createSrcSet, createThumbUrl} from "../../core/utils"
 import {useWindowDimensions} from "../../core/hooks"
 import Player from "./player"
 
@@ -36,6 +36,7 @@ const Slider = ({
 	                infinite = false,
 	                direction = "horizontal",
 	                autoHeight = false,
+	                centered = false,
 	                responsive = null,
 	                effect = "slide",
 	                paginationType = "bullets",
@@ -69,11 +70,13 @@ const Slider = ({
 		}, {})
 	)
 
+	/*
 
-	useEffect(() => {
-		console.log(carouselRef.current?.swiper)
-		console.log(sliderState)
-	}, [])
+		useEffect(() => {
+			console.log(carouselRef.current?.swiper)
+			console.log(sliderState)
+		}, [])
+	*/
 
 
 	const handlePrev = useCallback(() => {
@@ -89,6 +92,7 @@ const Slider = ({
 	const handleSlideInitialized = ({slides, activeIndex, autoplay}) => {
 		// adding Zoom class to images' containers
 		label === "lightbox" && slides.forEach(obj => {
+			console.log(obj)
 			let img = obj.querySelector("img")
 			img && img.parentElement.classList.add("swiper-zoom-container")
 		})
@@ -139,7 +143,7 @@ const Slider = ({
 			})
 		} else {
 			// drop slideshow interval to default for an image slide
-			setSlideInterval(interval)
+			interval > 0 && setSlideInterval(interval)
 		}
 
 	}
@@ -155,7 +159,7 @@ const Slider = ({
 						modules={[Lazy, Pagination, Keyboard, Zoom, Autoplay, Parallax, FreeMode]}
 						initialSlide={current}
 						pagination={{
-							enabled: Boolean(paginationType),
+							enabled: Boolean(paginationType) && slides.length > 1,
 							clickable: true,
 							dynamicBullets: true,
 							hideOnClick: false,
@@ -164,15 +168,19 @@ const Slider = ({
 						preloadImages={false}
 						lazy={{
 							enabled: true,
-							//loadPrevNext: true,
+							loadPrevNext: true,
 							loadOnTransitionStart: true,
 						}}
 						keyboard
 						parallax={parallax}
-						zoom={zoom}
+						zoom={{
+							enabled: zoom,
+							maxRatio: 2.5
+						}}
 						effect={effect}
 						speed={duration}
 						autoplay={{
+							enabled: Boolean(interval),
 							delay: slideInterval
 						}}
 						freeMode={{
@@ -182,7 +190,7 @@ const Slider = ({
 						loop={infinite}
 						direction={direction}
 						breakpoints={responsive}
-						//centeredSlides
+						centeredSlides={centered}
 						grabCursor
 						watchOverflow
 						autoHeight={autoHeight}
@@ -195,19 +203,20 @@ const Slider = ({
 							: slides.map(obj => (
 								<SwiperSlide key={obj.id} onClick={() => setShowSlideCaption(!showSlideCaption)}>
 									{obj.file &&
-									<>
-										<Image
+									<span className="swiper-zoom-container">
+										<img
 											className="swiper-zoom-target swiper-lazy"
-											loader={remoteLoader}
-											src={obj.file}
+											src={obj.src}
+											//data-src={obj.srcset.length > 0 ? obj.srcset[0] : obj.src}
+											data-srcset={createSrcSet(obj.srcset)}
+											//srcSet={createSrcSet(obj.srcset)}
 											alt={obj.title}
-											width={obj.width}
-											height={obj.height}
-											quality={80}
-											layout="responsive"
-											objectFit={label === "lightbox" || obj.width / obj.height < 1.4 ? "contain" : objectFit}
-											placeholder="blur"
-											blurDataURL={createThumbUrl(obj.file, 50)}
+											//width={obj.size.width}
+											//height={obj.size.height}
+											//layout="responsive"
+											//objectFit={label === "lightbox" || obj.size.width / obj.size.height < 1.4 ? "contain" : objectFit}
+											//placeholder="blur"
+											//blurDataURL={createThumbUrl(obj.file, 50)}
 											//unoptimized
 										/>
 
@@ -242,7 +251,7 @@ const Slider = ({
 												</p>
 											</figcaption>
 										}
-									</>
+									</span>
 									}
 									{
 										obj.link || obj.video

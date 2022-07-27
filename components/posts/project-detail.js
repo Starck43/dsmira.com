@@ -43,7 +43,9 @@ const ProjectDetail = ({id, post_type, page, section, content}) => {
 								//style={{height: width / 1.77}}
 								className={post_type}
 								zoom
+								infinite
 								parallax
+								autoHeight
 								{...content}
 							/>
 						)

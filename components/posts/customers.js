@@ -41,7 +41,7 @@ export default function Customers({items}) {
 						<SwiperSlide key={item.id} className="customer centered vertical">
 							<Avatar
 								className="avatar-wrapper zoom-out"
-								src={item.content?.avatar}
+								src={item.content?.avatar?.src}
 								href={item.content?.link}
 								name={item.title}
 								width={160}

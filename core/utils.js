@@ -59,28 +59,20 @@ export const getNaturalImageSizes = (img) => {
 	}
 }
 
-export const getYear = () => new Date().getFullYear()
-
-export const getSiteLocation = () => (
-	typeof window !== "undefined"
-		? {
-			url: location.protocol + "//" + location.host,
-			name: location.hostname
-		}
-		: null
-)
-
 export const cleanDoubleSlashes = (str) => str.replace(/([^:]\/)\/+/g, "$1")
 
-export const convertTime2Number = (str, unit="ms") => {
+export const convertTime2Number = (str, unit = "ms") => {
 	let arr = str.match(/[^\d]+|\d+/g)
 	let num = parseFloat(arr[0])
 
 	if (typeof num === "number") {
 		switch (arr[1]) {
-			case "s" : return (unit === "ms") ? num * 1000 : num
-			case "ms" : return (unit === "s") ? num / 1000 : num
-			default: return num
+			case "s" :
+				return (unit === "ms") ? num * 1000 : num
+			case "ms" :
+				return (unit === "s") ? num / 1000 : num
+			default:
+				return num
 		}
 	}
 	return 0
@@ -135,6 +127,14 @@ export const createThumbUrl = (src, width) => {
 	return src
 }
 
+export const createSrcSet = (srcset) => (
+	srcset.reduce((acc, value, index) => {
+		let arr = value.match(/(?!_)\d+w/g)
+		if (!arr) return acc
+		return acc + value + ' ' + arr.pop() + (index < srcset.length - 1 ? ", " : "")
+	}, "")
+)
+
 export const shimmer = (color, w, h = null, rounded) => (`
 		<svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<defs>
@@ -173,6 +173,17 @@ export const truncateHTML = (value, n = 200) => {
 	if (ar) return t + "&hellip;" + ar.reverse().join("").replace(/</g, "<\/") // close tags
 	return value
 }
+
+export const getYear = () => new Date().getFullYear()
+
+export const getSiteLocation = () => (
+	typeof window !== "undefined"
+		? {
+			url: location.protocol + "//" + location.host,
+			name: location.hostname
+		}
+		: null
+)
 
 export const isSafari = () => {
 	let userAgent = navigator.userAgent.toLowerCase()

@@ -61,15 +61,15 @@ const ProjectList = ({items, className}) => {
 		<div className={`${className} grid`}>
 			<div className="grid-sizer"/>
 			{items?.length > 0 && items.map((item, i) =>
-				item.content.cover && (
+				item.content.cover.src && (
 					<Link key={item.id} href={item.url} passHref>
 						<a id={`project-${item.id}`} className={`project-cover ${item.content.category.slug} mb-2vw`}>
 							<BlockAnimation options={{key: i}}>
 								<Cover
-									src={item.content.cover}
+									src={item.content.cover.src}
 									alt={item.title}
-									width={item.content.cover_size.width}
-									height={item.content.cover_size.height}
+									width={item.content.cover.size.width}
+									height={item.content.cover.size.height}
 									className="zoom-out"
 								/>
 							</BlockAnimation>

@@ -17,9 +17,9 @@ export default function About({items}) {
 							{item.content.avatar &&
 							<Avatar
 								className="about-avatar"
-								src={item.content.avatar}
-								width={item.content.avatar_size?.width || 320}
-								height={item.content.avatar_size?.height || 320}
+								src={item.content.avatar.src}
+								width={item.content.avatar.size?.width || 320}
+								height={item.content.avatar.size?.height || 320}
 							/>}
 							<div className="about-meta">
 								{item.content.excerpt && <div className="about-excerpt">{item.content.excerpt}</div>}
@@ -30,9 +30,9 @@ export default function About({items}) {
 							<div className="about-extra">
 								<h3 className="title">География заказчиков</h3>
 								<Cover
-									src={item.content.file}
-									width={item.content.file_size.width}
-									height={item.content.file_size.height}
+									src={item.content.file?.src}
+									width={item.content.file?.size.width}
+									height={item.content.file?.size.height}
 								/>
 							</div>
 							}

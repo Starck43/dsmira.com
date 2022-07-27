@@ -12,18 +12,28 @@
 
 .carousel-container
 	+make-container
-	min-width: 100%
+	width: 100%
 
 .swiper
 	height: 100%
-
+	&.swiper-initialized
+		.swiper-slide
+			opacity: 1
 .swiper-slide
+	opacity: 0
+	transition: opacity 600ms ease-out
 	span
 		max-height: 80vh
 		margin: auto !important
 
 	.swiper-zoom-container
 		overflow: unset !important
+		img
+			object-fit: none
+
+	&-zoomed
+		img
+			object-fit: cover !important
 
 	.carousel-caption
 		position: absolute
@@ -125,9 +135,12 @@
 	.swiper-wrapper
 		align-items: center
 	.swiper-slide
-		height: auto
+		//height: auto
+		height: 100%
 		span
+			position: relative
 			max-height: 100vh
+
 	.carousel-caption
 		padding: $lightbox-controls-margin
 

@@ -36,7 +36,8 @@ const Grid = ({container, slideName="grid-item", images, handleClick=null}) => {
 						handleClick={handleClick}
 					>
 						<Cover
-							src={obj.file}
+							src={obj.src}
+							srcSet={obj.srcset}
 							alt={obj.title || obj.excerpt}
 							title={obj.title || obj.excerpt}
 							width={obj.width}
