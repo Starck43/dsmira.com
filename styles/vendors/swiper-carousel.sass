@@ -28,8 +28,6 @@
 
 	.swiper-zoom-container
 		overflow: unset !important
-		img
-			object-fit: none
 
 	&-zoomed
 		img
@@ -132,11 +130,14 @@
 .lightbox
 	.swiper
 		overflow: unset
+		height: 100vh
 	.swiper-wrapper
 		align-items: center
 	.swiper-slide
 		//height: auto
 		height: 100%
+		padding: $lightbox-controls-margin
+
 		span
 			position: relative
 			max-height: 100vh
@@ -180,7 +181,7 @@
 	right: $lightbox-controls-margin
 	top: $lightbox-controls-margin
 	padding: 0.8rem
-	//background-color: transparentize($lightbox-controls-bg-color, 0.7)
 	z-index: 1
 	&:hover
 		transform: scale(1.2)
+		background-color: transparentize($lightbox-controls-bg-color, 0.7)
