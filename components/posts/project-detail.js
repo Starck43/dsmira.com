@@ -40,12 +40,11 @@ const ProjectDetail = ({id, post_type, page, section, content}) => {
 					{screen === "desktop"
 						? (
 							<Slider
-								//style={{height: width / 1.77}}
 								className={post_type}
-								zoom
+								//zoom
 								infinite
 								parallax
-								autoHeight
+								//autoHeight
 								{...content}
 							/>
 						)

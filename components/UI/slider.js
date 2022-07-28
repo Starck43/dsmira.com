@@ -1,4 +1,4 @@
-import React, {createRef, useCallback, useEffect, useRef, useState} from "react"
+import React, {createRef, useCallback, useRef, useState} from "react"
 //import styled from "styled-components/macro"
 //import Image from "next/image"
 
@@ -206,14 +206,14 @@ const Slider = ({
 									<span className="swiper-zoom-container">
 										<img
 											className="swiper-zoom-target swiper-lazy"
-											src={obj.src}
-											//data-src={obj.srcset.length > 0 ? obj.srcset[0] : obj.src}
+											//src={obj.srcset.length > 0 ? obj.srcset[0] : obj.src}
+											data-src={obj.srcset.length > 0 ? obj.srcset[0] : obj.src}
 											data-srcset={createSrcSet(obj.srcset)}
 											//srcSet={createSrcSet(obj.srcset)}
 											alt={obj.title}
-											//width={obj.size.width}
-											//height={obj.size.height}
-											//layout="responsive"
+											width={obj.size?.width}
+											height={obj.size?.height}
+											//layout="fill"
 											//objectFit={label === "lightbox" || obj.size.width / obj.size.height < 1.4 ? "contain" : objectFit}
 											//placeholder="blur"
 											//blurDataURL={createThumbUrl(obj.file, 50)}

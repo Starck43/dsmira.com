@@ -15,16 +15,26 @@
 	width: 100%
 
 .swiper
-	height: 100%
 	&.swiper-initialized
 		.swiper-slide
 			opacity: 1
+	&.swiper-autoheight .swiper-zoom-container img
+		object-fit: none
+
 .swiper-slide
 	opacity: 0
 	transition: opacity 600ms ease-out
 	span
-		max-height: 80vh
+		//position: relative
+		max-height: 75vh
 		margin: auto !important
+
+	img
+		position: relative
+		display: block
+		min-width: 100%
+		min-height: 100%
+		inset: 0
 
 	.swiper-zoom-container
 		overflow: unset !important
@@ -130,17 +140,12 @@
 .lightbox
 	.swiper
 		overflow: unset
-		height: 100vh
-	.swiper-wrapper
-		align-items: center
 	.swiper-slide
-		//height: auto
-		height: 100%
-		padding: $lightbox-controls-margin
-
 		span
 			position: relative
+			height: 100vh
 			max-height: 100vh
+			padding: $lightbox-controls-margin
 
 	.carousel-caption
 		padding: $lightbox-controls-margin
