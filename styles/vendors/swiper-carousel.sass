@@ -21,27 +21,22 @@
 	&.swiper-autoheight .swiper-zoom-container img
 		object-fit: none
 
+.swiper-wrapper
+	max-height: $slider-h
+	align-items: center
+
 .swiper-slide
-	opacity: 0
 	transition: opacity 600ms ease-out
-	span
-		//position: relative
-		max-height: 75vh
-		margin: auto !important
+	opacity: 0
+	.swiper-zoom-container
+		margin: auto
+		overflow: unset !important
 
 	img
 		position: relative
 		display: block
-		min-width: 100%
-		min-height: 100%
+		max-height: $slider-h
 		inset: 0
-
-	.swiper-zoom-container
-		overflow: unset !important
-
-	&-zoomed
-		img
-			object-fit: cover !important
 
 	.carousel-caption
 		position: absolute
@@ -55,12 +50,14 @@
 			color: black
 			text-align: center
 		.subtitle
+			//text-transform: uppercase
 			margin: 0.5rem 0
 		p
 			display: table
 			font-size: 0.9rem
 			text-align: left
 			+push--auto
+			margin-bottom: 0
 		&.hide
 			opacity: 0
 			visibility: hidden
@@ -140,15 +137,33 @@
 .lightbox
 	.swiper
 		overflow: unset
+	.swiper-wrapper
+		max-height: 100vh !important
+
 	.swiper-slide
-		span
+		.swiper-zoom-container
 			position: relative
-			height: 100vh
-			max-height: 100vh
+		img
 			padding: $lightbox-controls-margin
+			max-height: 100vh !important
+
+		&-zoomed
+			.swiper-zoom-container
+			height: 100%
+			img
+				min-width: 100vw
+				min-height: 100vh
+				padding: 0
+				object-fit: cover !important
+
+			.carousel-caption
+				display: none
+			&~.swiper-control-prev,
+			&~.swiper-control-next
+				display: none
 
 	.carousel-caption
-		padding: $lightbox-controls-margin
+		margin: $lightbox-controls-margin
 
 	.swiper-control
 		&-prev,
@@ -179,14 +194,3 @@
 		color: $lightbox-controls-color
 		background-color: transparentize($lightbox-controls-bg-color, 0.7)
 		z-index: 1
-
-
-.carousel-modal .btn-close
-	position: fixed
-	right: $lightbox-controls-margin
-	top: $lightbox-controls-margin
-	padding: 0.8rem
-	z-index: 1
-	&:hover
-		transform: scale(1.2)
-		background-color: transparentize($lightbox-controls-bg-color, 0.7)

@@ -33,21 +33,6 @@
     @media (max-width: 767.98px) and (orientation: landscape)
       width: 50%
 
-.project-detail
-  position: relative
-  .meta
-    .title
-      text-align: center
-      margin-bottom: 2rem
-    .description
-      text-align: justify
-      column-gap: 3rem
-      column-count: 1
-      +media-breakpoint-up(lg)
-        column-count: 2
-      +media-breakpoint-up(xl)
-        column-count: 3
-
 
 .portfolio.grid
   width: 100%
@@ -68,17 +53,13 @@
     width: 100%
 
 
-.carousel-modal
+.carousel.modal-dialog
   max-width: 100%
   min-height: 100%
   max-height: 100vh
   margin: 0
   background-color: $overlay-bg
   overflow: hidden
-  .modal-body
-    +media-breakpoint-down(lg)
-      padding: 0
-
   .carousel-content
     background-color: unset
     position: relative
@@ -89,6 +70,13 @@
     outline: 0
 
     .btn-close
+      position: fixed
+      right: $lightbox-controls-margin
+      top: $lightbox-controls-margin
+      padding: 0.8rem
       opacity: 0.7
+      z-index: 1
       &:hover
+        transform: scale(1.2)
+        background-color: transparentize($lightbox-controls-bg-color, 0.7)
         opacity: 1
