@@ -17,7 +17,15 @@ export default function Works({items}) {
 						<BlockAnimation key={item.id} className="col" inview={{threshold: 0.10}} options={{key: i}}>
 							<Link href={item.url} passHref>
 							<a id={`project-${item.id}`} className="work">
-								<Cover src={item.content.cover?.src} srcSet={item.content.cover?.srcset} alt={item.title} width={450} height={253} className="zoom-out"/>
+								<Cover
+									id={item.content.cover?.id}
+									src={item.content.cover?.src}
+									srcset={item.content.cover?.srcset}
+									alt={item.title}
+									width={450}
+									height={253}
+									className="zoom-out"
+								/>
 								<PostMeta {...item.content} className="work-info"/>
 							</a>
 							</Link>

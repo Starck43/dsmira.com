@@ -67,6 +67,7 @@ const ProjectList = ({items, className}) => {
 							<BlockAnimation options={{key: i}}>
 								<Cover
 									src={item.content.cover.src}
+									srcset={item.content.cover.srcset}
 									alt={item.title}
 									width={item.content.cover.size.width}
 									height={item.content.cover.size.height}

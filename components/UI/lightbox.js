@@ -3,33 +3,30 @@ import {Modal, CloseButton} from "react-bootstrap"
 import Slider from "./slider"
 
 
-const LightBox = ({slides, currentSlide, title, excerpt, show, handleClick, className}) => {
+const LightBox = ({slides, currentSlide, title, excerpt, show, handleClose, className}) => {
 	return (
 		<Modal
 			contentClassName="carousel-content"
-			dialogClassName="carousel-modal"
+			dialogClassName="carousel"
 			centered
 			fullscreen
 			scrollable={false}
+			backdrop={false}
 			show={show}
-			onHide={handleClick}
+			onHide={handleClose}
 		>
-			<Modal.Body>
-				<Slider
-					label="lightbox"
-					className={className}
-					current={currentSlide}
-					title={title}
-					excerpt={excerpt}
-					slides={slides}
-					parallax
-					infinite
-					zoom
-				/>
-			</Modal.Body>
-
-			<CloseButton className="" onClick={handleClick}/>
-
+			<Slider
+				label="lightbox"
+				className={className}
+				current={currentSlide}
+				title={title}
+				excerpt={excerpt}
+				slides={slides}
+				parallax
+				infinite
+				zoom
+			/>
+			<CloseButton className="" onClick={handleClose}/>
 		</Modal>
 	)
 }

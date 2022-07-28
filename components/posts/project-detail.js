@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from "react"
+import React, {Fragment, useState} from "react"
 import {useWindowDimensions} from "../../core/hooks"
 import Slider from "../UI/slider"
 import Grid from "../UI/grid"
@@ -6,65 +6,60 @@ import {LinkButton} from "../UI/links"
 import {HtmlContent} from "../UI/html-content"
 import LightBox from "../UI/lightbox"
 
+import styles from "~/styles/modules/projects.module.sass"
+
 
 const ProjectDetail = ({id, post_type, page, section, content}) => {
-	const {width} = useWindowDimensions()
-	const [screen, setScreen] = useState("mobile")
-	const [showModal, setShowModal] = useState(false)
+	const {ratio} = useWindowDimensions(null)
 	const [imageIndex, setImageIndex] = useState(0)
 
-	const toggleShow = (e) => {
-		setShowModal(!showModal)
+	const openLightbox = (e) => {
+		setImageIndex(parseInt(e.target.id, 10) + 1)
 	}
 
-	const openLightbox = (event) => {
-		let current = event.currentTarget
-		let slides = current.parentElement.querySelectorAll(".grid-item")
-		let index = (slides?.length > 0) ? [...slides].indexOf(current) : -1
-
-		setImageIndex(index)
-		setShowModal(!showModal)
-	}
-
-	useEffect(() => {
-		setScreen(width < 992 ? "mobile" : "desktop")
-	}, [width])
 
 	return (
-		width
+		ratio
 			? <Fragment>
 				{content.slides.length > 0 &&
-				<section id={`project-${id}`}
-				         className={`project-detail flex-column centered${screen === "desktop" ? " reverse" : ""}`}>
-					<ProjectMeta {...content} className={screen === "desktop" ? "mt-5" : "mb-5"}/>
-					{screen === "desktop"
+				<section
+					id={`project-${id}`}
+					className={`project-detail flex-column centered${ratio > 1 ? " reverse" : ""}`}
+					style={{position: "relative"}}
+				>
+					<ProjectMeta
+						className={ratio > 1 ? "mt-5" : "mb-5"}
+						styles={styles}
+						{...content}
+					/>
+					{ratio > 1
 						? (
 							<Slider
 								className={post_type}
-								//zoom
+								{...content}
 								infinite
 								parallax
+								//zoom
 								//autoHeight
-								{...content}
 							/>
 						)
 						: (
 							<>
 								<Grid
 									images={content.slides}
-									container={post_type}
 									handleClick={openLightbox}
+									container={post_type}
 								/>
 
-								{imageIndex >= 0 &&
+								{imageIndex > 0 &&
 								<LightBox
+									className={post_type}
 									slides={content.slides}
-									currentSlide={imageIndex}
-									show={showModal}
 									title={content.title}
 									excerpt={content.excerpt}
-									handleClick={toggleShow}
-									className={post_type}
+									show={Boolean(imageIndex)}
+									handleClose={() => setImageIndex(0)}
+									currentSlide={imageIndex - 1}
 								/>
 								}
 							</>
@@ -86,9 +81,9 @@ const ProjectDetail = ({id, post_type, page, section, content}) => {
 export default ProjectDetail
 
 
-const ProjectMeta = ({title, description, className}) => (
+const ProjectMeta = ({title, description, className="", styles}) => (
 	<div className={`meta ${className}`}>
-		{title && <h3 className="title">{title}</h3>}
-		{description && <HtmlContent className="description">{description}</HtmlContent>}
+		{title && <h3 className={`title ${styles.title}`}>{title}</h3>}
+		{description && <HtmlContent className={`description ${styles.description}`}>{description}</HtmlContent>}
 	</div>
 )

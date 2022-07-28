@@ -37,7 +37,9 @@ export default function About({items}) {
 								<div className="about-extra">
 									<h3 className="title">География заказчиков</h3>
 									<Cover
+										id={item.content?.file.id}
 										src={item.content?.file.src}
+										srcset={item.content?.file.srcset}
 										width={item.content?.file.size?.width}
 										height={item.content?.file.size?.height}
 									/>

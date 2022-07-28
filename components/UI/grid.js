@@ -5,18 +5,19 @@ import Cover from "./cover"
 
 const isBrowser = typeof window !== "undefined"
 const Masonry = isBrowser ? window.Masonry || require("masonry-layout") : null
+const SIZER = "grid-sizer"
+const GUTTER = "gutter-sizer"
+const ITEM = "grid-item"
 
 
-const Grid = ({container, slideName = "grid-item", images, handleClick = null}) => {
+const Grid = ({container, images, handleClick = null}) => {
 	const masonry = useRef()
-	let grid = "grid-sizer"
-	let gutter = "gutter-sizer"
 
 	useEffect(() => {
 		masonry.current = new Masonry(`.${container}`, {
-			columnWidth: `.${grid}`,
-			gutter: `.${gutter}`,
-			itemSelector: `.${slideName}`,
+			columnWidth: `.${SIZER}`,
+			gutter: `.${GUTTER}`,
+			itemSelector: `.${ITEM}`,
 			percentPosition: true,
 		})
 		return () => masonry?.current.destroy()
@@ -24,21 +25,21 @@ const Grid = ({container, slideName = "grid-item", images, handleClick = null}) 
 
 	return (
 		masonry && images?.length > 0 && (
-			<div className={`${container} grid`}>
-				<div className={grid}/>
-				<div className={gutter}/>
+			<div className={`${container} grid`} onClick={handleClick}>
+				<div className={SIZER}/>
+				<div className={GUTTER}/>
 				{
-					images?.map(obj => (
+					images?.map((obj, index) => (
 						obj.file &&
 						<BlockAnimation
 							key={obj.id}
 							id={`slide-${obj.id}`}
-							className={`${slideName} ${obj.height > 0 && obj.size?.width / obj.size?.height < 1 ? "portrait" : "landscape"}`}
-							handleClick={handleClick}
+							className={`${ITEM} ${obj.size?.height > 0 && obj.size?.width / obj.size?.height < 1 ? "portrait" : "landscape"}`}
 						>
 							<Cover
+								id={index}
 								src={obj.src}
-								srcSet={obj.srcset}
+								srcset={obj.srcset}
 								alt={obj.title || obj.excerpt}
 								title={obj.title || obj.excerpt}
 								width={obj.size?.width}
