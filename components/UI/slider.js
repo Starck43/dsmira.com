@@ -13,18 +13,11 @@ import "swiper/css/pagination"
 import "swiper/css/parallax"
 import "swiper/css/free-mode"
 
-
-import {createSrcSet, createThumbUrl} from "../../core/utils"
-import {useWindowDimensions} from "../../core/hooks"
 import Player from "./player"
 
+import {createSrcSet} from "../../core/utils"
+import {useWindowDimensions} from "../../core/hooks"
 
-const remoteLoader = ({src, width}) => {
-	let breakpoints = [50, 320, 576, 768, 992, 1200]
-	if (breakpoints.indexOf(width) !== -1)
-		return createThumbUrl(src, width)
-	return src
-}
 
 const Slider = ({
 	                title,
@@ -70,32 +63,23 @@ const Slider = ({
 		}, {})
 	)
 
-	/*
 
-		useEffect(() => {
-			console.log(carouselRef.current?.swiper)
-			console.log(sliderState)
-		}, [])
-	*/
-
-
-	const handlePrev = useCallback(() => {
+	const handlePrev = () => {
 		carouselRef.current?.swiper.slidePrev()
-	}, [])
+	}
 
 
-	const handleNext = useCallback(() => {
+	const handleNext = () => {
 		carouselRef.current?.swiper.slideNext()
-	}, [])
+	}
 
 
 	const handleSlideInitialized = ({slides, activeIndex, autoplay}) => {
 		// adding Zoom class to images' containers
-		label === "lightbox" && slides.forEach(obj => {
-			console.log(obj)
+/*		label === "lightbox" && slides.forEach(obj => {
 			let img = obj.querySelector("img")
 			img && img.parentElement.classList.add("swiper-zoom-container")
-		})
+		})*/
 
 		let currentSlider = sliderState[slides[activeIndex]?.id]
 		if (currentSlider?.url) {
@@ -145,7 +129,6 @@ const Slider = ({
 			// drop slideshow interval to default for an image slide
 			interval > 0 && setSlideInterval(interval)
 		}
-
 	}
 
 
@@ -278,12 +261,12 @@ const Slider = ({
 						width > 576
 							? (<>
 									<div
-										className={`swiper-control-next ${!infinite && carouselRef.current?.swiper.isEnd ? "disabled" : ""}`}
+										className={`swiper-control-next ${!infinite && carouselRef.current?.swiper.isEnd || carouselRef.current?.swiper.zoom?.scale > 1 ? "disabled" : ""}`}
 										onClick={handleNext}>
 										<span className={`arrow right`}/>
 									</div>
 									<div
-										className={`swiper-control-prev ${!infinite && carouselRef.current?.swiper.isBeginning ? "disabled" : ""}`}
+										className={`swiper-control-prev ${!infinite && carouselRef.current?.swiper.isBeginning || carouselRef.current?.swiper.zoom?.scale > 1 ? "disabled" : ""}`}
 										onClick={handlePrev}>
 										<span className={`arrow left`}/>
 									</div>
