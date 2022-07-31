@@ -1,17 +1,16 @@
 import {Button, Modal} from "react-bootstrap"
-import React from "react"
 
 
-export const ModalDialog = ({
-	                            children,
-	                            show = false,
-	                            closeHandler,
-	                            title,
-	                            footer,
-	                            className,
-	                            size = "sm",
-	                            scrollable = true
-                            }) => (
+const ModalDialog = ({
+	                     className,
+	                     title,
+	                     children,
+	                     footer,
+	                     size = "sm",
+	                     scrollable = true,
+	                     show = true,
+	                     closeHandler,
+                     }) => (
 	<Modal className={className}
 	       contentClassName="alert-content"
 	       centered
@@ -38,5 +37,4 @@ export const ModalDialog = ({
 	</Modal>
 )
 
-
-
+export default ModalDialog

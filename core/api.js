@@ -99,6 +99,5 @@ export const postForm = async (form) => {
 			"Accept": "application/json, application/xml, text/plain, text/html",
 		},
 		body: JSON.stringify(data),
-		//credentials: 'include',
 	})
 }

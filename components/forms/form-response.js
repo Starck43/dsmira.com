@@ -1,13 +1,10 @@
-import {ModalDialog} from "../UI/dialogs"
-import {Button, Modal} from "react-bootstrap"
-import React from "react"
+import ModalDialog from "../UI/dialogs"
 
 
-const ModalResponse = ({response, className = "alert-container", handleClose}) => {
+const FormResponse = ({response, handleClose, className = "alert-container"}) => {
 	if (response instanceof Promise || response === null) return (
 		<ModalDialog
 			className={`${className}`}
-			show
 			closeHandler={handleClose}
 		>
 			<h3 className="subtitle">Отправка сообщения...</h3>
@@ -16,7 +13,6 @@ const ModalResponse = ({response, className = "alert-container", handleClose}) =
 	else if (!response?.error && response?.data) return (
 		<ModalDialog
 			className={`${className} success`}
-			show
 			closeHandler={handleClose}
 		>
 			<h3 className="subtitle">Сообщение успешно доставлено!</h3>
@@ -29,7 +25,6 @@ const ModalResponse = ({response, className = "alert-container", handleClose}) =
 	else return (
 			<ModalDialog
 				className={`${className} error`}
-				show
 				closeHandler={handleClose}
 			>
 				<h3 className="subtitle">Возникла ошибка на сервере!</h3>
@@ -41,4 +36,4 @@ const ModalResponse = ({response, className = "alert-container", handleClose}) =
 		)
 }
 
-export default ModalResponse
+export default FormResponse

@@ -19,6 +19,7 @@ export default function About({items}) {
 								<Avatar
 									className="about-avatar"
 									src={item.content?.avatar.src}
+									srcset={item.content?.avatar.srcset}
 									width={item.content?.avatar.size?.width || 320}
 									height={item.content?.avatar.size?.height || 320}
 								/>

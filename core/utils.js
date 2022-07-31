@@ -78,6 +78,11 @@ export const convertTime2Number = (str, unit = "ms") => {
 	return 0
 }
 
+export const findObjectInArray = (arr, key, value) => {
+	let index = arr.findIndex(obj => obj[key] === value)
+	return index > -1 ? arr[index] : null
+}
+
 export const arrayToParams = (arr) => {
 	return (arr.length > 0) ? "fields=" + arr.join("&") : ""
 }

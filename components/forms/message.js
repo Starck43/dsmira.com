@@ -1,32 +1,30 @@
-import React, {Fragment, useEffect, useState} from "react"
+import {Fragment, useEffect, useRef, useState} from "react"
 
-import {MessageTemplate} from "../UI/forms"
 import {postForm} from "../../core/api"
-import ModalResponse from "./modal-response"
+import {MessageTemplate} from "../UI/forms"
+import FormResponse from "./form-response"
 
 //import style from "~/styles/reg.module.sass"
 
 
-const MessageForm = ({formName, formData}) => {
+const MessageForm = (props) => {
 	const [response, setResponse] = useState(null)
 	const [validated, setValidated] = useState(false)
+	const formRef = useRef(null)
 
 	useEffect(() => {
+		// cleaning form fields
 		if (!validated && !response?.error) {
 			setResponse(null)
-			let form = document.getElementById(formName)
-			form && form.reset()
+			//let form = document.getElementById(formName)
+			formRef?.current.reset()
 		}
 	}, [validated])
-
-	const handleClose = (e) => {
-		setValidated(false)
-	}
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		e.stopPropagation()
-		let form = e.target
+		let form = formRef?.current || e.target
 
 		if (form?.checkValidity() === false) {
 			setValidated(true)
@@ -42,23 +40,23 @@ const MessageForm = ({formName, formData}) => {
 		}
 	}
 
+
 	return (
 		<Fragment>
 			<MessageTemplate
-				name={formName}
-				data={formData}
+				formRef={formRef}
+				{...props}
+				modal={false}
 				compact={false}
 				validated={validated}
 				submitHandler={handleSubmit}
-				modal={false}
 			/>
-			{validated && <ModalResponse response={response} handleClose={handleClose}/>}
-
+			{validated &&
+			<FormResponse response={response} handleClose={()=>setValidated(false)}/>
+			}
 		</Fragment>
 
 	)
 }
 
 export default MessageForm
-
-
