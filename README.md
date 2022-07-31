@@ -1,44 +1,24 @@
-# site.ru
+# dsmira.com
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with CSR fetching JSON data from server via API.
+This is a portfolio site created with nextJS and python backend.
 
 
 
 ![](screenshot.jpg)
 
-1. To view a static site **[click here](https://site.ru/)**.
-2. To view a site's code **[visit repository](https://github.com/Starck43/site.git)**.
-3. To add/change content **[open Django](https://admin.site.ru)**.
-
-
-## Site code
-
-Site was written on React/Next.js with Python/Django backend. Pages are pre-rendered at build time
-
- - `next-config.js` -  API settings
- - `core/constants.js` - to change additional personal data
- - `pages/*.js` - base pages
- - `libs/*.js` - vendor libraries
- - `components/*.js` - all component's folder
- - `public/` - folder for icons, logos and fonts
- - `babel.config.js` Babel settings
- - `next-sitemap.config.js` Sitemap settings
- 
-
-### Online registration
-
-For sending data on server it uses a fetch function with post method [Python API](https://admin.fogapo.ru/api/user/add).
-After success data saving server sends email notifications to administrator and message author
+1. To view a site **[click here](https://dsmira.com/)**.
+2. To view a site's code **[visit repository](https://github.com/Starck43/dsmira.com.git)**.
+3. To manage content **[open Django](https://admin.dsmira.com)**.
 
 
 ## Backend
 
-Based on Django framework API with Python code
+Based on Django with Rest framework.
  - `backend` -  Django project
  - `backend/api` -  API app
 
- For API used `djangorestframework` package
- All packages saved in `backend/requirements.txt` file
+ For creating API used `djangorestframework` package
+ All project packages saved in `backend/requirements.txt` file
 
 ```bash
 # Environment installation
@@ -49,14 +29,13 @@ $ django-admin startproject crm .
 $ python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 # Install api app
 $ django-admin startapp api
-
+# Activate Virtual Environment
 $ source ./venv/bin/activate
-
 $ python3 manage.py createsuperuser
-
+# Install all dependence packages
 $ pip install -r requirements.txt
-
 $ python manage.py migrate
+$ python manage.py makemigrations
 # collect static
 $ python manage.py collectstatic
 # run server
@@ -64,34 +43,59 @@ $ python manage.py runserver [localhost:8000]
 ````
 
 ### API endpoints
+   - `pages/` - get all pages list
+   - `pages/<str:slug>/` - get page by name (i.e. homepage, projects)
+   - `pages/<str:slug>/<int:pk>/` - get page by name and id (i.e. projects/1)
+   - `posts/` - get all posts list
+   - `posts/<int:pk>/` - get post by id
+   - `sections/` - get all pages' sections
+   - `sections/<str:slug>/` - get section by name
+   - `sections/<str:slug>/<int:pk>/` - get page's section by name and id
+   - `feedback/` - post message via site form and send email
+
 
 
 ## Frontend
 
-Before working with the project you need to be installed Node.JS, Git and Yarn.
-In terminal clone and run the project:
+Site was written on React/Next.js with Python/Django backend.
+
+Before working with project you need to be installed Node.JS
 
 ```bash
 # Clone this repository to your project's folder
-$ git clone https://github.com/Starck43/site.git
+$ git clone https://github.com/Starck43/dsmira.com.git
 
 # Go into the repository
-$ cd site
+$ cd dsmira.com
 
 # Install dependencies
 $ npm i (or yarn)
 
-# Start development server
-# npm run dev
+# Start server in development mode
+$ npm run dev
+# or
 $ yarn dev
 ```
+
+#### Project file structure
+
+- `pages/*.js` - site's pages
+- `libs/*.js` - vendor libraries
+- `components/*.js` - react components (forms, posts, UI)
+- `core/` - api, utils, hooks and constants files
+- `public/` - folder for icons, logos and fonts
+- `styles/` - css/scss/sass project files
+- `next-config.js` -  nextJS config file
+- `babel.config.js` Babel settings
+- `next-sitemap.config.js` Sitemap settings
 
 
 ## Deployment
 
-When you are done with development you should commit changes and push them back to github.
+When you are done with development you should commit changes and push them back to Github.
 
-### Deploy to Github
+
+#### Deploy to Github
 
 ```bash
 $ git add ./
@@ -99,15 +103,17 @@ $ git commit -m "some changes added"
 $ git push origin
 ```
 
-If you want to view a compiled site on github.io, please, read [Deploying on Github Pages](https://create-react-app.dev/docs/deployment/#github-pages) docs for React.
+To view a compiled site on github.io, please, read [Deploying on Github Pages](https://create-react-app.dev/docs/deployment/#github-pages) docs for React.
 
-### Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Deploy on Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The easiest way to deploy Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
 
-### Build
+Check out [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+#### Build
 
 Run [Hook](https://api.vercel.com/v1/integrations/deploy/prj_FCMF1WgdMPeSIP6bmDBe1PspBjAP/NJ0Kqa6gDK) to build site on the hoster's server
 
@@ -122,6 +128,7 @@ Open [site.vercel.app](http://site.vercel.app) with your browser to see the resu
 - [Django](https://docs.djangoproject.com/)
 - [Vercel](https://vercel.com/docs/)
 
+
 ## Favicon Package
 
 Generate favicons with [RealFaviconGenerator](https://realfavicongenerator.net/)
@@ -131,3 +138,4 @@ To install this package:
 If the site is <code>http://www.example.com</code>, you should be able to access a file named <code>http://www.example.com/favicon.ico</code>.
 
 *Optional* - Check your favicon with the [favicon checker](https://realfavicongenerator.net/favicon_checker)
+v1.2.9
