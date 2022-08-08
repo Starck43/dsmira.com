@@ -18,14 +18,12 @@ export const LinkButton = ({children, url="#", title = "", arrow = "", className
 
 export const ScrollToTop = ({url, className = ""}) => {
 
-	const scroll = (typeof window !== "undefined")
-		? useScrollPosition(document.documentElement, window.innerHeight)
-		: {position: 0, reachedTarget: false}
+	const scroll = useScrollPosition(document.documentElement, window.innerHeight)
 
 	const scrollToRef = useCallback(() => {
 		let ref = document.querySelector(url)
 		smoothScroll(ref)
-	},[])
+	},[url])
 
 	return (
 		<div id="scrollToTop" className={`${scroll.reachedTarget ? "visible" : "invisible"} ${className}`} onClick={scrollToRef}>

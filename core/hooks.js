@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect, useRef, useState} from "react"
+import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react"
 import {getCountdown, getNaturalImageSizes, getWindowDimensions} from "./utils"
 
 export const useWindowDimensions = () => {
@@ -25,14 +25,14 @@ export const useScrollPosition = (container = document.documentElement, targetSc
 		reachedTarget: false
 	})
 
-	const handleScroll = () => {
-		setScroll({
-			position: container.scrollTop,
-			reachedTarget: container.scrollTop >= targetScroll
-		})
-	}
-
 	useEffect(() => {
+		const handleScroll = () => {
+			setScroll({
+				position: container.scrollTop,
+				reachedTarget: container.scrollTop >= targetScroll
+			})
+		}
+
 		window.addEventListener("scroll", handleScroll)
 		return () => window.removeEventListener("scroll", handleScroll)
 	}, [])

@@ -19,7 +19,7 @@ const MessageForm = (props) => {
 			//let form = document.getElementById(formName)
 			formRef?.current.reset()
 		}
-	}, [validated])
+	}, [validated, response])
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
