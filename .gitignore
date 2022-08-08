@@ -33,6 +33,7 @@ public/sitemap*.xml
 .DS_Store
 *.pem
 package-lock.json
+yarn.lock
 
 # debug
 npm-debug.log*
@@ -58,8 +59,6 @@ venv/
 *.sublime-workspace
 *.sublime-project
 sftp-config.json
-
-package-lock.json
 datadamp.json
 
 # Django #
