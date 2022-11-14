@@ -42,12 +42,11 @@ export const getWindowDimensions = () => {
 			ratio: window.innerWidth / window.innerHeight,
 			media: getMediaScreen()
 		}
-	} else {
-		return {
-			width: 0,
-			height: 0,
-			ratio: 0
-		}
+	}
+	return {
+		width: 0,
+		height: 0,
+		ratio: 0
 	}
 }
 

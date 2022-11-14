@@ -187,7 +187,7 @@ class SectionSerializer(serializers.ModelSerializer):
 
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
-		print(self.context)
+		#print(self.context)
 		data['active'] = True if 'current_route' in self.context and self.context['current_route'] == instance.slug else False
 
 		return data

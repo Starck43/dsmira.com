@@ -72,7 +72,6 @@ def generate_media(obj, *sizes, resize_source=True):
 				generate_thumbs(obj, *sizes)
 
 		except IOError:
-			print('error in file: %s' % file)
 			if path.isfile(old_file):
 				rename(old_file, file)
 			return HttpResponse('Ошибка открытия файла %s!' % file)

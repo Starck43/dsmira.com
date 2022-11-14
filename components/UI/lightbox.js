@@ -1,4 +1,3 @@
-import React from "react"
 import {Modal, CloseButton} from "react-bootstrap"
 import Slider from "./slider"
 
