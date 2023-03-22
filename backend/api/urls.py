@@ -17,7 +17,7 @@ urlpatterns = [
 	path('sections/<str:slug>/', views.SectionView.as_view({'get': 'retrieve'})),
 	path('sections/<str:slug>/<int:pk>/', views.SectionView.as_view({'get': 'retrieve'})),
 	path('feedback/', views.feedback_manage),
-	path('rebuild_site/', views.generate_pages, name="rebuild"),
+	path('generate_new_pages/', views.generate_pages, name="rebuild"),
 
 	#path('', views.SearchListView),
 	#path('', include('rest_framework.urls', namespace='rest_framework')),

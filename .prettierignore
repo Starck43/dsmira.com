@@ -1,0 +1,9 @@
+# Ignore artifacts:
+backend
+resources
+build
+.next
+node_modules
+*.html
+*.sass
+*.scss

@@ -1,79 +1,70 @@
-import {Form, InputGroup, FloatingLabel} from "react-bootstrap"
+import { Form, InputGroup, FloatingLabel } from "react-bootstrap"
 
 import InputControl from "./controls/text"
 import SelectControl from "./controls/select"
 import CheckControl from "./controls/check"
 
-
 const Control = ({
-		title,
-		name,
-		type='text',
-		choices,
-		compact=true,
-		selected='',
-		required=false,
-		inline=false,
-		placeholder='',
-		autocomplete='false',
-		rows=5,
-	}) => {
-
-	return (
-		<Form.Group className="form-group mb-3" controlId={name}>
-			{
-				type === 'textarea' ? (
-					<>
-						<Form.Label>{title}</Form.Label>
-						<Form.Control
-							as={type}
-							name={name}
-							rows={rows}
-							placeholder={placeholder}
-							autoComplete={autocomplete.toString()}
-							required={required}
-						/>
-					</>
-				) : (type === 'text' || type === 'number' || type === 'tel' || type === 'email' ? (
-						<InputControl
-							type={type}
-							choices={choices}
-						 	title={title}
-							name={name}
-							placeholder={placeholder}
-							autocomplete={autocomplete}
-							inline={inline}
-							required={required}
-							compact={compact}
-						/>
-					) : (type === 'select' ? (
-							<SelectControl
-								name={name}
-								title={title}
-								choices={choices}
-								selected={selected}
-								placeholder={placeholder}
-								required={required}
-								compact={compact}
-							/>
-						) : (type === 'radio' || type === 'checkbox' ? (
-								<CheckControl
-									type={type}
-									choices={choices}
-								 	title={title}
-									name={name}
-									inline={inline}
-									required={required}
-								/>
-							) : null
-						)
-					)
-				)
-			}
-		</Form.Group>
-	)
+    title,
+    name,
+    type = "text",
+    choices,
+    compact = true,
+    selected = "",
+    required = false,
+    inline = false,
+    placeholder = "",
+    autocomplete = "false",
+    rows = 5,
+}) => {
+    return (
+        <Form.Group className="form-group mb-3" controlId={name}>
+            {type === "textarea" ? (
+                <>
+                    <Form.Label>{title}</Form.Label>
+                    <Form.Control
+                        as={type}
+                        name={name}
+                        rows={rows}
+                        placeholder={placeholder}
+                        autoComplete={autocomplete.toString()}
+                        required={required}
+                    />
+                </>
+            ) : type === "text" || type === "number" || type === "tel" || type === "email" ? (
+                <InputControl
+                    type={type}
+                    choices={choices}
+                    title={title}
+                    name={name}
+                    placeholder={placeholder}
+                    autocomplete={autocomplete}
+                    inline={inline}
+                    required={required}
+                    compact={compact}
+                />
+            ) : type === "select" ? (
+                <SelectControl
+                    name={name}
+                    title={title}
+                    choices={choices}
+                    selected={selected}
+                    placeholder={placeholder}
+                    required={required}
+                    compact={compact}
+                />
+            ) : type === "radio" || type === "checkbox" ? (
+                <CheckControl
+                    type={type}
+                    choices={choices}
+                    title={title}
+                    name={name}
+                    inline={inline}
+                    required={required}
+                />
+            ) : null}
+        </Form.Group>
+    )
 }
 
 export default Control
-
-

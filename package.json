@@ -10,7 +10,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap",
+    "prettier": "npx prettier --check \"**/*.{js,jsx,ts,tsx}\"",
+    "prettier:fix": "npx prettier --write \"**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
     "axios": "^0.27.2",

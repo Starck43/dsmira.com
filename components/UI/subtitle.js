@@ -1,6 +1,3 @@
-
-export default function SubTitle({children, className="subtitle"}) {
-	return (
-		<h4 className={className}>{children}</h4>
-	)
+export default function SubTitle({ children, className = "subtitle" }) {
+    return <h4 className={className}>{children}</h4>
 }
