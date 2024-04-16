@@ -24,8 +24,9 @@ export default function PageHeader({ logo, nav, header }) {
                                 section={section.section}
                                 {...section.content}
                                 interval={INTERVAL}
-                                duration={1800}
+                                duration={2000}
                                 //infinite
+                                zoom={false}
                                 parallax
                                 objectFit="contain"
                             />

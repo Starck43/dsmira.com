@@ -2,10 +2,10 @@
 @import ../vars.module
 
 \:root
-	--swiper-theme-color: #{$brand-color} !important
-	--swiper-pagination-bullet-size: 0.6rem
-	--swiper-pagination-bullet-inactive-color: #888
-	--swiper-pagination-bullet-inactive-opacity: 0.3
+	--swiper-theme-color: white !important
+	--swiper-pagination-bullet-size: 0.7rem
+	--swiper-pagination-bullet-inactive-color: #BBB
+	--swiper-pagination-bullet-inactive-opacity: 0.7
 	--swiper-pagination-bullet-opacity: 1
 	--swiper-pagination-bullet-horizontal-gap: 0.3rem
 	--swiper-pagination-bullet-vertical-gap: 1.5rem
@@ -18,6 +18,7 @@
 	&.swiper-initialized
 		.swiper-slide
 			opacity: 1
+
 	&.swiper-autoheight .swiper-zoom-container img
 		object-fit: none
 
@@ -32,11 +33,20 @@
 		margin: auto
 		overflow: unset !important
 
-	img
-		position: relative
+		img
+			position: relative
+			display: block
+			max-height: $slider-h
+			inset: 0
+
+	.img-wrapper
 		display: block
-		max-height: $slider-h
-		inset: 0
+		height: 100vh
+		img
+			+push--absolute()
+			height: 0
+			min-width: 100%
+			min-height: 100%
 
 	.carousel-caption
 		position: absolute

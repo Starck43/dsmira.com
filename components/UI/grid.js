@@ -48,7 +48,6 @@ const Grid = ({ container, images, handleClick = null }) => {
                                     title={obj.title || obj.excerpt}
                                     width={obj.size?.width}
                                     height={obj.size?.height}
-                                    layout="responsive"
                                     style={handleClick && { cursor: "pointer" }}
                                 />
                             </BlockAnimation>

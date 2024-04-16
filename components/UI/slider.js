@@ -2,9 +2,10 @@ import React, { createRef, useRef, useState } from "react";
 //import Image from "next/image"
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Keyboard, Zoom, Autoplay, Parallax, FreeMode } from "swiper/modules";
+import { Pagination, Keyboard, Zoom, Autoplay, Parallax, FreeMode, EffectCreative } from "swiper/modules";
 
 import "swiper/css";
+import "swiper/css/effect-creative";
 import "swiper/css/zoom";
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
@@ -15,10 +16,11 @@ import Player from "./player";
 
 import { createSrcSet } from "/core/utils";
 import { useWindowDimensions } from "/core/hooks";
+import Image from "next/image";
+import Cover from "./cover";
 
 const Slider = ({
                   title,
-                  excerpt,
                   slides = [],
                   current = 0,
                   interval = 0,
@@ -28,7 +30,7 @@ const Slider = ({
                   autoHeight = false,
                   centered = false,
                   responsive = null,
-                  effect = "slide",
+                  effect = "creative",
                   paginationType = "bullets",
                   zoom = false,
                   parallax = false,
@@ -69,10 +71,10 @@ const Slider = ({
 
   const handleSlideInitialized = ({ slides, activeIndex, autoplay }) => {
     // adding Zoom class to images' containers
-    label === "lightbox" && slides.forEach(obj => {
-      let img = obj.querySelector("img");
-      img && img.parentElement.classList.add("swiper-zoom-container");
-    });
+    // label === "lightbox" && slides.forEach(obj => {
+    //   let img = obj.querySelector("img");
+    //   img && img.parentElement.classList.add("swiper-zoom-container");
+    // });
 
     let currentSlider = sliderState[slides[activeIndex]?.id];
     if (currentSlider?.url) {
@@ -129,7 +131,7 @@ const Slider = ({
         ref={carouselRef}
         className={className}
         style={style}
-        modules={[Pagination, Keyboard, Zoom, Autoplay, Parallax, FreeMode]}
+        modules={[Pagination, Keyboard, EffectCreative, Zoom, Autoplay, Parallax, FreeMode]}
         initialSlide={current}
         pagination={{
           enabled: Boolean(paginationType) && slides.length > 1,
@@ -139,11 +141,6 @@ const Slider = ({
           type: paginationType
         }}
         preloadImages={false}
-        lazy={{
-          enabled: true,
-          loadPrevNext: true,
-          loadOnTransitionStart: true
-        }}
         keyboard
         parallax={parallax}
         zoom={{
@@ -151,9 +148,18 @@ const Slider = ({
           maxRatio: 2.5
         }}
         effect={effect}
+        creativeEffect={{
+          prev: {
+            shadow: true,
+            translate: [0, 0, -400],
+          },
+          next: {
+            translate: ['100%', 0, 0],
+          },
+        }}
         speed={duration}
         autoplay={{
-          enabled: Boolean(interval),
+          enabled: false, //Boolean(interval),
           delay: slideInterval
         }}
         freeMode={{
@@ -176,21 +182,16 @@ const Slider = ({
           : slides.map((obj) => (
             <SwiperSlide key={obj.id} onClick={() => setShowSlideCaption(!showSlideCaption)}>
               {obj.file && (
-                <span className="swiper-zoom-container">
-                                      <img
-                                        className="swiper-zoom-target swiper-lazy"
-                                        //src={obj.srcset.length > 0 ? obj.srcset[0] : obj.src}
-                                        data-src={obj.srcset.length > 0 ? obj.srcset[0] : obj.src}
-                                        data-srcset={createSrcSet(obj.srcset)}
-                                        //srcSet={createSrcSet(obj.srcset)}
+                <span className={zoom ? "swiper-zoom-container" : "img-wrapper"}>
+                                      <Cover
+                                        className={zoom ? "swiper-zoom-target" : ""}
+                                        src={obj.srcset.length > 0 ? obj.srcset[0] : obj.src}
+                                        //src={obj.src}
+                                        srcset={obj.srcset}
                                         alt={obj.title}
                                         width={obj.size?.width}
                                         height={obj.size?.height}
-                                        //layout="fill"
-                                        //objectFit={label === "lightbox" || obj.size.width / obj.size.height < 1.4 ? "contain" : objectFit}
-                                        //placeholder="blur"
-                                        //blurDataURL={createThumbUrl(obj.file, 50)}
-                                        //unoptimized
+                                        style={{"objectFit": objectFit}}
                                       />
 
                                       <div className="swiper-lazy-preloader" />
