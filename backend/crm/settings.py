@@ -11,7 +11,6 @@ from os import path
 # https://django-environ.readthedocs.io/en/latest/
 import environ
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
@@ -30,7 +29,7 @@ DEBUG = env.bool('DEBUG', False)
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    #'django.contrib.sites',
+    # 'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -40,47 +39,46 @@ INSTALLED_APPS = [
     'corsheaders',
     'ckeditor',
     'ckeditor_uploader',
-    'debug_toolbar',
     'api',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # corsheaders
+    "corsheaders.middleware.CorsMiddleware",  # corsheaders
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-   # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+if DEBUG:
+    INSTALLED_APPS.extend(['debug_toolbar'])
+    MIDDLEWARE.extend(['debug_toolbar.middleware.DebugToolbarMiddleware'])
 
 API_PAGES_RENDER_HOOK = env('API_BUILD_HOOK')
 
-
 EMAIL_CONFIG = env.email_url('EMAIL_URL')
-EMAIL_RICIPIENTS = env('EMAIL_RICIPIENTS', list, [])
+EMAIL_RECIPIENTS = env('EMAIL_RECIPIENTS', list, [])
 EMAIL_HOST_USER = EMAIL_CONFIG['EMAIL_HOST_USER']
 DEFAULT_FROM_EMAIL = EMAIL_CONFIG['EMAIL_HOST_USER']
 vars().update(EMAIL_CONFIG)
 
-ADMINS = [('Starck', EMAIL_RICIPIENTS)]
+ADMINS = [('Starck', EMAIL_RECIPIENTS)]
 
+ALLOWED_HOSTS = env('ALLOWED_HOSTS', list, ["*"])
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS', list, [])
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+# ]
 
 INTERNAL_IPS = ALLOWED_HOSTS
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOW_METHODS = ['GET','POST', 'OPTIONS']
+CORS_ALLOW_METHODS = ['GET', 'POST', 'OPTIONS']
 
 CORS_ALLOW_HEADERS = [
     "accept",
@@ -117,7 +115,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
         'rest_framework.permissions.AllowAny',
     ]
 }
@@ -130,7 +128,7 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     },
-    #'default': env.cache()
+    # 'default': env.cache()
 }
 
 # Password validation
@@ -149,13 +147,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 FILE_UPLOAD_HANDLERS = [
-    #"forum.logic.ImageUploadHandler",
+    # "forum.logic.ImageUploadHandler",
     "django.core.files.uploadhandler.MemoryFileUploadHandler",
     "django.core.files.uploadhandler.TemporaryFileUploadHandler"
- ]
+]
 
+FILES_UPLOAD_FOLDER = 'uploads/'
 # FILE_UPLOAD_MAX_MEMORY_SIZE = 5*1024*1024
 # MAX_UPLOAD_FILES_SIZE = FILE_UPLOAD_MAX_MEMORY_SIZE
 # FILE_UPLOAD_TEMP_DIR = '/home/a0694174/tmp'
@@ -165,7 +163,6 @@ ADMIN_THUMBNAIL_SIZE = [50, 50]
 
 PORTFOLIO_IMAGE_QUALITY = 80
 PORTFOLIO_IMAGE_SIZE = [1200, 800]
-
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_IMAGE_BACKEND = 'pillow'
@@ -177,22 +174,24 @@ CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': [
             {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
-            {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Superscript', '-', 'RemoveFormat']},
             {'name': 'colors', 'items': ['TextColor', 'BGColor']},
-            {'name': 'paragraph', 'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-',
-                'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',]},
-            {'name': 'tools', 'items': ['Image', 'Video', 'Link', 'Youtube', 'Maximize', 'ShowBlocks','Undo', 'Redo',]},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', ]},
+            {'name': 'tools',
+             'items': ['Image', 'Video', 'Link', 'Youtube', 'Maximize', 'ShowBlocks', 'Undo', 'Redo', ]},
         ],
         'font_names': 'Cuprum;Alegreya Sans;Corbel;Calibri;Arial;Tahoma;Sans serif;Helvetica;Symbol',
         'width': '70%',
         'height': '400',
         'tabSpaces': 4,
-        'config.extraPlugins' : 'youtube',
+        'config.extraPlugins': 'youtube',
         'extraAllowedContent': 'iframe[*]',
         'toolbarCanCollapse': True,
     },
 }
-
 
 LANGUAGE_CODE = 'ru-RU'
 
@@ -204,20 +203,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-PUBLIC_ROOT = env('PUBLIC_ROOT', default='')
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static/'
 
-STATIC_URL = '/static/'
-
-# Base url to serve media files
-MEDIA_URL = '/media/'
-
-STATIC_ROOT = path.join(BASE_DIR, PUBLIC_ROOT + 'static/')
-STATICFILES_DIRS = [
-    path.join(BASE_DIR, PUBLIC_ROOT + 'assets/'),
-]
-
-MEDIA_ROOT = path.join(BASE_DIR, PUBLIC_ROOT + 'media/')
-
-FILES_UPLOAD_FOLDER = 'uploads/'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

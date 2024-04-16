@@ -234,13 +234,13 @@ def buildSrcSet(self, obj):
 
 
 """ Sending email """
-def SendEmail(subject, template, email_sender=settings.EMAIL_HOST_USER, email_ricipients=settings.EMAIL_RICIPIENTS):
+def SendEmail(subject, template, email_sender=settings.EMAIL_HOST_USER, email_ricipients=settings.EMAIL_RECIPIENTS):
 	email = EmailMessage(
 		subject,
 		template,
 		email_sender,
 		email_ricipients,
-		reply_to=[settings.EMAIL_RICIPIENTS[0]],
+		reply_to=[settings.EMAIL_RECIPIENTS[0]],
 	)
 
 	email.content_subtype = "html"
@@ -270,7 +270,7 @@ class AsyncEmail(Thread):
 
 
 """ Sending email to recipients asyncronically """
-def SendEmailAsync(subject, template, email_sender=settings.EMAIL_HOST_USER, email_ricipients=settings.EMAIL_RICIPIENTS):
+def SendEmailAsync(subject, template, email_sender=settings.EMAIL_HOST_USER, email_ricipients=settings.EMAIL_RECIPIENTS):
 	AsyncEmail(subject, template, email_sender, email_ricipients).start()
 
 
