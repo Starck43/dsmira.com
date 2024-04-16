@@ -28,7 +28,7 @@ export default function PageHeader({ logo, nav, header }) {
                                 //infinite
                                 zoom={false}
                                 parallax
-                                objectFit="contain"
+                                objectFit="cover"
                             />
                         ),
                 )}

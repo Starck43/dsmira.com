@@ -1,6 +1,4 @@
 import React, { createRef, useRef, useState } from "react";
-//import Image from "next/image"
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Keyboard, Zoom, Autoplay, Parallax, FreeMode, EffectCreative } from "swiper/modules";
 
@@ -14,9 +12,7 @@ import "swiper/css/free-mode";
 
 import Player from "./player";
 
-import { createSrcSet } from "/core/utils";
 import { useWindowDimensions } from "/core/hooks";
-import Image from "next/image";
 import Cover from "./cover";
 
 const Slider = ({
@@ -159,7 +155,7 @@ const Slider = ({
         }}
         speed={duration}
         autoplay={{
-          enabled: false, //Boolean(interval),
+          enabled: Boolean(interval),
           delay: slideInterval
         }}
         freeMode={{
