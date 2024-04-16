@@ -4,7 +4,7 @@ import Image from "next/image"
 import { createSrcSet, shimmer, toBase64 } from "/core/utils"
 
 import { HEADER } from "/core/constants"
-import style from "~/styles/modules/avatar.module.sass"
+import style from "/styles/modules/avatar.module.sass"
 
 export const Logo = ({
     href = "/",

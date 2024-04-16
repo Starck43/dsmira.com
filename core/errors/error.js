@@ -1,8 +1,8 @@
 import React from "react"
-import styled from "styled-components/macro"
 import NotFound from "./NotFound"
 import InternalServer from "./InternalServer"
 import General from "./General"
+import styled from "styled-components";
 
 const Error = ({ statusCode }) => {
     return (

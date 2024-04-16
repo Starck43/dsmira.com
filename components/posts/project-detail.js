@@ -6,7 +6,7 @@ import { LinkButton } from "/components/UI/links"
 import { HtmlContent } from "/components/UI/html-content"
 import LightBox from "/components/UI/lightbox"
 
-import styles from "~/styles/modules/projects.module.sass"
+import styles from "/styles/modules/projects.module.sass"
 
 const ProjectDetail = ({ id, post_type, page, section, content }) => {
     const { ratio } = useWindowDimensions(null)

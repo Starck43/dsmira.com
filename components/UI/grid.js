@@ -20,7 +20,7 @@ const Grid = ({ container, images, handleClick = null }) => {
             percentPosition: true,
         })
         return () => masonry?.current.destroy()
-    }, [])
+    }, [container])
 
     return (
         masonry &&

@@ -1,10 +1,10 @@
+import Menu from "./menu"
 import Container from "/components/UI/container"
 import { Logo } from "/components/UI/avatar"
-import Menu from "./menu"
 import Slider from "/components/UI/slider"
-
-import theme from "~/styles/theme.module.scss"
 import { convertTime2Number } from "/core/utils"
+
+import theme from "/styles/theme.module.scss"
 
 const INTERVAL = convertTime2Number(theme.sliderAutoplayInterval)
 

@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import theme from "~/styles/theme.module.scss"
+import theme from "/styles/theme.module.scss"
 
 export const Loader = () => (
     <LoaderContainer className="loader">

@@ -2,7 +2,7 @@ import { useState } from "react"
 import Image from "next/legacy/image"
 import { createSrcSet, shimmer, toBase64 } from "/core/utils"
 
-import styles from "~/styles/modules/cover.module.sass"
+import styles from "/styles/modules/cover.module.sass"
 
 export default function Cover({
     id = null,

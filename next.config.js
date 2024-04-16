@@ -6,12 +6,6 @@ module.exports = {
     env: {
         SERVER: process.env.SERVER,
         API_SERVER: process.env.SERVER + "/api",
-        API_ENDPOINTS: {
-            pages: "/pages/",
-            posts: "/posts/",
-            sections: "/sections/",
-            feedback: "/feedback/",
-        },
     },
     publicRuntimeConfig: {},
     serverRuntimeConfig: {
@@ -24,18 +18,24 @@ module.exports = {
         deviceSizes: [50, 320, 576, 768, 992, 1200, 1400], // breakpoints
         //imageSizes: [75, 150, 300, 600], // breakpoints
     },
+    swcMinify: true,
     compiler: {
         // ssr and displayName are configured by default
-        styledComponents: true,
+        styledComponents: {
+            displayName: true,
+            ssr: false,
+        },
         relay: {
-            // This should match relay.config.js
             src: "./",
             artifactDirectory: "./__generated__",
-            language: "typescript",
+            //language: "typescript",
         },
     },
     sassOptions: {
         includePaths: [path.join(__dirname, "styles")],
+    },
+    eslint: {
+        dirs: ["pages", "core", "components"],
     },
     /*	async headers() {
 		return [

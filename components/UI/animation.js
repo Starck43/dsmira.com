@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components"
 
 import { useElementInView } from "/core/hooks"
 
-import style from "~/styles/modules/animation.module.sass"
+import style from "/styles/modules/animation.module.sass"
 
 export const BlockAnimation = ({
     children,
