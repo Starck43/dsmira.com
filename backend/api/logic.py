@@ -7,7 +7,6 @@ from threading import Thread
 
 from PIL import Image
 from django.conf import settings
-from django.contrib.sitemaps import ping_google
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
@@ -287,10 +286,3 @@ def is_mobile(request):
         return True
     else:
         return False
-
-
-def update_google_sitemap():
-    try:
-        ping_google()  # сообщим Google об изменениях в sitemap.xml
-    except Exception:
-        pass
