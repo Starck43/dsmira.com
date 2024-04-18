@@ -19,8 +19,8 @@ export async function getPages(page = "") {
 /*
  * getPageDetail(id, page) - get page detail content grouped by header, body and footer blocks to update whole page
  * parameter:
- * - <id> – fetching post content by id
- * - <page name> – fetching self page section content
+ * – <id> – fetching post content by id
+ * – <page name> – fetching self page section content
  * return:
  *  <object { nav{}, meta{}, header{}, body{}, footer{}, page_route }>
  * */
@@ -34,7 +34,7 @@ export async function getPageDetail(id, page) {
  * getSection(slug, [page_type]) - get posts for selected section to update only components on page
  * parameter:
  *  - <slug> - section name
- *  - <page type> - empty by default or ('index_page', 'self_page') - set strict type of fetching page
+ *  - <page type> – empty by default or ('index_page', 'self_page') - set strict type of fetching page
  * return: <array of objects { id, content{}, post_type, section, page, area, url }>
  * */
 export async function getSection(slug, param = "") {
@@ -46,10 +46,10 @@ export async function getSection(slug, param = "") {
 }
 
 /*
- * getSectionDetail(id, section) - get detail post content by id with extra data for selected section
+ * getSectionDetail(id, section) - get detail post content by id with extra data for a selected section
  * parameter:
  *  1. <post id> - fetching post by id
- *  2. <section name> - fetching post for selected section
+ *  2. <section name> – fetching post for selected section
  * return: <object> with {id, content{}, post_type, section, url, page, area, meta}
  * */
 export async function getSectionDetail(id, section) {
@@ -73,7 +73,7 @@ export async function getPost(id) {
 /*
  * getAllPosts([fields]) - get post content by id
  * parameter:
- *  - <fields> - extra fields returning on request
+ *  - <fields> – extra fields returning on request
  * return: <objects array> with every post content {title, excerpt, description, post_type, section}
  * */
 export async function getAllPosts(fields = []) {
