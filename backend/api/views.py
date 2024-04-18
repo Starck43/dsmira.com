@@ -14,7 +14,7 @@ from collections import defaultdict
 
 from .serializers import *
 from .models import *
-from .logic import SendEmail, SendEmailAsync, get_site_url
+from .logic import send_email, send_email_async, get_site_url
 
 
 @api_view(('GET',))
@@ -37,7 +37,6 @@ def SearchListView(request):
 		search_result = post_result
 
 	return JsonResponse(search_result, safe=False)
-
 
 
 class PageView(viewsets.ModelViewSet):
@@ -183,7 +182,7 @@ def feedback_manage(request):
 
 	''' Отправка уведомления о новом обращении автору сайта '''
 	template = render_to_string('new_feedback_confirmation.html', data)
-	status = SendEmail('Новое сообщение от посетителя сайта %s!' % (data['site']['name']), template)
+	status = send_email('Новое сообщение от посетителя сайта %s!' % (data['site']['name']), template)
 
 
 	# Отправка уведомления отправителю сообщения
@@ -192,7 +191,7 @@ def feedback_manage(request):
 
 		status = 200
 		template = render_to_string('guest_feedback_confirmation.html', data)
-		SendEmailAsync('Уведомление об отправке сообщения на сайте %s' % (data['site']['name']), template)
+		send_email_async('Уведомление об отправке сообщения на сайте %s' % (data['site']['name']), template)
 	else:
 		data['answer'] = "Сообщение не было доставлено. Приносим свои извинения"
 		status = 500
