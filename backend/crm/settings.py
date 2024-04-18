@@ -16,10 +16,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 env.read_env(path.join(BASE_DIR, '.env'))
 
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-
 SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env.bool('DEBUG', False)
@@ -43,13 +39,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # corsheaders
+    'corsheaders.middleware.CorsMiddleware',  # corsheaders
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -60,26 +57,23 @@ if DEBUG:
 API_PAGES_RENDER_HOOK = env('API_BUILD_HOOK')
 
 EMAIL_CONFIG = env.email_url('EMAIL_URL')
-EMAIL_RECIPIENTS = env('EMAIL_RECIPIENTS', list, [])
+EMAIL_RICIPIENTS = env('EMAIL_RICIPIENTS', list, [])
 EMAIL_HOST_USER = EMAIL_CONFIG['EMAIL_HOST_USER']
 DEFAULT_FROM_EMAIL = EMAIL_CONFIG['EMAIL_HOST_USER']
 vars().update(EMAIL_CONFIG)
 
-ADMINS = [('Starck', EMAIL_RECIPIENTS)]
+ADMINS = [('Starck', EMAIL_RICIPIENTS)]
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS', list, ["*"])
-
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000",
-# ]
-
+ALLOWED_HOSTS = env('ALLOWED_HOSTS', list, ['*'])
+TRUSTED_URL = env('TRUSTED_URL', default=None)
 INTERNAL_IPS = ALLOWED_HOSTS
 
+if TRUSTED_URL:
+    CSRF_TRUSTED_ORIGINS = [TRUSTED_URL]
+    CORS_ALLOWED_ORIGINS = [TRUSTED_URL]
+
 CORS_ALLOW_ALL_ORIGINS = True
-
 CORS_ALLOW_METHODS = ['GET', 'POST', 'OPTIONS']
-
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
@@ -124,12 +118,12 @@ DATABASES = {
     'default': env.db()
 }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    },
-    # 'default': env.cache()
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+#     },
+#     #'default': env.cache()
+# }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -153,16 +147,16 @@ FILE_UPLOAD_HANDLERS = [
     "django.core.files.uploadhandler.TemporaryFileUploadHandler"
 ]
 
-FILES_UPLOAD_FOLDER = 'uploads/'
-# FILE_UPLOAD_MAX_MEMORY_SIZE = 5*1024*1024
-# MAX_UPLOAD_FILES_SIZE = FILE_UPLOAD_MAX_MEMORY_SIZE
-# FILE_UPLOAD_TEMP_DIR = '/home/a0694174/tmp'
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
+MAX_UPLOAD_FILES_SIZE = FILE_UPLOAD_MAX_MEMORY_SIZE
+FILE_UPLOAD_PERMISSIONS = 0o775
+# FILE_UPLOAD_TEMP_DIR = '/home/starck/tmp'
 
 ADMIN_THUMBNAIL_QUALITY = 75
 ADMIN_THUMBNAIL_SIZE = [50, 50]
 
 PORTFOLIO_IMAGE_QUALITY = 80
-PORTFOLIO_IMAGE_SIZE = [1200, 800]
+PORTFOLIO_IMAGE_SIZE = [1400, 900]
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_IMAGE_BACKEND = 'pillow'
@@ -183,7 +177,7 @@ CKEDITOR_CONFIGS = {
             {'name': 'tools',
              'items': ['Image', 'Video', 'Link', 'Youtube', 'Maximize', 'ShowBlocks', 'Undo', 'Redo', ]},
         ],
-        'font_names': 'Cuprum;Alegreya Sans;Corbel;Calibri;Arial;Tahoma;Sans serif;Helvetica;Symbol',
+        'font_names': 'Roboto;Cuprum;Alegreya Sans;Corbel;Calibri;Arial;Tahoma;Sans serif;Helvetica;Symbol',
         'width': '70%',
         'height': '400',
         'tabSpaces': 4,
@@ -203,11 +197,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static/'
+PUBLIC_ROOT = env('PUBLIC_ROOT', default='')
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+STATIC_URL = '/static/'
+
+# Base url to serve media files
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = path.join(BASE_DIR, PUBLIC_ROOT + 'static/')
+
+MEDIA_ROOT = path.join(BASE_DIR, PUBLIC_ROOT + 'media/')
+
+FILES_UPLOAD_FOLDER = 'uploads/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
