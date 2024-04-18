@@ -1,8 +1,5 @@
-asgiref
-backports.zoneinfo
 crispy-bootstrap5
 Django
-django-appconf
 django-ckeditor==6.6.1
 django-cors-headers
 django-crispy-forms
@@ -12,10 +9,9 @@ django-imagekit
 django-js-asset
 django-uuslug
 djangorestframework
+gunicorn
+psycopg2-binary
 pilkit
 Pillow
 python-slugify
 pytz
-six
-sqlparse
-text-unidecode
