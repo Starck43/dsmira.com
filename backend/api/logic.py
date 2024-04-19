@@ -26,7 +26,7 @@ def is_image_file(obj):
     return ext.lower() == '.jpg' or ext.lower() == '.jpeg' or ext.lower() == '.png' or ext.lower() == '.gif'
 
 
-# delete obj related media files and their cached thumbnails
+# delete obj related media files, and their cached thumbnails
 def remove_media_folder(relative_folder):
     absolute_path = path.join(settings.BASE_DIR, settings.MEDIA_ROOT, settings.FILES_UPLOAD_FOLDER, relative_folder)
     rmtree(absolute_path, ignore_errors=True)
@@ -164,7 +164,7 @@ def generate_thumbs(obj, sizes):
                 im.save(thumb_filename)
 
 
-def MediaUploadTo(instance, filename):
+def media_upload_to(instance, filename):
     # print(instance._meta.model_name)
     if instance._meta.model_name == 'slider':
         related_folder = instance.slider._meta.db_table
@@ -206,7 +206,7 @@ def get_site_url(request):
 def add_domain_to_url(request, value, pattern, start=False):
     if request:
         scheme = 'https' if request.is_secure() else 'http'
-        site_domain = '%s://%s' % (scheme, request.META['HTTP_HOST'])
+        site_domain = '%s://%s' % (scheme, request.get_host())
         search_pattern = pattern.replace('<URL>', '')
         replace_with = pattern.replace('<URL>', site_domain)
         to_replace = value.startswith(search_pattern) if start else True

@@ -81,7 +81,7 @@ class MediaSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         if instance.file:
             data.update({
-                'src': data['file'],
+                'src': self.context['request'].build_absolute_uri(instance.file.url),
                 'srcset': build_srcset(self, instance.file),
                 'size': {
                     'width': instance.file.width,

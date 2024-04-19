@@ -1,5 +1,4 @@
-from django.urls import path, re_path, include
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import path
 
 from . import views
 
@@ -18,7 +17,4 @@ urlpatterns = [
 	path('sections/<str:slug>/<int:pk>/', views.SectionView.as_view({'get': 'retrieve'})),
 	path('feedback/', views.feedback_manage),
 	path('generate_new_pages/', views.generate_pages, name="rebuild"),
-
-	#path('', views.SearchListView),
-	#path('', include('rest_framework.urls', namespace='rest_framework')),
 ]
