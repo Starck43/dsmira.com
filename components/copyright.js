@@ -4,7 +4,7 @@ export default function Copyright({ src }) {
     return (
         <div className="copyright bg-white">
             <small>
-                {getYear()} &copy;&nbsp;Разработка сайта <a href={src}>iStarck</a>
+                2021 - {getYear()} &copy;&nbsp; Права защищены. Реализация <a href={src}>iStarck</a>
             </small>
         </div>
     )
