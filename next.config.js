@@ -3,6 +3,7 @@ const { join } = require("path");
  * @type {import("next").NextConfig}
  */
 const nextConfig = {
+  output: "standalone",
   env: {
     SERVER: process.env.SERVER,
     API_SERVER: process.env.SERVER + "/api"
