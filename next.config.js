@@ -3,7 +3,7 @@ const { join } = require("path");
  * @type {import("next").NextConfig}
  */
 const nextConfig = {
-  output: "standalone",
+  output: "export", // "standalone" for Docker
   env: {
     SERVER: process.env.SERVER,
     API_SERVER: process.env.SERVER + "/api"
@@ -15,12 +15,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true
   },
-  async headers() {
-    return [];
-  },
   images: {
     dangerouslyAllowSVG: true,
     deviceSizes: [50, 320, 576, 768, 992, 1200, 1400], // breakpoints
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "http",
