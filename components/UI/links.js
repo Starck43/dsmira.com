@@ -21,7 +21,7 @@ export const LinkButton = ({ children, url = null, title = "", arrow = "", class
         </Link>
     ) : (
         buttonElement
-    )
+    );
 }
 
 export const ScrollToTop = ({ url, className = "" }) => {

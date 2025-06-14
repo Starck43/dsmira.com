@@ -83,7 +83,7 @@ const ProjectList = ({ items, className }) => {
                     ),
             )}
         </div>
-    )
+    );
 }
 
 const uniqueFilters = (src, sortField) => {

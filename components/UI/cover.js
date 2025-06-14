@@ -33,13 +33,16 @@ export default function Cover({
             //layout={layout}
             width={width}
             height={height}
-            objectFit="cover"
             placeholder="blur"
             quality={80}
             blurDataURL={srcset ? thumb : `data:image/svg+xml;base64,${toBase64(shimmer("#a6a6a6", width, height))}`}
             onLoadingComplete={loadComplete}
             unoptimized
-            style={style}
-        />
-    )
+            style={{
+                ...style,
+                maxWidth: "100%",
+                height: "auto",
+                objectFit: "cover"
+            }} />
+    );
 }

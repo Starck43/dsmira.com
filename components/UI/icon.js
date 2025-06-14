@@ -8,10 +8,10 @@ export default function Icon({ src, height, width }) {
             //placeholder={blur}
             alt=""
             className="icon"
-            layout="fixed"
-            objectFit="contain"
             width={width}
             height={height}
-        />
-    )
+            style={{
+                objectFit: "contain"
+            }} />
+    );
 }

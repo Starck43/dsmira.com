@@ -30,14 +30,21 @@ const NavItem = ({ item, pathname }) => {
     return (
         <Nav.Item>
             {pathname === "/" && item.show_on_page !== "self_page" ? (
-                <Link className="nav-link" href={`/${item.link}`} onClick={handleScroll}>
+                <Link
+                    className="nav-link"
+                    href={`/${item.link}`}
+                    onClick={handleScroll}>
                     {item.name}
                 </Link>
             ) : (
-                <Link className="nav-link" href={`/${item.link}`} disabled={item.active}>
+                <Link
+                    className="nav-link"
+                    href={`/${item.link}`}
+                    disabled={item.active}
+                    >
                     {item.name}
                 </Link>
             )}
         </Nav.Item>
-    )
+    );
 }

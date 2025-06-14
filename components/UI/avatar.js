@@ -26,11 +26,13 @@ export const Logo = ({
     }
 
     return (
-        <Link href={href} className={`${className} ${rounded ? style.rounded : ""}`}>
+        <Link
+            href={href}
+            className={`${className} ${rounded ? style.rounded : ""}`}
+        >
             <Image
                 src={HEADER?.logo || src}
                 alt={name}
-                layout="responsive"
                 width={width || imageSize.naturalWidth}
                 height={height || imageSize.naturalHeight}
                 blurDataURL={`data:image/svg+xml;base64,${toBase64(
@@ -39,9 +41,13 @@ export const Logo = ({
                 placeholder="blur"
                 onLoadingComplete={!width && !height && loadComplete}
                 unoptimized
-            />
+                sizes="100vw"
+                style={{
+                    width: "100%",
+                    height: "auto"
+                }} />
         </Link>
-    )
+    );
 }
 
 export const Avatar = ({
@@ -76,8 +82,11 @@ export const Avatar = ({
                             : `data:image/svg+xml;base64,${toBase64(shimmer("#a6a6a6", width, height, rounded))}`
                     }
                     unoptimized
-                />
+                    style={{
+                        maxWidth: "100%",
+                        height: "auto"
+                    }} />
             )}
         </Tag>
-    )
+    );
 }

@@ -34,5 +34,5 @@ export default function Works({ items }) {
                 <button className="projects-link btn btn-primary mt-4">Все проекты</button>
             </Link>
         </section>
-    ) : null
+    ) : null;
 }

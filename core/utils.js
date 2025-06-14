@@ -174,7 +174,7 @@ export const truncateHTML = (value, n = 200) => {
         /<((?!li|hr|img|br|area|base|col|command|embed|input|keygen|link|meta|head|param|source|track|wbr).*?)>/g,
     )
 
-    if (ar) return t + "&hellip;" + ar.reverse().join("").replace(/</g, "</") // close tags
+    if (ar) return t + "&hellip;" + ar.reverse().join("").replace(/</g, "</"); // close tags
     return value
 }
 
@@ -190,5 +190,5 @@ export const getSiteLocation = () =>
 
 export const isSafari = () => {
     let userAgent = navigator.userAgent.toLowerCase()
-    return /^((?!chrome|android).)*safari/i.test(userAgent)
+    return /^((?!chrome|android).)*safari/i.test(userAgent);
 }
