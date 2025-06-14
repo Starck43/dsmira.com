@@ -1,62 +1,81 @@
-const path = require("path")
+const { join } = require("path");
+/**
+ * @type {import("next").NextConfig}
+ */
+const nextConfig = {
+  env: {
+    SERVER: process.env.SERVER,
+    API_SERVER: process.env.SERVER + "/api"
+  },
+  reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true
+  },
+  typescript: {
+    ignoreBuildErrors: true
+  },
+  async headers() {
+    return [];
+  },
+  images: {
+    dangerouslyAllowSVG: true,
+    deviceSizes: [50, 320, 576, 768, 992, 1200, 1400], // breakpoints
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000"
+      },
+      {
+        protocol: "https",
+        hostname: "*.istarck.ru",
+        port: ""
+      }
+    ]
+  },
+  // turbopack: {
+  //     rules: {
+  //         "*.svg": {
+  //             loaders: ["@svgr/webpack"],
+  //             as: "*.js",
+  //         },
+  //     },
+  // },
+  logging:
+    process.env.NODE_ENV === "development"
+      ? {
+        fetches: {
+          fullUrl: true
+        }
+      }
+      : {},
+  webpack(config) {
+    // Grab the existing rule that handles SVG imports
+    const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.(".svg"));
 
-//const isProduction = process.env.NODE_ENV === "production"
+    config.module.rules.push(
+      // Reapply the existing rule, but only for svg imports ending in ?url
+      {
+        ...fileLoaderRule,
+        test: /\.svg$/i,
+        resourceQuery: /url/ // *.svg?url
+      },
+      // Convert all other *.svg imports to React components
+      {
+        test: /\.svg$/i,
+        issuer: fileLoaderRule.issuer,
+        resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
+        use: ["@svgr/webpack"]
+      }
+    );
 
-module.exports = {
-    env: {
-        SERVER: process.env.SERVER,
-        API_SERVER: process.env.SERVER + "/api",
-    },
-    publicRuntimeConfig: {},
-    serverRuntimeConfig: {
-        // Will only be available on the server side
-        // mySecret: 'secret',
-        // secondSecret: process.env.SECOND_SECRET, // Pass through env variables
-    },
-    images: {
-        domains: ["localhost", process.env.SERVER_HOST],
-        deviceSizes: [50, 320, 576, 768, 992, 1200, 1400], // breakpoints
-        //imageSizes: [75, 150, 300, 600], // breakpoints
-    },
-    swcMinify: true,
-    compiler: {
-        // ssr and displayName are configured by default
-        styledComponents: {
-            displayName: true,
-            ssr: false,
-        },
-        relay: {
-            src: "./",
-            artifactDirectory: "./__generated__",
-            //language: "typescript",
-        },
-    },
-    sassOptions: {
-        includePaths: [path.join(__dirname, "styles")],
-    },
-    eslint: {
-        dirs: ["pages", "core", "components"],
-    },
-    /*	async headers() {
-		return [
-			{
-				source: "/fonts/Montserrat-Regular.woff2",
-				headers: [
-					{
-						key: "Cache-Control",
-						value: "public, max-age=31536000, immutable",
-					},
-				],
-			},
-			{
-				source: "/fonts/Montserrat-Bold.woff2",
-				headers: [
-					{
-						key: "Cache-Control",
-						value: "public, max-age=31536000, immutable",
-					},
-				],
-			},
-		]
-	},*/
-}
+    // Modify the file loader rule to ignore *.svg, since we have it handled now.
+    fileLoaderRule.exclude = /\.svg$/i;
+
+    return config;
+  }
+};
+
+console.log("next.config.js", JSON.stringify(module.exports, null, 2));
+
+module.exports = nextConfig;

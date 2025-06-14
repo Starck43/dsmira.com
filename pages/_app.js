@@ -1,13 +1,13 @@
-import { IconContext } from "react-icons"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import { IconContext } from "react-icons"
 
+import Loader from "../components/UI/loader"
 import ErrorBoundary from "../core/errorboundary"
 import * as gtag from "../libs/gtag"
 
 import "../styles/vendors.scss"
 import "../styles/main.sass"
-import Loader from "../components/UI/loader"
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
@@ -24,7 +24,7 @@ export default function MyApp({ Component, pageProps }) {
         return () => {
             router.events.off("routeChangeComplete", handleRouteChange)
         }
-    }, [router.events])
+    }, [isProduction, router.events])
 
     useEffect(() => {
         setLoaded(true)
@@ -33,11 +33,12 @@ export default function MyApp({ Component, pageProps }) {
 
     if (!isLoaded) return <Loader />
     if (typeof window === "undefined") return <></>
+
     return (
         <ErrorBoundary>
-            <IconContext.Provider value={{ className: "react-icons svg-icons", size: "40px" }}>
+            <IconContext value={{ className: "react-icons svg-icons", size: "40px" }}>
                 <Component {...pageProps} loaded={isLoaded} />
-            </IconContext.Provider>
+            </IconContext>
         </ErrorBoundary>
     )
 }
