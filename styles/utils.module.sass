@@ -413,11 +413,11 @@
     &:active
       opacity: 0.5
 
-  $rotation-degree: 90deg - $arrow-degree/2
+  $rotation-degree: 90deg - math.div($arrow-degree, 2)
   $sin : +sin($rotation-degree)
   &:before,
   &:after
-    left: calc(50% - (#{$sin * (1 - $arrow-padding / 100%) * $arrow-size} + #{$arrow-thickness}) / 2)
+    left: calc(50% - (#{$sin * (1 - math.div($arrow-padding, 100%)) * $arrow-size} + #{$arrow-thickness}) / 2)
 
   &:before
     transform-origin: 0 100% 0
@@ -430,11 +430,11 @@
     transform: rotate(-$rotation-degree)
 
   &:hover
-    $rotation-degree: 90deg - $arrow-degree-hover/2
+    $rotation-degree: 90deg - math.div($arrow-degree-hover, 2)
     $sin : +sin($rotation-degree)
     &:before,
     &:after
-      left: calc(50% - (#{$sin * (1 - $arrow-padding / 100%) * $arrow-size} + #{$arrow-thickness}) / 2)
+      left: calc(50% - (#{$sin * (1 -  math.div($arrow-padding, 100%) ) * $arrow-size} + #{$arrow-thickness}) / 2)
 
     &:after
       transform: rotate(-$rotation-degree)

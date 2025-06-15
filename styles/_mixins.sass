@@ -38,13 +38,13 @@
 
 //Убираем единицы измерения у чисел
 @function strip-units($size)
-  $number: $size / ($size * 0 + 1)
+  $number: math.div($size, $size * 0 + 1)
   @return $number
 
 
 @function em($pixels, $fontsize)
   $fontsize: $fontsize + 0px
-  @return ($pixels/$fontsize)*1em
+  @return math.div($pixels, $fontsize) * 1em
 
 
 @function px($em, $fontsize)
@@ -213,12 +213,12 @@ $parallax-ios: true !default
     border-left: $size solid transparent
     border-right: $size solid transparent
     border-top: $size solid $color
-    margin-top: (0 - round( $size / 2.5 ))
+    margin-top: (0 - round( math.div($size, 2.5) ))
   @else if $direction == up
     border-left: $size solid transparent
     border-right: $size solid transparent
     border-bottom: $size solid $color
-    margin-bottom: 0 - round( $size / 2.5 )
+    margin-bottom: (0 - round(math.div($size, 2.5)))
   @else if $direction == right
     border-top: $size solid transparent
     border-bottom: $size solid transparent
@@ -267,7 +267,7 @@ $parallax-ios: true !default
   $w-min: strip-units($w-min)
   $w-max: strip-units($w-max)
 
-  $k: ($f-max - $f-min)/($w-max - $w-min)
+  $k: math.div(($f-max - $f-min), ($w-max - $w-min))
   $b: $f-min - $k * $w-min
 
   $b: $b + $units
@@ -286,7 +286,7 @@ $_precision: 10
 
   @if $exp < 1
     @for $i from 0 through -$exp
-      $value: $value / $base
+      $value: math.div($value, $base)
 
   @return $value
 
@@ -302,10 +302,10 @@ $_precision: 10
 
 @function _to_unitless_rad($angle)
   @if unit($angle) == deg
-    $angle: $angle / 180deg * $pi
+    $angle: math.div($angle, 180deg) * $pi
 
   @if unit($angle) == rad
-    $angle: $angle / 1rad
+    $angle: math.div($angle, 1rad)
 
   @return $angle
 
@@ -314,7 +314,7 @@ $_precision: 10
   $a: _to_unitless_rad($angle)
   $sin: $a
   @for $n from 1 through $_precision
-    $sin: $sin + (pow(-1, $n) / fact(2 * $n + 1) ) * pow($a, (2 * $n + 1))
+    $sin: $sin + ( math.div(pow(-1, $n), fact(2 * $n + 1)) ) * pow($a, (2 * $n + 1))
 
   @return $sin
 
@@ -323,6 +323,6 @@ $_precision: 10
   $a: _to_unitless_rad($angle)
   $cos: 1
   @for $n from 1 through $_precision
-    $cos: $cos + ( pow(-1,$n) / fact(2*$n) ) * pow($a,2*$n)
+    $cos: $cos + ( math.div(pow(-1, $n), fact(2 * $n)) ) * pow($a,2*$n)
 
   @return $cos

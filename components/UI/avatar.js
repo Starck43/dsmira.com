@@ -32,7 +32,7 @@ export const Logo = ({
         >
             <Image
                 src={HEADER?.logo || src}
-                alt={name}
+                alt={name || ""}
                 width={width || imageSize.naturalWidth}
                 height={height || imageSize.naturalHeight}
                 blurDataURL={`data:image/svg+xml;base64,${toBase64(
@@ -71,7 +71,7 @@ export const Avatar = ({
                 <Image
                     src={thumb}
                     srcset={createSrcSet(srcset)}
-                    alt={name}
+                    alt={name || ""}
                     width={width}
                     height={height ? height : width}
                     placeholder="blur"

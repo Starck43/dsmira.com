@@ -151,12 +151,6 @@
 		max-height: 100vh !important
 
 	.swiper-slide
-		.swiper-zoom-container
-			position: relative
-		img
-			padding: $lightbox-controls-margin
-			max-height: 100vh !important
-
 		&-zoomed
 			.swiper-zoom-container
 			height: 100%
@@ -171,6 +165,12 @@
 			&~.swiper-control-prev,
 			&~.swiper-control-next
 				display: none
+
+		.swiper-zoom-container
+			position: relative
+		img
+			padding: $lightbox-controls-margin
+			max-height: 100vh !important
 
 	.carousel-caption
 		margin: $lightbox-controls-margin
