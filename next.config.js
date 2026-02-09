@@ -8,6 +8,7 @@ const nextConfig = {
     SERVER: process.env.SERVER,
     API_SERVER: process.env.SERVER + "/api"
   },
+  allowedDevOrigins: ["localhost"],
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true
